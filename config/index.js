@@ -1,3 +1,5 @@
+const path = require('path');
+
 const config = {
   projectName: 'taro-listView',
   date: '2019-7-10',
@@ -31,6 +33,12 @@ const config = {
     ],
     options: {
     }
+  },
+  alias: {
+    components: path.resolve(__dirname, '..', 'src/components'),
+    models: path.resolve(__dirname, '..', 'src/models'),
+    utils: path.resolve(__dirname, '..', 'src/utils'),
+    package: path.resolve(__dirname, '..', 'package.json'),
   },
   weapp: {
     module: {

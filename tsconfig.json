@@ -22,7 +22,14 @@
     "typeRoots": [
       "node_modules/@types",
       "global.d.ts"
-    ]
+    ],
+    "paths": {
+      "components": ["./src/components/index.ts"],
+      "components/*": ["./src/components/*"],
+      "models": ["./src/models/index.ts"],
+      "utils/*": ["./src/utils/*"],
+      "package": ["./package.json"]
+    }
   },
   "exclude": [
     "node_modules",
