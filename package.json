@@ -1,5 +1,5 @@
 {
-  "name": "taro-list-view",
+  "name": "taro-listview",
   "version": "1.0.0",
   "description": "listView pullDownRefresh and Skeleton",
   "templateInfo": {
@@ -32,7 +32,7 @@
     "dev:tt": "npm run build:tt -- --watch",
     "dev:h5": "npm run build:h5 -- --watch",
     "dev:rn": "npm run build:rn -- --watch",
-    "build": "TARO_BUILD_TYPE=ui taro build --ui",
+    "build": "cross-env TARO_BUILD_TYPE=ui taro build --ui",
     "publish:production": "npm run build & npm publish"
   },
   "author": "rahim <chenrixi93@gmail.com>",
@@ -78,7 +78,6 @@
     "stylelint": "9.3.0",
     "stylelint-config-taro-rn": "1.3.4",
     "stylelint-taro-rn": "1.3.4",
-    "taro-list-view": "^1.0.1",
     "typescript": "^3.0.1"
   }
 }
