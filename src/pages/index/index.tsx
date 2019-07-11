@@ -71,6 +71,7 @@ export default class Index extends Component {
 
   render() {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
+
     return (
       <View className='skeleton'>
         <ListView

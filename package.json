@@ -1,17 +1,24 @@
 {
   "name": "taro-list-view",
   "version": "1.0.0",
-  "private": false,
   "description": "listView pullDownRefresh and Skeleton",
   "templateInfo": {
     "name": "default",
     "typescript": true,
     "css": "sass"
   },
-  "files": [
-    "src/components"
+  "keywords": [
+    "taro",
+    "taro-list-view",
+    "taro-skeleton"
   ],
-  "main": "src/components/index.ts",
+  "files": [
+    "dist",
+    "@types"
+  ],
+  "types": "./@types/index.d.ts",
+  "main": "dist/index.js",
+  "main:h5": "dist/h5/index.js",
   "scripts": {
     "build:weapp": "taro build --type weapp",
     "build:swan": "taro build --type swan",
@@ -24,7 +31,9 @@
     "dev:alipay": "npm run build:alipay -- --watch",
     "dev:tt": "npm run build:tt -- --watch",
     "dev:h5": "npm run build:h5 -- --watch",
-    "dev:rn": "npm run build:rn -- --watch"
+    "dev:rn": "npm run build:rn -- --watch",
+    "build": "TARO_BUILD_TYPE=ui taro build --ui",
+    "publish:production": "npm run build & npm publish"
   },
   "author": "rahim <chenrixi93@gmail.com>",
   "repository": {
@@ -43,31 +52,33 @@
     "@tarojs/taro-tt": "1.3.4",
     "@tarojs/taro-weapp": "1.3.4",
     "nerv-devtools": "^1.4.0",
-    "nervjs": "^1.4.0"
+    "nervjs": "^1.4.0",
+    "taro-countdown": "^1.3.0"
   },
   "devDependencies": {
-    "@types/react": "^16.4.6",
-    "@types/webpack-env": "^1.13.6",
     "@tarojs/plugin-babel": "1.3.4",
     "@tarojs/plugin-csso": "1.3.4",
     "@tarojs/plugin-sass": "1.3.4",
     "@tarojs/plugin-uglifyjs": "1.3.4",
     "@tarojs/webpack-runner": "1.3.4",
+    "@types/react": "^16.4.6",
+    "@types/webpack-env": "^1.13.6",
+    "@typescript-eslint/parser": "^1.6.0",
+    "babel-eslint": "^8.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-jsx-stylesheet": "^0.6.5",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-eslint": "^8.2.3",
     "eslint": "^5.16.0",
     "eslint-config-taro": "1.3.4",
-    "eslint-plugin-react": "^7.8.2",
     "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react": "^7.8.2",
+    "eslint-plugin-taro": "1.3.4",
     "stylelint": "9.3.0",
     "stylelint-config-taro-rn": "1.3.4",
     "stylelint-taro-rn": "1.3.4",
-    "eslint-plugin-taro": "1.3.4",
-    "@typescript-eslint/parser": "^1.6.0",
+    "taro-list-view": "^1.0.1",
     "typescript": "^3.0.1"
   }
 }
