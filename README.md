@@ -108,6 +108,7 @@ const { hasMore, list } = this.state;
 | selector   | 骨架屏外层class名称    | string | - | - |
 
 ###方法参数
+
 | 事件名称 | 说明                | 类型   |默认值   |必传   |
 | :------- | :---------------  | :--------- |:--------- |:--------- |
 | onPullDownRefresh   | 下拉刷新触发函数 | function | - | - |
