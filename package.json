@@ -1,7 +1,7 @@
 {
-  "name": "taro-listView",
-  "version": "1.0.0",
-  "private": true,
+  "name": "taro-list-view",
+  "version": "1.0.1",
+  "private": false,
   "description": "listView pullDownRefresh and Skeleton",
   "templateInfo": {
     "name": "default",
@@ -9,9 +9,9 @@
     "css": "sass"
   },
   "files": [
-    "src/components",
-    "dist/components"
+    "src/components"
   ],
+  "main": "src/components/index.ts",
   "scripts": {
     "build:weapp": "taro build --type weapp",
     "build:swan": "taro build --type swan",
