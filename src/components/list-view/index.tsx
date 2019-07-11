@@ -20,24 +20,20 @@ interface State {
 }
 
 interface Props {
-  isLoaded?: boolean;
-  isEmpty: boolean;
-  pullUpText?: string;
+  style?: any;
+  className?: string;
   emptyText?: string;
+  footerLoaded?: string;
+  footerLoading?: string;
   noMore?: string;
   tipText?: string;
   tipFreedText?: string;
-  onScrollToLower?: (any) => void;
+  onScrollToLower: (any) => void;
   onPullDownRefresh?: (any) => void;
-  classText?: string;
-  style?: any;
-  className?: string;
-  scrollTop?: number;
   hasMore: boolean;
-  needLoad?: boolean;
+  needInit?: boolean;
+  isEmpty: boolean;
   isError?: boolean;
-  selector?: string;
-  delay?: string | boolean | number;
   launch?: Launch;
   renderEmpty?: any;
   renderError?: any;
@@ -45,6 +41,8 @@ interface Props {
   renderFooterLoaded?: any;
   distanceToRefresh?: number;
   indicator?: Indicator;
+  isLoaded?: boolean;
+  selector?: string;
 }
 interface Indicator {
   activate?: any,
@@ -65,20 +63,19 @@ class ListView extends Component<Props, State> {
   };
 
   static defaultProps = {
-    delay: false,
     distanceToRefresh: 30,
     isLoaded: true,
-    value: '',
-    isEmpty: true,
+    isEmpty: false,
     emptyText: '',
-    footerLoading: '加载中...',
     noMore: '暂无更多内容',
+    footerLoading: '加载中...',
+    footerLoaded: '暂无更多内容',
     scrollTop: 0,
     touchScrollTop: 0,
     onScrollToLower: () => {},
     onPullDownRefresh: null,
     hasMore: false,
-    needLoad: false,
+    needInit: false,
     isError: false,
     launch: {},
     renderEmpty: null,
@@ -105,7 +102,7 @@ class ListView extends Component<Props, State> {
   };
 
   componentDidMount() {
-    if (this.props.needLoad) this.fetchInit();
+    if (this.props.needInit) this.fetchInit();
   }
 
   touchEvent = (e: TouchEvent) => {
@@ -333,7 +330,7 @@ class ListView extends Component<Props, State> {
             {
               footerLoaded && (
                 <View className='loaded'>
-                  { noMore }
+                  { noMore || footerLoaded }
                 </View>
               )
             }
