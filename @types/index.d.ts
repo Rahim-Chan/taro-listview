@@ -1,2 +1,1 @@
-export {default as ClAvatar} from './list-view';
-export {default as ClButton} from './button';
+export {default as ListView} from './list-view';

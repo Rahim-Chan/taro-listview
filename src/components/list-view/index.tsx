@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro';
 import { ScrollView, View } from '@tarojs/components';
-import { Skeleton } from 'components';
+import Skeleton  from '../skeleton';
 // import { AtIcon } from 'taro-ui';
-import { throttle } from 'utils/utils';
+import { throttle } from '../../utils/utils';
 import emptyImg from './assets/empty.png'
 import './index.scss';
 
@@ -201,7 +201,6 @@ class ListView extends Component<Props, State> {
   };
 
   handleScrollToLower = () => {
-    console.log('触底了');
     throttle(() => {
       this.getMore();
     });
@@ -212,7 +211,6 @@ class ListView extends Component<Props, State> {
     const { lowerLoading } = this.state;
     if (hasMore && !lowerLoading && onScrollToLower) {
       this.setState({ lowerLoading: true });
-      console.log('onScrollToLower');
       onScrollToLower(() => {
         this.setState({ lowerLoading: false });
       });

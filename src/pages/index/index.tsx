@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
-import {ListView} from 'components';
+import ListView from '../../components/list-view';
 import { wait } from 'utils/utils';
 import './index.scss'
 
