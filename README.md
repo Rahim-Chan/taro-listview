@@ -100,8 +100,8 @@ const { hasMore, list } = this.state;
     </View>
   </ListView>
 </View>
-
 ```
+
 | 属性 | 说明                | 类型   |默认值   |必传   |
 | :------- | :---------------  | :--------- |:--------- |:--------- |
 | isLoaded   | 骨架屏是否显示（eg:加载第一页时开启）    | boolean | false | - |
@@ -112,6 +112,7 @@ const { hasMore, list } = this.state;
 | :------- | :---------------  | :--------- |:--------- |:--------- |
 | onPullDownRefresh   | 下拉刷新触发函数 | function | - | - |
 | onScrollToLower   | 上拉底触发函数    | function | - | - |
+
 ```jsx
 onPullDownRefresh = async (rest) => {
   await getData()
