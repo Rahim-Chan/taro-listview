@@ -19,7 +19,7 @@
 import ListView from 'taro-list-view'
 
 onPullDownRefresh = async (rest) => {
-    const res = await await fetch(1);// { list: array, hasMore: boolean }
+    const res = await fetch(1);// { list: array, hasMore: boolean }
     this.setState(res);
     rest()
   };
@@ -62,7 +62,6 @@ const { hasMore, list } = this.state;
 | :------- | :---------------  | :--------- |:--------- |:--------- |
 | style   | -    | - | - | - |
 | hasMore   | 允许加载更多    | boolean | true |true |
-| isLoaded   | 骨架屏展示    | boolean | - | - |
 | isEmpty   | 空凭页    | boolean | - | - |
 | isError   | 错误页    | boolean | - | - |
 | needInit   | 初始化&自动调用下拉刷新方法   | boolean | - | - |

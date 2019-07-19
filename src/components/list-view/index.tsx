@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro';
 import { ScrollView, View } from '@tarojs/components';
 import Skeleton  from '../skeleton';
-// import { AtIcon } from 'taro-ui';
 import { throttle } from '../../utils/utils';
 import emptyImg from './assets/empty.png'
 import './index.scss';
@@ -23,8 +22,8 @@ interface Props {
   style?: any;
   className?: string;
   emptyText?: string;
-  footerLoaded?: string;
-  footerLoading?: string;
+  footerLoadedText?: string;
+  footerLoadingText?: string;
   noMore?: string;
   tipText?: string;
   tipFreedText?: string;
@@ -68,8 +67,8 @@ class ListView extends Component<Props, State> {
     isEmpty: false,
     emptyText: '',
     noMore: '暂无更多内容',
-    footerLoading: '加载中...',
-    footerLoaded: '暂无更多内容',
+    footerLoadingText: '加载中...',
+    footerLoadedText: '暂无更多内容',
     scrollTop: 0,
     touchScrollTop: 0,
     onScrollToLower: () => {},
@@ -239,6 +238,8 @@ class ListView extends Component<Props, State> {
       selector,
       launch,
       indicator,
+      footerLoadingText,
+      footerLoadedText
     } = this.props;
     const { launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false } = launch as Launch;
     const { release = '加载中', activate = '下拉刷新', deactivate = '释放刷新' } = indicator as Indicator;
@@ -258,7 +259,7 @@ class ListView extends Component<Props, State> {
     const showError = isError; // isErrorUI权重最高
     const showErrorText = showError && !launchError; // 渲染ErrorText
     const showRenderError = showError && launchError; // 渲染renderError
-    const showEmpty = !isError && isEmpty; // isErrorUI权重最高
+    const showEmpty = !isError && !downLoading && isEmpty; // isErrorUI权重最高
     const showEmptyText = showEmpty && !launchEmpty; // 渲染emptyText
     const showRenderEmpty = showEmpty && launchEmpty; // 渲染renderEmpty
 
@@ -316,7 +317,7 @@ class ListView extends Component<Props, State> {
             {
               footerLoading && (
                 <View className='loading'>
-                  { footerLoading }
+                  { footerLoadingText }
                 </View>
               )
             }
@@ -328,7 +329,7 @@ class ListView extends Component<Props, State> {
             {
               footerLoaded && (
                 <View className='loaded'>
-                  { noMore || footerLoaded }
+                  { noMore || footerLoadedText }
                 </View>
               )
             }

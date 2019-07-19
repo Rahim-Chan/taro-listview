@@ -1,7 +1,6 @@
 let endTime: number;
 
 export function throttle(callback: () => void, time: number = 500) {
-  console.log('throttle');
   const startTime = new Date().getTime();
   if (startTime - endTime > time || !endTime) {
     callback();
