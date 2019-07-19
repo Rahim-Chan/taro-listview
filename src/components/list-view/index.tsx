@@ -286,8 +286,8 @@ class ListView extends Component<Props, State> {
           >
             <View style={blockStyle} className='pullDownBlock'>
               <View className='tip'>
-                {showTipFreedText && <View>{ activate ||tipFreedText}</View>}
-                {showTipText && <View>{ deactivate ||tipText}</View>}
+                {showTipFreedText && <View>{ deactivate || tipFreedText}</View>}
+                {showTipText && <View>{ activate || tipText}</View>}
                 {downLoading && <View>{release}</View>}
               </View>
             </View>
