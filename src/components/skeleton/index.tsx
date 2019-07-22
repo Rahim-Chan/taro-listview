@@ -7,10 +7,17 @@ interface Props {
   selector?: string;
 }
 
+interface Item {
+  width: string | number;
+  height: string | number;
+  top: string | number;
+  left: string | number;
+}
+
 interface State {
-  bg: any[];
-  list: any[];
-  listRadius: any[];
+  bg: Item[];
+  list: Item[];
+  listRadius: Item[];
 }
 
 class Skeleton extends Component<Props, State> {
@@ -63,7 +70,6 @@ class Skeleton extends Component<Props, State> {
       .selectAll(`${selector} >>> .skeleton-bg`)
       .boundingClientRect()
       .exec(res => {
-        console.log(res);
         this.setState({ bg: res[0] });
       });
 
@@ -71,7 +77,6 @@ class Skeleton extends Component<Props, State> {
       .selectAll(`${selector} >>> .skeleton-rect`)
       .boundingClientRect()
       .exec(res => {
-        console.log({ res });
         this.setState({ list: res[0] });
       });
 
@@ -94,7 +99,7 @@ class Skeleton extends Component<Props, State> {
         ) : (
           <View style={{ height: '100vh', backgroundColor: 'white' }}>
             {bg.map(item => {
-              const { width, height, top, left } = item;
+              const { width, height, top, left } = item as Item;
               return (
                 <View
                   key={item}
@@ -110,7 +115,7 @@ class Skeleton extends Component<Props, State> {
               );
             })}
             {list.map(item => {
-              const { width, height, top, left } = item;
+              const { width, height, top, left } = item as Item;
               return (
                 <View
                   key={item}
@@ -126,7 +131,7 @@ class Skeleton extends Component<Props, State> {
               );
             })}
             {listRadius.map(item => {
-              const { width, height, top, left } = item;
+              const { width, height, top, left } = item as Item;
               return (
                 <View
                   key={item}
