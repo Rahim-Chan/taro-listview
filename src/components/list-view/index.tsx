@@ -269,7 +269,7 @@ class ListView extends Component<Props, State> {
           ref={node => {
             this.scrollView = node;
           }}
-          className={`${className} scrollView refView`}
+          className={`${className}`}
           style={style}
           scrollY={canScrollY}
           lowerThreshold={20}
@@ -295,7 +295,7 @@ class ListView extends Component<Props, State> {
             {showChildren && this.props.children}
             {/* default error page */}
             {showErrorText && (
-              <View className="error-page">
+              <View className="errorPage">
                 <View className="marginBottom30">啊哦，网络悄悄跑到外星球去了~</View>
                 <View className="button" onClick={this.fetchInit}>
                   重新加载
@@ -307,7 +307,7 @@ class ListView extends Component<Props, State> {
             {/* default blank page */}
             {showEmptyText && (
               <View className="noContentTips">
-                <Image src={emptyImg} alt="" className='empty-banner'/>
+                <Image src={emptyImg} alt="" className='emptyBanner'/>
                 {emptyText}
               </View>
             )}
