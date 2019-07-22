@@ -107,7 +107,7 @@ export default class Index extends Component {
               release: '刷新中',
             }}
           onPullDownRefresh={fn => this.onPullDownRefresh(fn)}
-          onScrollToLower={fn => this.onScrollToLower(fn)}
+          onScrollToLower={this.onScrollToLower}
         >
           {list.map((item, index) => {
             return (

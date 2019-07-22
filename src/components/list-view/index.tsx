@@ -1,22 +1,10 @@
 import Taro, { Component } from '@tarojs/taro';
-import { ScrollView, View } from '@tarojs/components';
+import { ScrollView, View, Image } from '@tarojs/components';
+import { ITouchEvent } from '@tarojs/components/types/common';
 import Skeleton  from '../skeleton';
 import { throttle } from '../../utils/utils';
 import emptyImg from './assets/empty.png'
 import './index.scss';
-
-interface State {
-  blockStyle: any;
-  canScrollY: boolean;
-  startY: number;
-  needPullDown: boolean;
-  touchScrollTop: number;
-  downLoading: boolean;
-  lowerLoading: boolean;
-  scrollTop: number;
-  isInit: boolean;
-  lowerDistance: number;
-}
 
 interface Props {
   style?: any;
@@ -56,6 +44,23 @@ interface Launch {
   launchFooterLoaded?: boolean;
 }
 
+const initialState = {
+  canScrollY: true,
+  touchScrollTop: 0,
+  lowerDistance: 0,
+  scrollTop: 0,
+  startY: 0,
+  downLoading: false,
+  lowerLoading: false,
+  needPullDown: true,
+  isInit: false,
+  blockStyle: {
+    height: `${0}px`,
+    transition: `none`,
+  },
+};
+
+type State = Readonly<typeof initialState>
 class ListView extends Component<Props, State> {
   static options = {
     addGlobalClass: true,
@@ -104,7 +109,7 @@ class ListView extends Component<Props, State> {
     if (this.props.needInit) this.fetchInit();
   }
 
-  touchEvent = (e: TouchEvent) => {
+  touchEvent = (e: ITouchEvent) => {
     const { startY } = this.state;
     const { type, touches } = e;
     const { onPullDownRefresh } = this.props;
@@ -189,8 +194,8 @@ class ListView extends Component<Props, State> {
       blockStyle: {
         height: `${height}px`,
         transition: 'height 300ms',
-        needPullDown: true,
       },
+      needPullDown: true,
       downLoading: height === distanceToRefresh,
     });
     // todo 监听真正动画结束
@@ -279,10 +284,10 @@ class ListView extends Component<Props, State> {
         >
           <View
             style={{ minHeight: '100%' }}
-            onTouchMove={this.touchEvent}
-            onTouchEnd={this.touchEvent}
-            onTouchStart={this.touchEvent}
-            onTouchCancel={this.touchEvent}
+            onTouchMove={(e) => this.touchEvent(e)}
+            onTouchEnd={(e) => this.touchEvent(e)}
+            onTouchStart={(e) => this.touchEvent(e)}
+            onTouchCancel={(e) => this.touchEvent(e)}
           >
             <View style={blockStyle} className='pullDownBlock'>
               <View className='tip'>
@@ -307,7 +312,7 @@ class ListView extends Component<Props, State> {
             {/* default blank page */}
             {showEmptyText && (
               <View className="noContentTips">
-                <Image src={emptyImg} alt="" className='empty-banner'/>
+                <Image src={emptyImg} className='empty-banner'/>
                 {emptyText}
               </View>
             )}
