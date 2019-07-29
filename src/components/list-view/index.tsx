@@ -1,8 +1,8 @@
-import Taro, { Component } from '@tarojs/taro';
-import { ScrollView, View, Image } from '@tarojs/components';
+import Taro, {Component} from '@tarojs/taro';
+import {ScrollView, View, Image} from '@tarojs/components';
 import { ITouchEvent } from '@tarojs/components/types/common';
-import Skeleton  from '../skeleton';
-import { throttle } from '../../utils/utils';
+import Skeleton from '../skeleton';
+import {throttle} from '../../utils/utils';
 import emptyImg from './assets/empty.png'
 import './index.scss';
 
@@ -31,12 +31,14 @@ interface Props {
   isLoaded?: boolean;
   selector?: string;
 }
+
 interface Indicator {
   activate?: any,
   deactivate?: any,
   release?: any,
   tipFreedText?: any;
 }
+
 interface Launch {
   launchEmpty?: boolean;
   launchError?: boolean;
@@ -47,7 +49,6 @@ interface Launch {
 const initialState = {
   canScrollY: true,
   touchScrollTop: 0,
-  lowerDistance: 0,
   scrollTop: 0,
   startY: 0,
   downLoading: false,
@@ -61,6 +62,7 @@ const initialState = {
 };
 
 type State = Readonly<typeof initialState>
+
 class ListView extends Component<Props, State> {
   static options = {
     addGlobalClass: true,
@@ -76,7 +78,8 @@ class ListView extends Component<Props, State> {
     footerLoadedText: '暂无更多内容',
     scrollTop: 0,
     touchScrollTop: 0,
-    onScrollToLower: () => {},
+    onScrollToLower: () => {
+    },
     onPullDownRefresh: null,
     hasMore: false,
     needInit: false,
@@ -92,7 +95,6 @@ class ListView extends Component<Props, State> {
   state = {
     canScrollY: true,
     touchScrollTop: 0,
-    lowerDistance: 0,
     scrollTop: 0,
     startY: 0,
     downLoading: false,
@@ -110,9 +112,9 @@ class ListView extends Component<Props, State> {
   }
 
   touchEvent = (e: ITouchEvent) => {
-    const { startY } = this.state;
-    const { type, touches } = e;
-    const { onPullDownRefresh } = this.props;
+    const {startY} = this.state;
+    const {type, touches} = e;
+    const {onPullDownRefresh} = this.props;
     if (!onPullDownRefresh) return;
     switch (type) {
       case 'touchstart': {
@@ -125,19 +127,19 @@ class ListView extends Component<Props, State> {
       }
       case 'touchmove': {
         // const { clientY: preClientY = 1 } = this.state.blockStyle;
-        const { clientY } = touches[0];
-        const { touchScrollTop } = this.state;
+        const {clientY} = touches[0];
+        const {touchScrollTop} = this.state;
         const height = Math.floor((clientY - startY) / 5);
         // 拖动方向不符合的不处理
         if (height < 0 || touchScrollTop > 5) return;
-        this.setState({ canScrollY: false });
+        this.setState({canScrollY: false});
 
         e.preventDefault(); // 阻止默认的处理方式(阻止下拉滑动的效果)
         if (height > 0 && height < 80) {
           if (height < 50) {
-            this.setState({ needPullDown: true });
+            this.setState({needPullDown: true});
           } else {
-            this.setState({ needPullDown: false });
+            this.setState({needPullDown: false});
           }
           this.setState({
             blockStyle: {
@@ -171,20 +173,20 @@ class ListView extends Component<Props, State> {
   };
 
   fetchInit = () => {
-    const { onPullDownRefresh } = this.props;
+    const {onPullDownRefresh} = this.props;
     this.resetLoad(30);
     if (onPullDownRefresh) {
       onPullDownRefresh(() => {
-        this.setState({ isInit: true });
+        this.setState({isInit: true});
         this.resetLoad(0, () => {
-          this.setState({ isInit: false });
+          this.setState({isInit: false});
         });
       });
     }
   };
 
   resetLoad = (height = 0, cb?) => {
-    const { distanceToRefresh } = this.props;
+    const {distanceToRefresh} = this.props;
     let canScrollY = false;
     if (height === 0) {
       canScrollY = true;
@@ -199,7 +201,7 @@ class ListView extends Component<Props, State> {
       downLoading: height === distanceToRefresh,
     });
     // todo 监听真正动画结束
-    setTimeout(function() {
+    setTimeout(function () {
       if (cb) cb();
     }, 400);
   };
@@ -211,21 +213,21 @@ class ListView extends Component<Props, State> {
   };
 
   getMore = () => {
-    const { onScrollToLower, hasMore } = this.props;
-    const { lowerLoading } = this.state;
+    const {onScrollToLower, hasMore} = this.props;
+    const {lowerLoading} = this.state;
     if (hasMore && !lowerLoading && onScrollToLower) {
-      this.setState({ lowerLoading: true });
+      this.setState({lowerLoading: true});
       onScrollToLower(() => {
-        this.setState({ lowerLoading: false });
+        this.setState({lowerLoading: false});
       });
     }
   };
 
   onScroll = e => {
     const {
-      detail: { scrollTop, scrollHeight },
+      detail: {scrollTop},
     } = e;
-    this.setState({ scrollTop, lowerDistance: scrollHeight - scrollTop });
+    this.setState({scrollTop });
   };
 
   render() {
@@ -246,9 +248,9 @@ class ListView extends Component<Props, State> {
       footerLoadingText,
       footerLoadedText
     } = this.props;
-    const { launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false } = launch as Launch;
-    const { release = '加载中', activate = '下拉刷新', deactivate = '释放刷新' } = indicator as Indicator;
-    const { canScrollY, isInit, blockStyle, needPullDown, downLoading, lowerLoading } = this.state;
+    const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
+    const {release = '加载中', activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
+    const {canScrollY, isInit, blockStyle, needPullDown, downLoading, lowerLoading} = this.state;
 
     const showTipText = !downLoading && needPullDown && !isInit; // 下拉文案
     const showTipFreedText = !downLoading && !needPullDown && !isInit;// 释放文案
@@ -268,6 +270,8 @@ class ListView extends Component<Props, State> {
     const showEmptyText = showEmpty && !launchEmpty; // 渲染emptyText
     const showRenderEmpty = showEmpty && launchEmpty; // 渲染renderEmpty
 
+    const newStyle = {...style, overflow: canScrollY ? 'scroll' : 'hidden'};
+    //taro scrollView 组建scrollY无效
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
         <ScrollView
@@ -275,24 +279,24 @@ class ListView extends Component<Props, State> {
             this.scrollView = node;
           }}
           className={`${className}`}
-          style={style}
-          scrollY={canScrollY}
+          style={newStyle}
+          // scrollY={false}
           lowerThreshold={20}
           onScrollToLower={this.handleScrollToLower}
           scrollWithAnimation
           onScroll={this.onScroll}
         >
           <View
-            style={{ minHeight: '100%' }}
+            style={{minHeight: '100%'}}
             onTouchMove={(e) => this.touchEvent(e)}
             onTouchEnd={(e) => this.touchEvent(e)}
             onTouchStart={(e) => this.touchEvent(e)}
             onTouchCancel={(e) => this.touchEvent(e)}
           >
             <View style={blockStyle} className='pullDownBlock'>
-              <View className='tip'>
-                {showTipFreedText && <View>{ deactivate || tipFreedText}</View>}
-                {showTipText && <View>{ activate || tipText}</View>}
+              <View className='tip'>¬
+                {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
+                {showTipText && <View>{activate || tipText}</View>}
                 {downLoading && <View>{release}</View>}
               </View>
             </View>
@@ -300,9 +304,9 @@ class ListView extends Component<Props, State> {
             {showChildren && this.props.children}
             {/* default error page */}
             {showErrorText && (
-              <View className="errorPage">
-                <View className="marginBottom30">啊哦，网络悄悄跑到外星球去了~</View>
-                <View className="button" onClick={this.fetchInit}>
+              <View className='errorPage'>
+                <View className='marginBottom30'>啊哦，网络悄悄跑到外星球去了~</View>
+                <View className='button' onClick={this.fetchInit}>
                   重新加载
                 </View>
               </View>
@@ -311,8 +315,8 @@ class ListView extends Component<Props, State> {
             {showRenderError && this.props.renderError}
             {/* default blank page */}
             {showEmptyText && (
-              <View className="noContentTips">
-                <Image src={emptyImg} className='emptyBanner'/>
+              <View className='noContentTips'>
+                <Image src={emptyImg} className='emptyBanner' />
                 {emptyText}
               </View>
             )}
@@ -322,7 +326,7 @@ class ListView extends Component<Props, State> {
             {
               footerLoading && (
                 <View className='loading'>
-                  { footerLoadingText }
+                  {footerLoadingText}
                 </View>
               )
             }
@@ -334,7 +338,7 @@ class ListView extends Component<Props, State> {
             {
               footerLoaded && (
                 <View className='loaded'>
-                  { noMore || footerLoadedText }
+                  {noMore || footerLoadedText}
                 </View>
               )
             }

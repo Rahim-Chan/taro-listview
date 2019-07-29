@@ -4,3 +4,10 @@ deploy_versions/
 .rn_temp/
 node_modules/
 .DS_Store
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/taro-listview.iml
+/.idea/vcs.xml
+/package-lock.json
