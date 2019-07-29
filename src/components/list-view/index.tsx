@@ -294,7 +294,7 @@ class ListView extends Component<Props, State> {
             onTouchCancel={(e) => this.touchEvent(e)}
           >
             <View style={blockStyle} className='pullDownBlock'>
-              <View className='tip'>¬
+              <View className='tip'>
                 {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                 {showTipText && <View>{activate || tipText}</View>}
                 {downLoading && <View>{release}</View>}
