@@ -270,7 +270,7 @@ class ListView extends Component<Props, State> {
     const showEmptyText = showEmpty && !launchEmpty; // 渲染emptyText
     const showRenderEmpty = showEmpty && launchEmpty; // 渲染renderEmpty
 
-    const newStyle = {...style, overflow: canScrollY ? 'scroll' : 'hidden'};
+    const newStyle = {...style };
     //taro scrollView 组建scrollY无效
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
@@ -280,7 +280,7 @@ class ListView extends Component<Props, State> {
           }}
           className={`${className}`}
           style={newStyle}
-          // scrollY={false}
+          scrollY={canScrollY}
           lowerThreshold={20}
           onScrollToLower={this.handleScrollToLower}
           scrollWithAnimation
