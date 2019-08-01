@@ -36,6 +36,9 @@
     "publish:production": "npm run build & npm publish"
   },
   "author": "rahim <chenrixi93@gmail.com>",
+  "publishConfig": {
+    "registry": "https://www.npmjs.com/"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:Rahim-Chan/taro-listView.git"
