@@ -2,8 +2,8 @@ import Taro, {Component} from '@tarojs/taro';
 import {ScrollView, View, Image} from '@tarojs/components';
 import { ITouchEvent } from '@tarojs/components/types/common';
 import Skeleton from '../skeleton';
-import {throttle} from '../../utils/utils';
-import emptyImg from './assets/empty.png'
+import { throttle } from '../../utils/utils';
+import emptyImg from './assets/empty.png';
 import './index.scss';
 
 interface Props {
@@ -61,6 +61,28 @@ const initialState = {
     transition: 'none',
   },
 };
+const initialProps = {
+  distanceToRefresh: 50,
+  damping: 150,
+  isLoaded: true,
+  isEmpty: false,
+  emptyText: '',
+  noMore: '暂无更多内容',
+  footerLoadingText: '加载中...',
+  footerLoadedText: '暂无更多内容',
+  scrollTop: 0,
+  touchScrollTop: 0,
+  onScrollToLower: () => {
+  },
+  onPullDownRefresh: null,
+  hasMore: false,
+  needInit: false,
+  isError: false,
+  launch: {},
+  renderEmpty: null,
+  renderError: null,
+  indicator: {}
+};
 
 type State = Readonly<typeof initialState>
 
@@ -69,28 +91,7 @@ class ListView extends Component<Props, State> {
     addGlobalClass: true,
   };
 
-  static defaultProps = {
-    distanceToRefresh: 50,
-    damping: 150,
-    isLoaded: true,
-    isEmpty: false,
-    emptyText: '',
-    noMore: '暂无更多内容',
-    footerLoadingText: '加载中...',
-    footerLoadedText: '暂无更多内容',
-    scrollTop: 0,
-    touchScrollTop: 0,
-    onScrollToLower: () => {
-    },
-    onPullDownRefresh: null,
-    hasMore: false,
-    needInit: false,
-    isError: false,
-    launch: {},
-    renderEmpty: null,
-    renderError: null,
-    indicator: {}
-  };
+  static defaultProps = initialProps;
 
   scrollView = {};
 
@@ -126,14 +127,13 @@ class ListView extends Component<Props, State> {
         this.setState({canScrollY: false});
 
         e.preventDefault(); // 阻止默认的处理方式(阻止下拉滑动的效果)
-        if (height > 0 && height < damping) {
-          if (height < distanceToRefresh) {
+        if (height > 0 && height < (damping || 0)) {
+          if (height < (distanceToRefresh || 0)) {
             this.setState({needPullDown: true});
           } else {
             this.setState({needPullDown: false});
           }
           this.trBody(height)
-
         }
         break;
       }
