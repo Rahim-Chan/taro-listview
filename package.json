@@ -1,6 +1,6 @@
 {
   "name": "taro-listview",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "listView pullDownRefresh and skeleton",
   "templateInfo": {
     "name": "default",
@@ -19,7 +19,13 @@
   "types": "./@types/index.d.ts",
   "main": "dist/index.js",
   "main:h5": "dist/h5/index.js",
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
   "scripts": {
+    "commit": "git-cz",
     "build:weapp": "taro build --type weapp",
     "build:swan": "taro build --type swan",
     "build:alipay": "taro build --type alipay",
