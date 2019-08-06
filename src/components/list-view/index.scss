@@ -1,11 +1,21 @@
+.bodyView {
+  will-change: transition, transform;
+}
+
+.containView {
+  position: relative;
+}
+
 .pullDownBlock {
   //background: red;
-  position: relative;
+  //position: absolute;
+  left: 0;
+  width: 100%;
   overflow: hidden;
   font-size: 28px;
-  //will-change: height;
+  display: flex;
+  align-items: flex-end;
   .tip {
-    position: absolute;
     bottom: 10px;
     left: 0;
     width: 100%;

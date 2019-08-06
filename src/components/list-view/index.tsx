@@ -27,6 +27,7 @@ interface Props {
   renderFooterLoading?: any;
   renderFooterLoaded?: any;
   distanceToRefresh?: number;
+  damping?: number;
   indicator?: Indicator;
   isLoaded?: boolean;
   selector?: string;
@@ -56,8 +57,8 @@ const initialState = {
   needPullDown: true,
   isInit: false,
   blockStyle: {
-    height: `${0}px`,
-    transition: `none`,
+    transform: 'translate3d(0,0,0)',
+    transition: 'none',
   },
 };
 
@@ -69,7 +70,8 @@ class ListView extends Component<Props, State> {
   };
 
   static defaultProps = {
-    distanceToRefresh: 30,
+    distanceToRefresh: 50,
+    damping: 150,
     isLoaded: true,
     isEmpty: false,
     emptyText: '',
@@ -92,29 +94,17 @@ class ListView extends Component<Props, State> {
 
   scrollView = {};
 
-  state = {
-    canScrollY: true,
-    touchScrollTop: 0,
-    scrollTop: 0,
-    startY: 0,
-    downLoading: false,
-    lowerLoading: false,
-    needPullDown: true,
-    isInit: false,
-    blockStyle: {
-      height: `${0}px`,
-      transition: `none`,
-    },
-  };
+  state = initialState;
 
   componentDidMount() {
+    this.trBody(0);
     if (this.props.needInit) this.fetchInit();
   }
 
   touchEvent = (e: ITouchEvent) => {
     const {startY} = this.state;
     const {type, touches} = e;
-    const {onPullDownRefresh} = this.props;
+    const {onPullDownRefresh, distanceToRefresh, damping} = this.props;
     if (!onPullDownRefresh) return;
     switch (type) {
       case 'touchstart': {
@@ -130,23 +120,20 @@ class ListView extends Component<Props, State> {
         const {clientY} = touches[0];
         const {touchScrollTop} = this.state;
         const height = Math.floor((clientY - startY) / 5);
+        // const height = (clientY - startY);
         // 拖动方向不符合的不处理
         if (height < 0 || touchScrollTop > 5) return;
         this.setState({canScrollY: false});
 
         e.preventDefault(); // 阻止默认的处理方式(阻止下拉滑动的效果)
-        if (height > 0 && height < 80) {
-          if (height < 50) {
+        if (height > 0 && height < damping) {
+          if (height < distanceToRefresh) {
             this.setState({needPullDown: true});
           } else {
             this.setState({needPullDown: false});
           }
-          this.setState({
-            blockStyle: {
-              height: `${height}px`,
-              transition: 'none',
-            },
-          });
+          this.trBody(height)
+
         }
         break;
       }
@@ -174,7 +161,7 @@ class ListView extends Component<Props, State> {
 
   fetchInit = () => {
     const {onPullDownRefresh} = this.props;
-    this.resetLoad(30);
+    this.resetLoad(1);
     if (onPullDownRefresh) {
       onPullDownRefresh(() => {
         this.setState({isInit: true});
@@ -185,21 +172,37 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  resetLoad = (height = 0, cb?) => {
+  resetLoad = (status = 0, cb?) => {
+    // status: 0:回复初始值 1：加载中
     const {distanceToRefresh} = this.props;
-    let canScrollY = false;
-    if (height === 0) {
-      canScrollY = true;
+    let blockStyle = {
+      transform: `translate3d(0,0,0)`,
+      transition: 'all 300ms linear',
+    };
+    let state = {};
+    switch (status) {
+      case 0:
+        state = {
+          canScrollY:true,
+          needPullDown: true,
+          downLoading: false,
+        };
+        break;
+      case 1:
+        state = {
+          canScrollY:false,
+          needPullDown: false,
+          downLoading: true,
+        };
+        blockStyle = {
+          transform: `translate3d(0,${distanceToRefresh}px,0)`,
+          transition: 'all 300ms linear',
+        };
+        break;
+      default:
     }
-    this.setState({
-      canScrollY,
-      blockStyle: {
-        height: `${height}px`,
-        transition: 'height 300ms',
-      },
-      needPullDown: true,
-      downLoading: height === distanceToRefresh,
-    });
+    state = Object.assign({}, state,{ blockStyle });
+    this.setState(JSON.parse(JSON.stringify(state)));
     // todo 监听真正动画结束
     setTimeout(function () {
       if (cb) cb();
@@ -230,6 +233,18 @@ class ListView extends Component<Props, State> {
     this.setState({scrollTop });
   };
 
+  trBody = (y: number) => {
+    //移动listview
+    console.log({ y })
+    this.setState({
+      blockStyle: {
+        transform: `translate3d(0,${y}px,0)`,
+        transition: 'none linear',
+        // overflow: 'hidden',
+      },
+    });
+  };
+
   render() {
     const {
       style,
@@ -246,7 +261,8 @@ class ListView extends Component<Props, State> {
       launch,
       indicator,
       footerLoadingText,
-      footerLoadedText
+      footerLoadedText,
+      damping
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
     const {release = '加载中', activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
@@ -270,7 +286,10 @@ class ListView extends Component<Props, State> {
     const showEmptyText = showEmpty && !launchEmpty; // 渲染emptyText
     const showRenderEmpty = showEmpty && launchEmpty; // 渲染renderEmpty
 
-    const newStyle = {...style };
+    const newStyle = {...style};
+    const trStyle = {
+      ...blockStyle
+    };
     //taro scrollView 组建scrollY无效
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
@@ -286,66 +305,69 @@ class ListView extends Component<Props, State> {
           scrollWithAnimation
           onScroll={this.onScroll}
         >
-          <View
-            style={{minHeight: '100%'}}
-            onTouchMove={(e) => this.touchEvent(e)}
-            onTouchEnd={(e) => this.touchEvent(e)}
-            onTouchStart={(e) => this.touchEvent(e)}
-            onTouchCancel={(e) => this.touchEvent(e)}
-          >
-            <View style={blockStyle} className='pullDownBlock'>
-              <View className='tip'>
-                {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
-                {showTipText && <View>{activate || tipText}</View>}
-                {downLoading && <View>{release}</View>}
+          <View style={{ minHeight: '100%',overflow: 'hidden' }}>
+            <View
+              style={trStyle}
+              className='bodyView'
+              onTouchMove={(e) => this.touchEvent(e)}
+              onTouchEnd={(e) => this.touchEvent(e)}
+              onTouchStart={(e) => this.touchEvent(e)}
+              onTouchCancel={(e) => this.touchEvent(e)}
+            >
+              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
+                <View className='tip'>
+                  {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
+                  {showTipText && <View>{activate || tipText}</View>}
+                  {downLoading && <View>{release}</View>}
+                </View>
               </View>
+              {/* present children */}
+              {showChildren && this.props.children}
+              {/* default error page */}
+              {showErrorText && (
+                <View className='errorPage'>
+                  <View className='marginBottom30'>啊哦，网络悄悄跑到外星球去了~</View>
+                  <View className='button' onClick={this.fetchInit}>
+                    重新加载
+                  </View>
+                </View>
+              )}
+              {/* custom error page */}
+              {showRenderError && this.props.renderError}
+              {/* default blank page */}
+              {showEmptyText && (
+                <View className='noContentTips'>
+                  <Image src={emptyImg} className='emptyBanner' />
+                  {emptyText}
+                </View>
+              )}
+              {/* custom blank page */}
+              {showRenderEmpty && this.props.renderEmpty}
+              {/* default page */}
+              {
+                footerLoading && (
+                  <View className='loading'>
+                    {footerLoadingText}
+                  </View>
+                )
+              }
+              {/* custom footer loading page*/}
+              {
+                customFooterLoading && this.props.renderFooterLoading
+              }
+              {/* default footer loaded page*/}
+              {
+                footerLoaded && (
+                  <View className='loaded'>
+                    {noMore || footerLoadedText}
+                  </View>
+                )
+              }
+              {/* custom footer loaded page*/}
+              {
+                customFooterLoaded && this.props.renderFooterLoaded
+              }
             </View>
-            {/* present children */}
-            {showChildren && this.props.children}
-            {/* default error page */}
-            {showErrorText && (
-              <View className='errorPage'>
-                <View className='marginBottom30'>啊哦，网络悄悄跑到外星球去了~</View>
-                <View className='button' onClick={this.fetchInit}>
-                  重新加载
-                </View>
-              </View>
-            )}
-            {/* custom error page */}
-            {showRenderError && this.props.renderError}
-            {/* default blank page */}
-            {showEmptyText && (
-              <View className='noContentTips'>
-                <Image src={emptyImg} className='emptyBanner' />
-                {emptyText}
-              </View>
-            )}
-            {/* custom blank page */}
-            {showRenderEmpty && this.props.renderEmpty}
-            {/* default page */}
-            {
-              footerLoading && (
-                <View className='loading'>
-                  {footerLoadingText}
-                </View>
-              )
-            }
-            {/* custom footer loading page*/}
-            {
-              customFooterLoading && this.props.renderFooterLoading
-            }
-            {/* default footer loaded page*/}
-            {
-              footerLoaded && (
-                <View className='loaded'>
-                  {noMore || footerLoadedText}
-                </View>
-              )
-            }
-            {/* custom footer loaded page*/}
-            {
-              customFooterLoaded && this.props.renderFooterLoaded
-            }
           </View>
         </ScrollView>
       </Skeleton>
