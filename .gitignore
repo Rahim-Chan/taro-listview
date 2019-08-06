@@ -17,3 +17,5 @@ node_modules/
 /src/components/.idea/workspace.xml
 /yarn.lock
 /yarn-error.log
+/.idea/watcherTasks.xml
+/src/components/.idea/components.iml
