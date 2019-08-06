@@ -320,9 +320,9 @@ class ListView extends Component<Props, State> {
                 renderEmpty={this.props.renderEmpty}
                 launchError={launchError}
                 launchEmpty={launchEmpty}
-                isError={isError}
-                isEmpty={isEmpty}
-                emptyText={emptyText}
+                isError={isError || false}
+                isEmpty={isEmpty || false}
+                emptyText={emptyText || ''}
                 fetchInit={this.fetchInit}
               />
               {/* default page */}
