@@ -40,7 +40,7 @@ export default class Index extends Component {
       });
     }
     await wait(1000)
-    return {list, hasMore: pIndex < 2, isLoaded: pIndex === 1};
+    return {list, hasMore: false, isLoaded: pIndex === 1};
   };
   componentDidMount() {
     console.log('componentDidMount')
