@@ -1,27 +1,7 @@
-.pullDownBlock {
-  position: relative;
-  font-size: 28px;
-  .tip {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-  }
-}
-
-.loading, .loaded {
-  text-align: center;
-  font-size: 24px;
-  padding: 12px;
-  //animation: loading infinite 1000ms ease;
-}
-.loaded {
-  color: #e6e6e6;
-}
 .errorPage {
   text-align: center;
   padding: 40px;
+  font-size: 30px;
   .button {
     border-radius: 10px;
     margin-top: 10px;
@@ -43,11 +23,6 @@
     margin: 0 auto 20px;
   }
 }
-@keyframes loading {
-  from {
-    transform: rotate(0turn);
-  }
-  to {
-    transform: rotate(1turn);
-  }
+.marginBottom30 {
+  margin-bottom: 30px;
 }
