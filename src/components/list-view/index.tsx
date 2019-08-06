@@ -1,9 +1,9 @@
 import Taro, {Component} from '@tarojs/taro';
-import {ScrollView, View, Image} from '@tarojs/components';
+import {ScrollView, View } from '@tarojs/components';
 import { ITouchEvent } from '@tarojs/components/types/common';
 import Skeleton from '../skeleton';
 import {throttle} from '../../utils/utils';
-import emptyImg from './assets/empty.png'
+import ResultPage from '../result-page';
 import './index.scss';
 
 interface Props {
@@ -19,13 +19,14 @@ interface Props {
   onPullDownRefresh?: (any) => void;
   hasMore: boolean;
   needInit?: boolean;
-  isEmpty: boolean;
+  isEmpty?: boolean;
   isError?: boolean;
   launch?: Launch;
-  renderEmpty?: any;
-  renderError?: any;
+  renderEmpty?: JSX.Element;
+  renderError?: JSX.Element;
   renderFooterLoading?: any;
   renderFooterLoaded?: any;
+  damping?: number;
   distanceToRefresh?: number;
   indicator?: Indicator;
   isLoaded?: boolean;
@@ -56,8 +57,8 @@ const initialState = {
   needPullDown: true,
   isInit: false,
   blockStyle: {
-    height: `${0}px`,
-    transition: `none`,
+    transform: 'translate3d(0,0,0)',
+    transition: 'none',
   },
 };
 
@@ -70,6 +71,7 @@ class ListView extends Component<Props, State> {
 
   static defaultProps = {
     distanceToRefresh: 30,
+    damping: 100,
     isLoaded: true,
     isEmpty: false,
     emptyText: '',
@@ -85,14 +87,14 @@ class ListView extends Component<Props, State> {
     needInit: false,
     isError: false,
     launch: {},
-    renderEmpty: null,
-    renderError: null,
+    renderEmpty: <View />,
+    renderError: <View />,
     indicator: {}
   };
 
   scrollView = {};
 
-  state = {
+  static state = {
     canScrollY: true,
     touchScrollTop: 0,
     scrollTop: 0,
@@ -114,7 +116,7 @@ class ListView extends Component<Props, State> {
   touchEvent = (e: ITouchEvent) => {
     const {startY} = this.state;
     const {type, touches} = e;
-    const {onPullDownRefresh} = this.props;
+    const {onPullDownRefresh, damping ,distanceToRefresh} = this.props;
     if (!onPullDownRefresh) return;
     switch (type) {
       case 'touchstart': {
@@ -135,15 +137,15 @@ class ListView extends Component<Props, State> {
         this.setState({canScrollY: false});
 
         e.preventDefault(); // 阻止默认的处理方式(阻止下拉滑动的效果)
-        if (height > 0 && height < 80) {
-          if (height < 50) {
+        if (height > 0 && height < damping) {
+          if (height < distanceToRefresh) {
             this.setState({needPullDown: true});
           } else {
             this.setState({needPullDown: false});
           }
           this.setState({
             blockStyle: {
-              height: `${height}px`,
+              transform: `translate3d(0,${height}px,0)`,
               transition: 'none',
             },
           });
@@ -154,7 +156,7 @@ class ListView extends Component<Props, State> {
         if (!this.state.needPullDown) {
           this.fetchInit();
         } else {
-          this.resetLoad(0);
+          this.resetLoad();
         }
         break;
       }
@@ -162,7 +164,7 @@ class ListView extends Component<Props, State> {
         if (!this.state.needPullDown) {
           this.fetchInit();
         } else {
-          this.resetLoad(0);
+          this.resetLoad();
         }
         break;
       }
@@ -173,8 +175,8 @@ class ListView extends Component<Props, State> {
   };
 
   fetchInit = () => {
-    const {onPullDownRefresh} = this.props;
-    this.resetLoad(30);
+    const {onPullDownRefresh, distanceToRefresh} = this.props;
+    this.resetLoad(distanceToRefresh);
     if (onPullDownRefresh) {
       onPullDownRefresh(() => {
         this.setState({isInit: true});
@@ -185,7 +187,8 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  resetLoad = (height = 0, cb?) => {
+  resetLoad = (height, cb?) => {
+    //状态断言： 0：恢复, distanceToRefresh: 加载中
     const {distanceToRefresh} = this.props;
     let canScrollY = false;
     if (height === 0) {
@@ -194,8 +197,8 @@ class ListView extends Component<Props, State> {
     this.setState({
       canScrollY,
       blockStyle: {
-        height: `${height}px`,
-        transition: 'height 300ms',
+        transform: `translate3d(0,${height}px,0)`,
+        transition: 'all 300ms',
       },
       needPullDown: true,
       downLoading: height === distanceToRefresh,
@@ -237,16 +240,17 @@ class ListView extends Component<Props, State> {
       tipText,
       hasMore,
       noMore,
-      isEmpty,
-      emptyText,
+      isEmpty = false,
+      emptyText = '',
       className,
-      isError,
+      isError = false,
       isLoaded,
       selector,
       launch,
       indicator,
       footerLoadingText,
-      footerLoadedText
+      footerLoadedText,
+      damping
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
     const {release = '加载中', activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
@@ -263,14 +267,12 @@ class ListView extends Component<Props, State> {
     const footerLoading = showFooter && !launchFooterLoading && lowerLoading;
     const customFooterLoading = showFooter && launchFooterLoading && lowerLoading; // 渲染renderNoMore
 
-    const showError = isError; // isErrorUI权重最高
-    const showErrorText = showError && !launchError; // 渲染ErrorText
-    const showRenderError = showError && launchError; // 渲染renderError
-    const showEmpty = !isError && !downLoading && isEmpty; // isErrorUI权重最高
-    const showEmptyText = showEmpty && !launchEmpty; // 渲染emptyText
-    const showRenderEmpty = showEmpty && launchEmpty; // 渲染renderEmpty
-
     const newStyle = {...style };
+
+    const bodyStyle = {
+      minHeight: '100%',
+      ...blockStyle
+    }
     //taro scrollView 组建scrollY无效
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
@@ -287,13 +289,13 @@ class ListView extends Component<Props, State> {
           onScroll={this.onScroll}
         >
           <View
-            style={{minHeight: '100%'}}
+            style={bodyStyle}
             onTouchMove={(e) => this.touchEvent(e)}
             onTouchEnd={(e) => this.touchEvent(e)}
             onTouchStart={(e) => this.touchEvent(e)}
             onTouchCancel={(e) => this.touchEvent(e)}
           >
-            <View style={blockStyle} className='pullDownBlock'>
+            <View className='pullDownBlock' style={{ height: damping }}>
               <View className='tip'>
                 {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                 {showTipText && <View>{activate || tipText}</View>}
@@ -302,26 +304,17 @@ class ListView extends Component<Props, State> {
             </View>
             {/* present children */}
             {showChildren && this.props.children}
-            {/* default error page */}
-            {showErrorText && (
-              <View className='errorPage'>
-                <View className='marginBottom30'>啊哦，网络悄悄跑到外星球去了~</View>
-                <View className='button' onClick={this.fetchInit}>
-                  重新加载
-                </View>
-              </View>
-            )}
-            {/* custom error page */}
-            {showRenderError && this.props.renderError}
-            {/* default blank page */}
-            {showEmptyText && (
-              <View className='noContentTips'>
-                <Image src={emptyImg} className='emptyBanner' />
-                {emptyText}
-              </View>
-            )}
-            {/* custom blank page */}
-            {showRenderEmpty && this.props.renderEmpty}
+
+            <ResultPage
+              renderError={this.props.renderError}
+              renderEmpty={this.props.renderEmpty}
+              launchError={launchError}
+              launchEmpty={launchEmpty}
+              isError={isError}
+              isEmpty={isEmpty}
+              emptyText={emptyText}
+              fetchInit={this.fetchInit}
+            />
             {/* default page */}
             {
               footerLoading && (

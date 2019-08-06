@@ -11,3 +11,9 @@ node_modules/
 /.idea/taro-listview.iml
 /.idea/vcs.xml
 /package-lock.json
+/src/components/.idea/misc.xml
+/src/components/.idea/modules.xml
+/src/components/.idea/vcs.xml
+/src/components/.idea/workspace.xml
+/yarn.lock
+/yarn-error.log
