@@ -65,7 +65,8 @@ const { hasMore, list } = this.state;
 | isEmpty   | 空凭页    | boolean | - | - |
 | isError   | 错误页    | boolean | - | - |
 | needInit   | 初始化&自动调用下拉刷新方法   | boolean | - | - |
-| distanceToRefresh   | 下拉距离    | boolean | - | - |
+| distanceToRefresh   | 下拉刷新距离    | number | - | - |
+| damping   | 最大下拉距离    | number | - | - |
 | emptyText   | 空白页提示语    | string | - | - |
 
 
@@ -84,10 +85,14 @@ const { hasMore, list } = this.state;
 
 ### 骨架屏
 1.因骨架屏是捕捉已有占位数据的样式，再绘制出骨架，所以要先注入默认空白占位数据。
+
 2.且需要一个传入父元素的class名(默认获取class为：skeleton的元素下的所有元素，可通过传入selector参数自定义class名。)，以捕捉子元素。现提供骨架选择器：背景（'skeleton-bg'）、矩阵（'skeleton-rect'）、圆形（'skeleton-redius'）。
+
+3.ListView组件已嵌套Skeleton组件，直接调用对应对应属性即可。
 ```jsx
+import { Skeleton } from 'taro-listview';
 <View className='skeleton>
-  <ListView>
+  <Skeleton>
     <View className='item skeleton-bg' >
       <Image className='avatar skeleton-radius' src={item.avatar}/>
       <View className='title skeleton-rect'>
