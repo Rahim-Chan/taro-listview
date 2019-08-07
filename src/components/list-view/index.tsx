@@ -234,7 +234,6 @@ class ListView extends Component<Props, State> {
 
   trBody = (y: number) => {
     //移动listview
-    console.log({ y })
     this.setState({
       blockStyle: {
         transform: `translate3d(0,${y}px,0)`,
