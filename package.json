@@ -45,7 +45,7 @@
   },
   "author": "rahim <chenrixi93@gmail.com>",
   "publishConfig": {
-    "registry": "https://www.npmjs.com/"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
