@@ -15,7 +15,7 @@ interface PagePros {
 }
 class Page extends Component<PagePros> {
   render() {
-    const { isError, launchError, launchEmpty, isEmpty, emptyText, fetchInit, renderError, renderEmpty } = this.props;
+    const { isError, launchError, launchEmpty, isEmpty, emptyText, fetchInit } = this.props;
     const showError = isError; // isErrorUI权重最高
     const showErrorText = showError && !launchError; // 渲染ErrorText
     const showRenderError = showError && launchError; // 渲染renderError
@@ -34,7 +34,7 @@ class Page extends Component<PagePros> {
           </View>
         )}
         {/* custom error page */}
-        {showRenderError ? renderError : ''}
+        {showRenderError ? this.props.renderError : ''}
         {/* default blank page */}
         {showEmptyText && (
           <View className='noContentTips'>
@@ -43,7 +43,7 @@ class Page extends Component<PagePros> {
           </View>
         )}
         {/* custom blank page */}
-        {showRenderEmpty ? renderEmpty : ''}
+        {showRenderEmpty ? this.props.renderEmpty : ''}
       </View>
     )}
 }
