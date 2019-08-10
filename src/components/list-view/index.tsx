@@ -68,7 +68,7 @@ const initialProps = {
   isEmpty: false,
   emptyText: '',
   noMore: '暂无更多内容',
-  footerLoadingText: '加载中...',
+  footerLoadingText: '加载中',
   footerLoadedText: '暂无更多内容',
   scrollTop: 0,
   touchScrollTop: 0,
