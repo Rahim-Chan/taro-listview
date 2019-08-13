@@ -296,14 +296,16 @@ class ListView extends Component<Props, State> {
           scrollWithAnimation
           onScroll={this.onScroll}
         >
-          <View style={{ minHeight: '100%',overflow: 'hidden' }}>
+          <View
+            style={{ minHeight: '100%',overflow: 'hidden' }}
+            onTouchMove={(e) => this.touchEvent(e)}
+            onTouchEnd={(e) => this.touchEvent(e)}
+            onTouchStart={(e) => this.touchEvent(e)}
+            onTouchCancel={(e) => this.touchEvent(e)}
+          >
             <View
               style={trStyle}
               className='bodyView'
-              onTouchMove={(e) => this.touchEvent(e)}
-              onTouchEnd={(e) => this.touchEvent(e)}
-              onTouchStart={(e) => this.touchEvent(e)}
-              onTouchCancel={(e) => this.touchEvent(e)}
             >
               <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
                 <View className='tip'>
