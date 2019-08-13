@@ -1,6 +1,6 @@
 {
   "name": "taro-listview",
-  "version": "1.0.17",
+  "version": "1.0.0",
   "description": "listView pullDownRefresh and skeleton",
   "templateInfo": {
     "name": "default",
@@ -16,7 +16,6 @@
     "dist",
     "@types"
   ],
-
   "types": "./@types/index.d.ts",
   "main": "dist/index.js",
   "main:h5": "dist/h5/index.js",
