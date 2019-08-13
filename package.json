@@ -1,6 +1,6 @@
 {
   "name": "taro-listview",
-  "version": "1.0.17",
+  "version": "1.0.16",
   "description": "listView pullDownRefresh and skeleton",
   "templateInfo": {
     "name": "default",
@@ -16,7 +16,6 @@
     "dist",
     "@types"
   ],
-
   "types": "./@types/index.d.ts",
   "main": "dist/index.js",
   "main:h5": "dist/h5/index.js",
@@ -73,7 +72,6 @@
   },
   "devDependencies": {
     "@semantic-release/git": "^7.0.16",
-    "semantic-release": "^15.13.19",
     "@tarojs/plugin-babel": "1.3.12",
     "@tarojs/plugin-csso": "1.3.12",
     "@tarojs/plugin-sass": "1.3.12",
@@ -93,6 +91,7 @@
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.8.2",
     "eslint-plugin-taro": "1.3.12",
+    "semantic-release": "^15.13.19",
     "stylelint": "9.3.0",
     "stylelint-config-taro-rn": "1.3.12",
     "stylelint-taro-rn": "1.3.12",
