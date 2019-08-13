@@ -1,14 +1,8 @@
 # .github/main.workflow
 
 # 触发: 当 push 时触发
-workflow "Push" {
-  resolves = [
-    "Release",
-  ]
-  on = "pull_request"
 
-  # .github/main.workflow
-}
+# .github/main.workflow
 
 # 安装：仅当分支筛选通过时依赖安装
 action "Installation" {
