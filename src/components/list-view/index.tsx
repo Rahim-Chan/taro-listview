@@ -233,12 +233,10 @@ class ListView extends Component<Props, State> {
   };
 
   trBody = (y: number) => {
-    //移动listview
     this.setState({
       blockStyle: {
         transform: `translate3d(0,${y}px,0)`,
         transition: 'none linear',
-        // overflow: 'hidden',
       },
     });
   };
