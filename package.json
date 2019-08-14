@@ -41,7 +41,8 @@
     "dev:h5": "npm run build:h5 -- --watch",
     "dev:rn": "npm run build:rn -- --watch",
     "build": "cross-env TARO_BUILD_TYPE=ui taro build --ui",
-    "publish:production": "npm run build & npm publish"
+    "publish:production": "npm run build & npm publish",
+    "semantic-release": "semantic-release"
   },
   "author": "rahim <chenrixi93@gmail.com>",
   "publishConfig": {
@@ -70,6 +71,7 @@
     "nervjs": "^1.4.0"
   },
   "devDependencies": {
+    "@semantic-release/git": "^7.0.16",
     "@tarojs/plugin-babel": "1.3.12",
     "@tarojs/plugin-csso": "1.3.12",
     "@tarojs/plugin-sass": "1.3.12",
@@ -89,6 +91,7 @@
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.8.2",
     "eslint-plugin-taro": "1.3.12",
+    "semantic-release": "^15.13.19",
     "stylelint": "9.3.0",
     "stylelint-config-taro-rn": "1.3.12",
     "stylelint-taro-rn": "1.3.12",
