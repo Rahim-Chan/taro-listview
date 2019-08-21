@@ -31,6 +31,7 @@ interface Props {
   indicator?: Indicator;
   isLoaded?: boolean;
   selector?: string;
+  onScroll?: () => void;
 }
 
 interface Indicator {
@@ -74,6 +75,7 @@ const initialProps = {
   touchScrollTop: 0,
   onScrollToLower: () => {
   },
+  className: '',
   onPullDownRefresh: null,
   hasMore: false,
   needInit: false,
@@ -229,6 +231,7 @@ class ListView extends Component<Props, State> {
     const {
       detail: {scrollTop},
     } = e;
+    if (this.props.onScroll) this.props.onScroll()
     this.setState({scrollTop });
   };
 
@@ -275,7 +278,10 @@ class ListView extends Component<Props, State> {
     const footerLoading = showFooter && !launchFooterLoading && lowerLoading;
     const customFooterLoading = showFooter && launchFooterLoading && lowerLoading; // 渲染renderNoMore
 
-    const newStyle = {...style};
+    const newStyle = {
+      ...style,
+      overflowY: canScrollY ? 'scroll' : 'hidden',
+    };
     const trStyle = {
       ...blockStyle
     };
@@ -295,7 +301,7 @@ class ListView extends Component<Props, State> {
           onScroll={this.onScroll}
         >
           <View
-            style={{ minHeight: '100%',overflow: 'hidden' }}
+            style={{ minHeight: '100%' }}
             onTouchMove={(e) => this.touchEvent(e)}
             onTouchEnd={(e) => this.touchEvent(e)}
             onTouchStart={(e) => this.touchEvent(e)}
