@@ -97,7 +97,7 @@ class Skeleton extends Component<Props, State> {
         {isLoaded ? (
           ''
         ) : (
-          <View style={{ height: '100vh', backgroundColor: 'white' }}>
+          <View style={{ height: '100vh', position: "fixed", left: 0, right: 0, top: 0, backgroundColor: 'white' }}>
             {bg.map(item => {
               const { width, height, top, left } = item as Item;
               return (
