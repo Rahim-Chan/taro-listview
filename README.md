@@ -13,6 +13,8 @@
 ## 使用案例
 
 ### 引入组件
+[列表Demo](https://github.com/Rahim-Chan/taro-listview/blob/master/src/pages/index/index.tsx)
+
 需给组件设置固定高度
 
 ```jsx
@@ -87,24 +89,43 @@ const { hasMore, list } = this.state;
 ### 骨架屏
 1.因骨架屏是捕捉已有占位数据的样式，再绘制出骨架，所以要先注入默认空白占位数据。
 
-2.且需要一个传入父元素的class名(默认获取class为：skeleton的元素下的所有元素，可通过传入selector参数自定义class名。)，以捕捉子元素。现提供骨架选择器：背景（'skeleton-bg'）、矩阵（'skeleton-rect'）、圆形（'skeleton-redius'）。
+2.且需要一个传入父元素的class名(默认获取class为：skeleton的元素下的所有元素，可通过传入selector参数自定义class名。)，以捕捉子元素。
+
+    提供骨架样式名：背景（'skeleton-bg'）、矩阵（'skeleton-rect'）、圆形（'skeleton-redius'）。
 
 3.ListView组件已嵌套Skeleton组件，直接调用对应对应属性即可。
+
+*元素需内容撑开，或者固定高度。
+
+[骨架屏Demo](https://github.com/Rahim-Chan/taro-listview/blob/master/src/pages/skeleton/index.tsx)
 ```jsx
-import { Skeleton } from 'taro-listview';
-<View className='skeleton>
-  <Skeleton>
-    <View className='item skeleton-bg' >
-      <Image className='avatar skeleton-radius' src={item.avatar}/>
-      <View className='title skeleton-rect'>
-        title
-      </View>
-      <View className='skeleton-rect'>
-        value
-      </View>
-    </View>
-  </ListView>
-</View>
+import Taro, {useState} from '@tarojs/taro';
+import {View, Button} from '@tarojs/components';
+import {Skeleton} from 'components';
+import './index.scss'
+
+export default () => {
+    const [isLoaded, setLoaded] = useState(false)
+    return (
+        <View>
+            <Button onClick={() => setLoaded(!isLoaded)}>toggle</Button>
+            <View className='skeleton'>
+                <Skeleton isLoaded={isLoaded}>
+                   {
+                       Array(4).fill(1).map(i => (
+                           <View className='item skeleton-bg' key={i}>
+                               <View className='avatar skeleton-radius'/>
+                               <View className='title skeleton-rect'>
+                                   title
+                               </View>
+                           </View>
+                       ))
+                   }
+                </Skeleton>
+            </View>
+        </View>
+    )
+}
 ```
 
 | 属性 | 说明                | 类型   |默认值   |必传   |

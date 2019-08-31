@@ -21,6 +21,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/skeleton/index',
       'pages/index/index'
     ],
     window: {
