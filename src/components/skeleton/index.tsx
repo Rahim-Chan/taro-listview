@@ -15,6 +15,7 @@ interface Item {
 }
 
 interface State {
+  parentRect: Record<any, string>;
   bg: Item[];
   list: Item[];
   listRadius: Item[];
@@ -27,6 +28,7 @@ class Skeleton extends Component<Props, State> {
   };
 
   state = {
+    parentRect: {},
     bg: [],
     list: [],
     listRadius: [],
@@ -57,11 +59,22 @@ class Skeleton extends Component<Props, State> {
         [selector]: list,
       });
     };
+    //window.requestAnimationFrame todo 渲染完毕
     setTimeout(() => {
+      const { selector } = this.props;
+      // @ts-ignore
+      const rect = document.querySelector(selector).getBoundingClientRect();
+      const parentStyle = {};
+      Object.keys(rect.toJSON()).forEach(i => {
+        parentStyle[i] = `${rect[i]}px`
+      });
+      this.setState({
+        parentRect: parentStyle
+      })
       selAll('bg');
       selAll('list');
       selAll('listRadius');
-    }, 300);
+    }, 300)
   }
 
   weappSkl() {
@@ -89,7 +102,7 @@ class Skeleton extends Component<Props, State> {
   }
 
   render() {
-    const { list, bg, listRadius } = this.state;
+    const { list, bg, listRadius, parentRect } = this.state;
     const { isLoaded } = this.props; // 是否加载完成
     return (
       <View>
@@ -97,7 +110,7 @@ class Skeleton extends Component<Props, State> {
         {isLoaded ? (
           ''
         ) : (
-          <View style={{ height: '100vh', position: "fixed", left: 0, right: 0, top: 0, backgroundColor: 'white' }}>
+          <View style={{ ...parentRect, backgroundColor: 'white', position: 'fixed', overflow: 'hidden' }}>
             {bg.map(item => {
               const { width, height, top, left } = item as Item;
               return (
