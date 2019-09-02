@@ -34,18 +34,6 @@ jobs:
         npm install -g npminstall
         npminstall
 
-    # 持续集成
-    - name: Continuous integration
-      run: npm run ci
-
-    # 代码覆盖率
-    - name: Code Coverage
-      run: |
-        npm install codecov -g
-        codecov
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
     # NPM 包发布
     - name: Release NPN Package
       run: npm run semantic-release
