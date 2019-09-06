@@ -28,15 +28,12 @@ jobs:
     # 代码拉取
     - uses: actions/checkout@master
 
-    # 依赖安装
-    - name: Install Dependencies
+    # 依赖安装并打包
+    - name: Install Dependencies and Build
       run: |
         npm install -g npminstall
         npminstall
-
-    # 打包代码
-    - name: Build
-        run: npm run build
+        npm run build
 
     # NPM 包发布
     - name: Release NPN Package
