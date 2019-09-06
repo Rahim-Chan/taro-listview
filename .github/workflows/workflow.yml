@@ -34,6 +34,10 @@ jobs:
         npm install -g npminstall
         npminstall
 
+    # 打包代码
+    - name: Build
+        run: npm run build
+
     # NPM 包发布
     - name: Release NPN Package
       run: npm run semantic-release
