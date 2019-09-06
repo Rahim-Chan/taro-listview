@@ -301,7 +301,7 @@ class ListView extends Component<Props, State> {
           onScroll={this.onScroll}
         >
           <View
-            style={{ minHeight: '100%' }}
+            style={{ minHeight: '100%', overflowY: 'hidden' }}
             onTouchMove={(e) => this.touchEvent(e)}
             onTouchEnd={(e) => this.touchEvent(e)}
             onTouchStart={(e) => this.touchEvent(e)}
