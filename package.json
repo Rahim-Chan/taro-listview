@@ -43,7 +43,7 @@
 		"build": "cross-env TARO_BUILD_TYPE=ui taro build --ui",
 		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types",
 		"publish:production": "npm run build & npm publish",
-		"semantic-release": "semantic-release",
+		"semantic-release": "semantic-release"
 	},
 
 	"author": "rahim <chenrixi93@gmail.com>",
