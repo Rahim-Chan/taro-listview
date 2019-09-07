@@ -2,11 +2,13 @@ import Taro, {Component} from '@tarojs/taro';
 import {ScrollView, View } from '@tarojs/components';
 import { ITouchEvent } from '@tarojs/components/types/common';
 import Skeleton from '../skeleton';
+import Loading from '../loading';
 import { throttle } from '../../utils/utils';
 import ResultPage from '../result-page';
 import './index.scss';
 
 interface Props {
+  circleColor?: string;
   style?: any;
   className?: string;
   emptyText?: string;
@@ -261,10 +263,11 @@ class ListView extends Component<Props, State> {
       indicator,
       footerLoadingText,
       footerLoadedText,
-      damping
+      damping,
+      circleColor
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
-    const {release = '加载中', activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
+    const {activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
     const {canScrollY, isInit, blockStyle, needPullDown, downLoading, lowerLoading} = this.state;
 
     const showTipText = !downLoading && needPullDown && !isInit; // 下拉文案
@@ -315,7 +318,8 @@ class ListView extends Component<Props, State> {
                 <View className='tip'>
                   {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                   {showTipText && <View>{activate || tipText}</View>}
-                  {downLoading && <View>{release}</View>}
+                  {/*{downLoading && <View>{release}</View>}*/}
+                  {downLoading && <Loading color={circleColor}/>}
                 </View>
               </View>
               {/* present children */}
