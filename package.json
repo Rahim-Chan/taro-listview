@@ -42,8 +42,10 @@
 		"dev:rn": "npm run build:rn -- --watch",
 		"build": "cross-env TARO_BUILD_TYPE=ui taro build --ui",
 		"publish:production": "npm run build & npm publish",
-		"semantic-release": "semantic-release"
+		"semantic-release": "semantic-release",
+		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types"
 	},
+
 	"author": "rahim <chenrixi93@gmail.com>",
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"

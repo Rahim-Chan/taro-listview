@@ -14,19 +14,7 @@ export default class Index extends Component {
     hasMore: true,
     style: {},
     isEmpty: false,
-    list: [{
-      value: 0,
-      avatar: require('./assets/avatar.jpg'),
-      title: 'this is title'
-    },{
-      value: 0,
-      avatar: require('./assets/avatar.jpg'),
-      title: 'this is title'
-    },{
-      value: 0,
-      avatar: require('./assets/avatar.jpg'),
-      title: 'this is title'
-    }],
+    list: [],
   };
 
   getData = async(pIndex = pageIndex) => {
@@ -48,7 +36,7 @@ export default class Index extends Component {
     this.refList.fetchInit()
   }
 
-  onPullDownRefresh = async (rest) => {
+  pullDownRefresh = async (rest) => {
     pageIndex = 1;
     const res = await this.getData(1);
     this.setState(res);
@@ -101,7 +89,7 @@ export default class Index extends Component {
                   //     deactivate: '释放刷新',
                   //     release: '刷新中',
                   //   }}
-                  onPullDownRefresh={fn => this.onPullDownRefresh(fn)}
+                  onPullDownRefresh={fn => this.pullDownRefresh(fn)}
                   onScrollToLower={this.onScrollToLower}
               >
                   {list.map((item, index) => {
