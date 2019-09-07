@@ -41,9 +41,9 @@
 		"dev:h5": "npm run build:h5 -- --watch",
 		"dev:rn": "npm run build:rn -- --watch",
 		"build": "cross-env TARO_BUILD_TYPE=ui taro build --ui",
+		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types"
 		"publish:production": "npm run build & npm publish",
 		"semantic-release": "semantic-release",
-		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types"
 	},
 
 	"author": "rahim <chenrixi93@gmail.com>",

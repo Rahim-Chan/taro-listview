@@ -19,3 +19,12 @@ node_modules/
 /yarn-error.log
 /.idea/watcherTasks.xml
 /src/components/.idea/components.iml
+/@types/components/list-view/index.d.ts
+/@types/components/loading/index.d.ts
+/@types/components/result-page/index.d.ts
+/@types/components/skeleton/index.d.ts
+/@types/components/index.d.ts
+/@types/pages/index/index.d.ts
+/@types/pages/skeleton/index.d.ts
+/@types/utils/utils.d.ts
+/@types/app.d.ts
