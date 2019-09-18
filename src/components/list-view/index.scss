@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.unNeedBlock {
+  opacity: 0;
+  visibility: hidden;
+}
 .pullDownBlock {
   left: 0;
   width: 100%;

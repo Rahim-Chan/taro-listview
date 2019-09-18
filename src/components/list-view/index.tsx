@@ -264,7 +264,8 @@ class ListView extends Component<Props, State> {
       footerLoadingText,
       footerLoadedText,
       damping,
-      circleColor
+      circleColor,
+      onPullDownRefresh,
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
     const {activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
@@ -314,7 +315,7 @@ class ListView extends Component<Props, State> {
               style={trStyle}
               className='bodyView'
             >
-              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
+              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className={`pullDownBlock ${onPullDownRefresh && 'unNeedBlock'}`}>
                 <View className='tip'>
                   {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                   {showTipText && <View>{activate || tipText}</View>}
