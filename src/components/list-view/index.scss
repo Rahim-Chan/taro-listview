@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.unNeedBlock {
+  opacity: 0;
+  visibility: hidden;
+}
 .pullDownBlock {
   left: 0;
   width: 100%;
@@ -14,10 +18,14 @@
   display: flex;
   align-items: flex-end;
   .tip {
-    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    color: #999999;
+    bottom: 30px;
     left: 0;
     width: 100%;
     text-align: center;
+
   }
 }
 

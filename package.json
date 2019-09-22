@@ -1,97 +1,101 @@
 {
-  "name": "taro-listview",
-  "version": "1.0.16",
-  "description": "listView pullDownRefresh and skeleton",
-  "templateInfo": {
-    "name": "default",
-    "typescript": true,
-    "css": "sass"
-  },
-  "keywords": [
-    "taro",
-    "taro-list-view",
-    "taro-skeleton"
-  ],
-  "files": [
-    "dist",
-    "@types"
-  ],
-  "types": "./@types/index.d.ts",
-  "main": "dist/index.js",
-  "main:h5": "dist/h5/index.js",
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
-  },
-  "scripts": {
-    "commit": "git-cz",
-    "build:weapp": "taro build --type weapp",
-    "build:swan": "taro build --type swan",
-    "build:alipay": "taro build --type alipay",
-    "build:tt": "taro build --type tt",
-    "build:h5": "taro build --type h5",
-    "build:rn": "taro build --type rn",
-    "build:qq": "taro build --type qq",
-    "build:quickapp": "taro build --type quickapp",
-    "dev:weapp": "npm run build:weapp -- --watch",
-    "dev:swan": "npm run build:swan -- --watch",
-    "dev:alipay": "npm run build:alipay -- --watch",
-    "dev:tt": "npm run build:tt -- --watch",
-    "dev:h5": "npm run build:h5 -- --watch",
-    "dev:rn": "npm run build:rn -- --watch",
-    "build": "cross-env TARO_BUILD_TYPE=ui taro build --ui",
-    "publish:production": "npm run build & npm publish"
-  },
-  "author": "rahim <chenrixi93@gmail.com>",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Rahim-Chan/taro-listView.git"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "@tarojs/async-await": "1.3.12",
-    "@tarojs/cli": "1.3.12",
-    "@tarojs/components": "1.3.12",
-    "@tarojs/router": "1.3.12",
-    "@tarojs/taro": "1.3.12",
-    "@tarojs/taro-alipay": "1.3.12",
-    "@tarojs/taro-h5": "1.3.12",
-    "@tarojs/taro-qq": "1.3.12",
-    "@tarojs/taro-quickapp": "1.3.12",
-    "@tarojs/taro-swan": "1.3.12",
-    "@tarojs/taro-tt": "1.3.12",
-    "@tarojs/taro-weapp": "1.3.12",
-    "cross-env": "^5.2.0",
-    "nerv-devtools": "^1.4.0",
-    "nervjs": "^1.4.0"
-  },
-  "devDependencies": {
-    "@tarojs/plugin-babel": "1.3.12",
-    "@tarojs/plugin-csso": "1.3.12",
-    "@tarojs/plugin-sass": "1.3.12",
-    "@tarojs/plugin-uglifyjs": "1.3.12",
-    "@tarojs/webpack-runner": "1.3.12",
-    "@types/react": "^16.4.6",
-    "@types/webpack-env": "^1.13.6",
-    "@typescript-eslint/parser": "^1.6.0",
-    "babel-eslint": "^8.2.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-jsx-stylesheet": "^0.6.5",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^5.16.0",
-    "eslint-config-taro": "1.3.12",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-react": "^7.8.2",
-    "eslint-plugin-taro": "1.3.12",
-    "stylelint": "9.3.0",
-    "stylelint-config-taro-rn": "1.3.12",
-    "stylelint-taro-rn": "1.3.12",
-    "typescript": "^3.0.1"
-  }
+	"name": "taro-listview",
+	"version": "1.1.1",
+	"description": "listView pullDownRefresh and skeleton",
+	"templateInfo": {
+		"name": "default",
+		"typescript": true,
+		"css": "sass"
+	},
+	"keywords": [
+		"taro",
+		"taro-list-view",
+		"taro-skeleton"
+	],
+	"files": [
+		"dist",
+		"@types"
+	],
+	"types": "./@types/index.d.ts",
+	"main": "dist/index.js",
+	"main:h5": "dist/h5/index.js",
+	"config": {
+		"commitizen": {
+			"path": "node_modules/cz-conventional-changelog"
+		}
+	},
+	"scripts": {
+		"commit": "git-cz",
+		"build:weapp": "taro build --type weapp",
+		"build:swan": "taro build --type swan",
+		"build:alipay": "taro build --type alipay",
+		"build:tt": "taro build --type tt",
+		"build:h5": "taro build --type h5",
+		"build:rn": "taro build --type rn",
+		"build:qq": "taro build --type qq",
+		"build:quickapp": "taro build --type quickapp",
+		"dev:weapp": "npm run build:weapp -- --watch",
+		"dev:swan": "npm run build:swan -- --watch",
+		"dev:alipay": "npm run build:alipay -- --watch",
+		"dev:tt": "npm run build:tt -- --watch",
+		"dev:h5": "npm run build:h5 -- --watch",
+		"dev:rn": "npm run build:rn -- --watch",
+		"build": "cross-env TARO_BUILD_TYPE=ui taro build --ui",
+		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types",
+		"publish:production": "npm run build & npm publish",
+		"semantic-release": "semantic-release"
+	},
+	"author": "rahim <chenrixi93@gmail.com>",
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:Rahim-Chan/taro-listView.git"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"@tarojs/async-await": "1.3.15",
+		"@tarojs/cli": "1.3.15",
+		"@tarojs/components": "1.3.15",
+		"@tarojs/router": "1.3.15",
+		"@tarojs/taro": "1.3.15",
+		"@tarojs/taro-alipay": "1.3.15",
+		"@tarojs/taro-h5": "1.3.15",
+		"@tarojs/taro-qq": "1.3.15",
+		"@tarojs/taro-quickapp": "1.3.15",
+		"@tarojs/taro-swan": "1.3.15",
+		"@tarojs/taro-tt": "1.3.15",
+		"@tarojs/taro-weapp": "1.3.15",
+		"cross-env": "^5.2.0",
+		"nerv-devtools": "^1.4.4",
+		"nervjs": "^1.4.4"
+	},
+	"devDependencies": {
+		"@semantic-release/git": "^7.0.16",
+		"@tarojs/plugin-babel": "1.3.15",
+		"@tarojs/plugin-csso": "1.3.15",
+		"@tarojs/plugin-sass": "1.3.15",
+		"@tarojs/plugin-uglifyjs": "1.3.15",
+		"@tarojs/webpack-runner": "1.3.15",
+		"@types/react": "^16.4.6",
+		"@types/webpack-env": "^1.13.6",
+		"@typescript-eslint/parser": "^1.6.0",
+		"babel-eslint": "^8.2.3",
+		"babel-plugin-transform-class-properties": "^6.24.1",
+		"babel-plugin-transform-decorators-legacy": "^1.3.4",
+		"babel-plugin-transform-jsx-stylesheet": "^0.6.5",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+		"babel-preset-env": "^1.6.1",
+		"eslint": "^5.16.0",
+		"eslint-config-taro": "1.3.15",
+		"eslint-plugin-import": "^2.12.0",
+		"eslint-plugin-react": "^7.8.2",
+		"eslint-plugin-taro": "1.3.15",
+		"semantic-release": "^15.13.19",
+		"stylelint": "9.3.0",
+		"stylelint-config-taro-rn": "1.3.15",
+		"stylelint-taro-rn": "1.3.15",
+		"typescript": "^3.0.1"
+	}
 }

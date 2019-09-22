@@ -14,7 +14,7 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "rootDir": ".",
+//    "rootDir": ".",
     "jsx": "preserve",
     "jsxFactory": "Taro.createElement",
     "allowJs": true,
@@ -35,5 +35,7 @@
     "node_modules",
     "dist"
   ],
-  "compileOnSave": false
+  "include": [
+    "src/components/*"
+  ]
 }

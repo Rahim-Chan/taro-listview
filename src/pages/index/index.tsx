@@ -4,7 +4,7 @@ import ListView from '../../components/list-view';
 import { wait } from 'utils/utils';
 import './index.scss'
 
-const NUM_ROWS = 15;
+const NUM_ROWS = 10;
 let pageIndex = 1;
 
 export default class Index extends Component {
@@ -14,19 +14,7 @@ export default class Index extends Component {
     hasMore: true,
     style: {},
     isEmpty: false,
-    list: [{
-      value: 0,
-      avatar: require('./assets/avatar.jpg'),
-      title: 'this is title'
-    },{
-      value: 0,
-      avatar: require('./assets/avatar.jpg'),
-      title: 'this is title'
-    },{
-      value: 0,
-      avatar: require('./assets/avatar.jpg'),
-      title: 'this is title'
-    }],
+    list: [],
   };
 
   getData = async(pIndex = pageIndex) => {
@@ -40,20 +28,23 @@ export default class Index extends Component {
       });
     }
     await wait(1000)
-    return {list, hasMore: false, isLoaded: pIndex === 1};
+    console.log({ pIndex })
+    return {list, hasMore: pIndex !== 4, isLoaded: pIndex === 1};
   };
   componentDidMount() {
     console.log('componentDidMount')
     this.refList.fetchInit()
   }
 
-  onPullDownRefresh = async (rest) => {
+  pullDownRefresh = async (rest) => {
+    pageIndex = 1;
     const res = await this.getData(1);
     this.setState(res);
     rest()
   };
 
   onScrollToLower = async (fn) => {
+    console.log(fn)
     const {list} = this.state;
     const {list: newList, hasMore} = await this.getData(++pageIndex);
     this.setState({
@@ -73,56 +64,49 @@ export default class Index extends Component {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
 
     return (
-      <View className='skeleton'>
-        <ListView
-          ref={node => this.insRef(node)}
-          isLoaded={isLoaded}
-          isError={error}
-          hasMore={hasMore}
-          style={{ height: '100vh' }}
-          isEmpty={isEmpty}
-          renderEmpty={(
-            <View>
-              renderEmpty
-            </View>
-          )}
-          launch={{
-            launchEmpty: false,
-            launchFooterLoading: true,
-            launchFooterLoaded: false,
-          }}
-          renderFooterLoading={(
-            <View style={{ padding: 20 }}>
-              renderFooterLoading
-            </View>
-          )}
-          renderFooterLoaded={(
-            <View style={{ padding: 20 }}>
-              renderFooterLoaded
-            </View>
-          )}
-          indicator={{
-              activate: '下拉刷新',
-              deactivate: '释放刷新',
-              release: '刷新中',
-            }}
-          onPullDownRefresh={fn => this.onPullDownRefresh(fn)}
-          onScrollToLower={this.onScrollToLower}
-        >
-          {list.map((item, index) => {
-            return (
-              <View className='item skeleton-bg' key={index}>
-                <Image className='avatar skeleton-radius' src={item.avatar}/>
-                <View className='title skeleton-rect'>
-                  { item.title }
-                </View>
-                <View className='skeleton-rect'>
-                  { item.value }
-                </View>
-              </View>
-            )
-          })}
-        </ListView>
+      <View>
+          header
+          <View className='skeleton'>
+              <ListView
+                  ref={node => this.insRef(node)}
+                  isLoaded={isLoaded}
+                  isError={error}
+                  hasMore={hasMore}
+                  style={{ height: '100vh' }}
+                  isEmpty={isEmpty}
+                  // renderEmpty={(
+                  //   <View>
+                  //     renderEmpty
+                  //   </View>
+                  // )}
+                  // launch={{
+                  //   launchEmpty: false,
+                  //   launchFooterLoading: true,
+                  //   launchFooterLoaded: false,
+                  // }}
+                  // indicator={{
+                  //     activate: '下拉刷新',
+                  //     deactivate: '释放刷新',
+                  //     release: '刷新中',
+                  //   }}
+                  onPullDownRefresh={fn => this.pullDownRefresh(fn)}
+                  onScrollToLower={this.onScrollToLower}
+              >
+                  {list.map((item, index) => {
+                      return (
+                          <View className='item skeleton-bg' key={index}>
+                              <Image className='avatar skeleton-radius' src={item.avatar}/>
+                              <View className='title skeleton-rect'>
+                                  { item.title }
+                              </View>
+                              <View className='skeleton-rect'>
+                                  { item.value }
+                              </View>
+                          </View>
+                      )
+                  })}
+              </ListView>
+          </View>
       </View>
     )
   }

@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro';
 import { Image, View } from '@tarojs/components';
-import emptyImg from "../list-view/assets/empty.png";
 import './index.scss';
 
+const emptyImg = require("./assets/empty.png");
 interface PagePros {
   renderError?: JSX.Element;
   renderEmpty?: JSX.Element;

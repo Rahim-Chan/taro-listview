@@ -2,11 +2,13 @@ import Taro, {Component} from '@tarojs/taro';
 import {ScrollView, View } from '@tarojs/components';
 import { ITouchEvent } from '@tarojs/components/types/common';
 import Skeleton from '../skeleton';
+import Loading from '../loading';
 import { throttle } from '../../utils/utils';
 import ResultPage from '../result-page';
 import './index.scss';
 
 interface Props {
+  circleColor?: string;
   style?: any;
   className?: string;
   emptyText?: string;
@@ -31,6 +33,7 @@ interface Props {
   indicator?: Indicator;
   isLoaded?: boolean;
   selector?: string;
+  onScroll?: () => void;
 }
 
 interface Indicator {
@@ -68,12 +71,13 @@ const initialProps = {
   isEmpty: false,
   emptyText: '',
   noMore: '暂无更多内容',
-  footerLoadingText: '加载中...',
+  footerLoadingText: '加载中',
   footerLoadedText: '暂无更多内容',
   scrollTop: 0,
   touchScrollTop: 0,
   onScrollToLower: () => {
   },
+  className: '',
   onPullDownRefresh: null,
   hasMore: false,
   needInit: false,
@@ -229,16 +233,15 @@ class ListView extends Component<Props, State> {
     const {
       detail: {scrollTop},
     } = e;
+    if (this.props.onScroll) this.props.onScroll()
     this.setState({scrollTop });
   };
 
   trBody = (y: number) => {
-    //移动listview
     this.setState({
       blockStyle: {
         transform: `translate3d(0,${y}px,0)`,
         transition: 'none linear',
-        // overflow: 'hidden',
       },
     });
   };
@@ -260,10 +263,12 @@ class ListView extends Component<Props, State> {
       indicator,
       footerLoadingText,
       footerLoadedText,
-      damping
+      damping,
+      circleColor,
+      onPullDownRefresh,
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
-    const {release = '加载中', activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
+    const {activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
     const {canScrollY, isInit, blockStyle, needPullDown, downLoading, lowerLoading} = this.state;
 
     const showTipText = !downLoading && needPullDown && !isInit; // 下拉文案
@@ -277,7 +282,10 @@ class ListView extends Component<Props, State> {
     const footerLoading = showFooter && !launchFooterLoading && lowerLoading;
     const customFooterLoading = showFooter && launchFooterLoading && lowerLoading; // 渲染renderNoMore
 
-    const newStyle = {...style};
+    const newStyle = {
+      ...style,
+      overflowY: canScrollY ? 'scroll' : 'hidden',
+    };
     const trStyle = {
       ...blockStyle
     };
@@ -296,20 +304,23 @@ class ListView extends Component<Props, State> {
           scrollWithAnimation
           onScroll={this.onScroll}
         >
-          <View style={{ minHeight: '100%',overflow: 'hidden' }}>
+          <View
+            style={{ minHeight: '100%', overflowY: 'hidden' }}
+            onTouchMove={(e) => this.touchEvent(e)}
+            onTouchEnd={(e) => this.touchEvent(e)}
+            onTouchStart={(e) => this.touchEvent(e)}
+            onTouchCancel={(e) => this.touchEvent(e)}
+          >
             <View
               style={trStyle}
               className='bodyView'
-              onTouchMove={(e) => this.touchEvent(e)}
-              onTouchEnd={(e) => this.touchEvent(e)}
-              onTouchStart={(e) => this.touchEvent(e)}
-              onTouchCancel={(e) => this.touchEvent(e)}
             >
-              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
+              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className={`pullDownBlock ${onPullDownRefresh && 'unNeedBlock'}`}>
                 <View className='tip'>
                   {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                   {showTipText && <View>{activate || tipText}</View>}
-                  {downLoading && <View>{release}</View>}
+                  {/*{downLoading && <View>{release}</View>}*/}
+                  {downLoading && <Loading color={circleColor}/>}
                 </View>
               </View>
               {/* present children */}
