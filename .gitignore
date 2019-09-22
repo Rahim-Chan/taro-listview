@@ -5,7 +5,7 @@ deploy_versions/
 node_modules/
 .DS_Store
 /.idea/inspectionProfiles/Project_Default.xml
-/.idea/.gitignore
+/.idea/.gitignore·
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/taro-listview.iml
@@ -19,3 +19,4 @@ node_modules/
 /yarn-error.log
 /.idea/watcherTasks.xml
 /src/components/.idea/components.iml
+/@types/*
