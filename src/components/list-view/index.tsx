@@ -3,11 +3,12 @@ import {ScrollView, View } from '@tarojs/components';
 import { ITouchEvent } from '@tarojs/components/types/common';
 import Skeleton from '../skeleton';
 import Loading from '../loading';
-import { throttle } from '../../utils/utils';
+import tools from './tool'
 import ResultPage from '../result-page';
 import './index.scss';
 
 interface Props {
+  lazy?: boolean;
   circleColor?: string;
   style?: any;
   className?: string;
@@ -65,6 +66,7 @@ const initialState = {
   },
 };
 const initialProps = {
+  lazy: false,
   distanceToRefresh: 50,
   damping: 150,
   isLoaded: true,
@@ -100,6 +102,14 @@ class ListView extends Component<Props, State> {
   scrollView = {};
 
   state = initialState;
+
+  lazyKey = (
+    () => {
+      if (this.props.lazy) {
+        return  tools.lazyScrollInit()
+      }
+    }
+  )();
 
   componentDidMount() {
     this.trBody(0);
@@ -213,9 +223,9 @@ class ListView extends Component<Props, State> {
   };
 
   handleScrollToLower = () => {
-    throttle(() => {
+    tools.debounce(() => {
       this.getMore();
-    });
+    })();
   };
 
   getMore = () => {
@@ -235,6 +245,9 @@ class ListView extends Component<Props, State> {
     } = e;
     if (this.props.onScroll) this.props.onScroll()
     this.setState({scrollTop });
+    if (this.props.lazy) {
+      tools.lazyScroll(this.lazyKey)
+    }
   };
 
   trBody = (y: number) => {

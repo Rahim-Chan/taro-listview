@@ -1,6 +1,7 @@
 import Taro, {Component} from '@tarojs/taro';
-import {View, Image} from '@tarojs/components';
+import {View} from '@tarojs/components';
 import ListView from '../../components/list-view';
+import Image from '../../components/list-view/image'
 import { wait } from 'utils/utils';
 import './index.scss'
 
@@ -65,15 +66,20 @@ export default class Index extends Component {
 
     return (
       <View>
-          header
+          <View onClick={() => {
+            console.log('lazy')
+            Taro.navigateBack({ url: "/pages/index/lazy" })
+          }}
+          >lazy</View>
           <View className='skeleton'>
               <ListView
-                  ref={node => this.insRef(node)}
-                  isLoaded={isLoaded}
-                  isError={error}
-                  hasMore={hasMore}
-                  style={{ height: '100vh' }}
-                  isEmpty={isEmpty}
+                lazy
+                ref={node => this.insRef(node)}
+                isLoaded={isLoaded}
+                isError={error}
+                hasMore={hasMore}
+                style={{ height: '100vh' }}
+                isEmpty={isEmpty}
                   // renderEmpty={(
                   //   <View>
                   //     renderEmpty
@@ -89,13 +95,13 @@ export default class Index extends Component {
                   //     deactivate: '释放刷新',
                   //     release: '刷新中',
                   //   }}
-                  onPullDownRefresh={fn => this.pullDownRefresh(fn)}
-                  onScrollToLower={this.onScrollToLower}
+                onPullDownRefresh={fn => this.pullDownRefresh(fn)}
+                onScrollToLower={this.onScrollToLower}
               >
                   {list.map((item, index) => {
                       return (
                           <View className='item skeleton-bg' key={index}>
-                              <Image className='avatar skeleton-radius' src={item.avatar}/>
+                              <Image className='avatar skeleton-radius' src={item.avatar} current={index} />
                               <View className='title skeleton-rect'>
                                   { item.title }
                               </View>

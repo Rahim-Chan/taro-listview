@@ -1,0 +1,11 @@
+.imageLoad {
+  animation: op 500ms ease;
+}
+@keyframes op {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
