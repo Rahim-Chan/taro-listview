@@ -65,6 +65,7 @@ const initialState = {
     transition: 'none',
   },
 };
+
 const initialProps = {
   lazy: false,
   distanceToRefresh: 50,
@@ -93,6 +94,14 @@ const initialProps = {
 type State = Readonly<typeof initialState>
 
 class ListView extends Component<Props, State> {
+  lazyKey = (
+    () => {
+      if (this.props.lazy) {
+        return  tools.lazyScrollInit()
+      }
+    }
+  )();
+
   static options = {
     addGlobalClass: true,
   };
@@ -103,17 +112,14 @@ class ListView extends Component<Props, State> {
 
   state = initialState;
 
-  lazyKey = (
-    () => {
-      if (this.props.lazy) {
-        return  tools.lazyScrollInit()
-      }
-    }
-  )();
 
   componentDidMount() {
     this.trBody(0);
     if (this.props.needInit) this.fetchInit();
+  }
+
+  componentWillUnmount(): void {
+    tools.lazyScrollRemove()
   }
 
   touchEvent = (e: ITouchEvent) => {
@@ -289,7 +295,7 @@ class ListView extends Component<Props, State> {
 
     const showChildren = !(isEmpty || isError); // 展示children内容
 
-    const showFooter = !isEmpty && !isError; // 空、错状态不展示底部
+    const showFooter = !downLoading && !isEmpty && !isError; // 空、错状态不展示底部
     const footerLoaded = showFooter && !launchFooterLoaded && !hasMore;
     const customFooterLoaded = showFooter && launchFooterLoaded && !hasMore; // 渲染renderLoadedText
     const footerLoading = showFooter && !launchFooterLoading && lowerLoading;
@@ -328,7 +334,7 @@ class ListView extends Component<Props, State> {
               style={trStyle}
               className='bodyView'
             >
-              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className={`pullDownBlock ${onPullDownRefresh && 'unNeedBlock'}`}>
+              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className={`pullDownBlock ${!onPullDownRefresh && 'unNeedBlock'}`}>
                 <View className='tip'>
                   {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                   {showTipText && <View>{activate || tipText}</View>}

@@ -3,6 +3,7 @@ import {Image, View} from '@tarojs/components';
 import {ImageProps} from "@tarojs/components/types/Image";
 import './image.scss'
 import storage from "../../utils/storage";
+import tools from "./tool";
 
 interface State {
 
@@ -19,52 +20,56 @@ class LazyImage extends Component<Props, State> {
 
   static externalClasses = ['img-class']
 
+  lazyKey = '';
+
   state = {
     scrollCur: [0]
   };
 
   componentDidMount() {
+    this.lazyKey = storage.get('lazyKeys',[])[storage.get('lazyKeys').length -1];
     this.bindTextListener();
   }
 
-  componentDidShow = () => {
-    Taro.eventCenter.off('lazyImage');
-  }
-
-  componentDidHide = () => {
-    Taro.eventCenter.off('lazyImage');
+  componentWillUnmount(): void {
+    Taro.eventCenter.off(`lazyImage${this.lazyKey}`);
   }
 
   bindTextListener() {
-    Taro.eventCenter.on('lazyImage', scrollCur => {
-      console.log(scrollCur)
+    Taro.eventCenter.on(`lazyImage${this.lazyKey}`, scrollCur => {
+      // console.log(scrollCur)
       this.setState({
         scrollCur
       })
     });
     // 绑定函数
     // @ts-ignore
-    const lazyKey = storage.get('lazyKeys').pop()
-    Taro[lazyKey] = Taro.eventCenter.trigger.bind(Taro.eventCenter, 'lazyImage');
+    Taro[this.lazyKey] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `lazyImage${this.lazyKey}`);
+    tools.lazyScroll(this.lazyKey)
   }
 
   isLoad = (current) => {
-    return this.state.scrollCur.indexOf(current) > -1;
+    return this.state.scrollCur.includes(current);
   };
 
   render() {
     const {current, src, onClick, mode} = this.props;
-    return this.isLoad(current) ? (
-      <Image
-        lazyLoad
-        onClick={onClick}
-        src={src}
-        className={`lazy-image imageLoad ${this.props.className}`}
-        mode={mode}
-      />
-    ) : (
-      <View className={`lazy-image ${this.props.className}`} />
-    );
+    return (
+        <View>
+          {
+            this.isLoad(current) ? (
+                <Image
+                    onClick={onClick}
+                    src={src}
+                    className={`lazy-image-${this.lazyKey} ${this.props.className}`}
+                    mode={mode}
+                />
+            ) : (
+                <View className={`lazy-image-${this.lazyKey} ${this.props.className}`} />
+            )
+          }
+        </View>
+    )
   }
 }
 
