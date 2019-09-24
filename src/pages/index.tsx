@@ -1,6 +1,5 @@
 import Taro, {Component} from '@tarojs/taro';
 import {View, Button} from '@tarojs/components';
-import './index.scss'
 
 export default class Index extends Component {
   route = (url) => {
@@ -12,9 +11,9 @@ export default class Index extends Component {
   render() {
     return (
         <View>
-          <Button className='button' onClick={() => this.route('/index/index')}>PullDown & LowerMore</Button>
-          <Button className='button' onClick={() => this.route('/index/lazy')}>LazyView</Button>
-          <Button className='button' onClick={() => this.route('/skeleton/index')}>Skeleton</Button>
+          <Button className='button' onClick={() => this.route('/index/index')}>长列表</Button>
+          <Button className='button' onClick={() => this.route('/index/lazy')}>长列表（懒加载）</Button>
+          <Button className='button' onClick={() => this.route('/skeleton/index')}>骨架屏</Button>
         </View>
     )
   }

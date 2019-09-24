@@ -1,6 +1,5 @@
 import Taro, {Component} from '@tarojs/taro';
-import {Image, View} from '@tarojs/components';
-import {ImageProps} from "@tarojs/components/types/Image";
+import {View} from '@tarojs/components';
 import './image.scss'
 import storage from "../../utils/storage";
 import tools from "./tool";
@@ -9,7 +8,8 @@ interface State {
 
 }
 
-interface Props extends ImageProps {
+interface Props {
+  className?: string;
   current: number;
 }
 
@@ -53,19 +53,18 @@ class LazyImage extends Component<Props, State> {
   };
 
   render() {
-    const {current, src, onClick, mode} = this.props;
+    const {current} = this.props;
     return (
-        <View>
+        <View className={`lazy-image-${this.lazyKey} ${this.props.className} `}>
           {
             this.isLoad(current) ? (
-                <Image
-                    onClick={onClick}
-                    src={src}
-                    className={`lazy-image-${this.lazyKey} ${this.props.className}`}
-                    mode={mode}
-                />
+                <View className='blockLoad'>
+                  {
+                    this.props.children
+                  }
+                </View>
             ) : (
-                <View className={`lazy-image-${this.lazyKey} ${this.props.className}`} />
+                ''
             )
           }
         </View>

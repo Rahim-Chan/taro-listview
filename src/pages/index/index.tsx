@@ -1,12 +1,20 @@
 import Taro, {Component} from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
 import ListView from '../../components/list-view';
-import {wait} from 'utils/utils';
-import './index.scss'
 
-
-const blankList = []
-const NUM_ROWS = 10;
+const blankList = [{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+}]
 let pageIndex = 1;
 
 export default class Index extends Component {
@@ -14,9 +22,8 @@ export default class Index extends Component {
     isLoaded: false,
     error: false,
     hasMore: true,
-    style: {},
     isEmpty: false,
-    list: [],
+    list: blankList,
   };
 
   getData = async (pIndex = pageIndex) => {
@@ -64,24 +71,21 @@ export default class Index extends Component {
     return (
         <View className='skeleton'>
           <ListView
-              ref={node => this.insRef(node)}
-              isLoaded={isLoaded}
-              isError={error}
-              hasMore={hasMore}
-              style={{height: '100vh'}}
-              isEmpty={isEmpty}
-              onPullDownRefresh={fn => this.pullDownRefresh(fn)}
-              onScrollToLower={this.onScrollToLower}
+            ref={node => this.insRef(node)}
+            isLoaded={isLoaded}
+            isError={error}
+            hasMore={hasMore}
+            style={{height: '100vh'}}
+            isEmpty={isEmpty}
+            onPullDownRefresh={fn => this.pullDownRefresh(fn)}
+            onScrollToLower={this.onScrollToLower}
           >
             {list.map((item, index) => {
               return (
                   <View className='item skeleton-bg' key={index}>
-                    <Image className='avatar skeleton-radius' src={item.author.avatar_url}/>
+                    <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
                     <View className='title skeleton-rect'>
                       {item.title}
-                    </View>
-                    <View className='skeleton-rect'>
-                      {item.value}
                     </View>
                   </View>
               )
