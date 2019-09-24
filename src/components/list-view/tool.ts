@@ -45,29 +45,32 @@ const wait = function(time = 500) {
     });
 };
 
-function lazyScrollInit() {
+interface LazyItem {
+  key: string, className: string
+}
+function lazyScrollInit(className) {
   const lazyKey = `lazy${new Date().getTime()}`
-  const lazyKeys: string[] = storage.get('lazyKeys',[])
-  if (lazyKeys.length) {
-    const length = lazyKeys.length;
-    const lastKey = lazyKeys[length - 1];
-    if (new Date().getTime() - Number(lastKey.replace('lazy', '')) > 86400000) {
-      lazyKeys.splice(0, length)
+  const lazyBox: LazyItem[] = storage.get('lazyBox',[])
+  if (lazyBox.length) {
+    const length = lazyBox.length;
+    const lastKey = lazyBox[length - 1];
+    if (new Date().getTime() - Number(lastKey.key.replace('lazy', '')) > 86400000) {
+      lazyBox.splice(0, length)
     }
   }
-  lazyKeys.push(lazyKey);
-  storage.set('lazyKeys', lazyKeys)
+  lazyBox.push({ key: lazyKey, className });
+  storage.set('lazyBox', lazyBox)
   return lazyKey
 }
 
 function lazyScrollRemove() {
-  const lazyKeys: string[] = storage.get('lazyKeys',[])
-  lazyKeys.pop();
-  storage.set('lazyKeys', lazyKeys)
+  const lazyBox: LazyItem[] = storage.get('lazyBox',[])
+  lazyBox.pop();
+  storage.set('lazyBox', lazyBox)
 }
 
-function lazyScroll(key) {
-  const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `.lazy-view >>> .lazy-image-${key}`
+function lazyScroll(key, selector) {
+  const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `${selector} >>> .lazy-image-${key}`;
   throttle(() => {
     Taro.createSelectorQuery()
         .selectAll(query)

@@ -8,7 +8,7 @@ import ResultPage from '../result-page';
 import './index.scss';
 
 interface Props {
-  lazy?: boolean;
+  lazy?: boolean | string;
   circleColor?: string;
   style?: any;
   className?: string;
@@ -94,10 +94,15 @@ const initialProps = {
 type State = Readonly<typeof initialState>
 
 class ListView extends Component<Props, State> {
+  // eslint-disable-next-line react/sort-comp
+  lazyClassName = (() => {
+    return typeof this.props.lazy === 'boolean' ? '.lazy-view': this.props.lazy;
+  })();
+
   lazyKey = (
     () => {
       if (this.props.lazy) {
-        return  tools.lazyScrollInit()
+        return  tools.lazyScrollInit(this.lazyClassName)
       }
     }
   )();
@@ -112,9 +117,15 @@ class ListView extends Component<Props, State> {
 
   state = initialState;
 
-
   componentDidMount() {
+    console.log('listview')
     this.trBody(0);
+    Taro.createSelectorQuery().in(this.$scope)
+      .selectAll('.scroll-view')
+      .boundingClientRect()
+      .exec(res => {
+        console.log({ res })
+      })
     if (this.props.needInit) this.fetchInit();
   }
 
@@ -252,7 +263,7 @@ class ListView extends Component<Props, State> {
     if (this.props.onScroll) this.props.onScroll()
     this.setState({scrollTop });
     if (this.props.lazy) {
-      tools.lazyScroll(this.lazyKey)
+      tools.lazySc  roll(this.lazyKey,this.lazyClassName)
     }
   };
 
@@ -315,7 +326,7 @@ class ListView extends Component<Props, State> {
           ref={node => {
             this.scrollView = node;
           }}
-          className={`${className}`}
+          className={`${className} scroll-view`}
           style={newStyle}
           scrollY={canScrollY}
           lowerThreshold={20}

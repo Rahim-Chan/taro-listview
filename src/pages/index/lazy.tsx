@@ -57,7 +57,7 @@ export default class Index extends Component {
   render() {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
     return (
-      <View className='skeleton'>
+      <View className='skeleton lazy-view'>
         <ListView
           lazy
           ref={node => this.insRef(node)}
