@@ -1,7 +1,11 @@
 import Taro from '@tarojs/taro';
 import storage  from "utils/storage";
 
-const {windowHeight} = Taro.getSystemInfoSync();
+interface LazyItem {
+  key: string;
+  className: string;
+  viewHeight: number;
+}
 
 export function debounce(method, time = 500) {
     let timer = null;
@@ -45,9 +49,6 @@ const wait = function(time = 500) {
     });
 };
 
-interface LazyItem {
-  key: string, className: string
-}
 function lazyScrollInit(className) {
   const lazyKey = `lazy${new Date().getTime()}`
   const lazyBox: LazyItem[] = storage.get('lazyBox',[])
@@ -58,7 +59,7 @@ function lazyScrollInit(className) {
       lazyBox.splice(0, length)
     }
   }
-  lazyBox.push({ key: lazyKey, className });
+  lazyBox.push({ key: lazyKey, className, viewHeight: 0 });
   storage.set('lazyBox', lazyBox)
   return lazyKey
 }
@@ -69,7 +70,15 @@ function lazyScrollRemove() {
   storage.set('lazyBox', lazyBox)
 }
 
-function lazyScroll(key, selector) {
+function updateScrollHeight(key, viewHeight) {
+  const lazyBox: LazyItem[] = storage.get('lazyBox',[])
+  const index = lazyBox.findIndex(i => i.key === key)
+  const targetLazy = lazyBox[index];
+  lazyBox.splice(index, 1, { ...targetLazy, viewHeight })
+  storage.set('lazyBox', lazyBox)
+}
+
+function lazyScroll(key, selector, height) {
   const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `${selector} >>> .lazy-image-${key}`;
   throttle(() => {
     Taro.createSelectorQuery()
@@ -79,7 +88,7 @@ function lazyScroll(key, selector) {
           const list = res[0];
           const indexs = [];
           list.forEach((i, index) => {
-            if (i.top > - windowHeight && i.top < windowHeight + 200) {
+            if (i.top > - height*1.5 && i.top < height*1.5) {
               // @ts-ignore
               indexs.push(index);
             }
@@ -89,4 +98,4 @@ function lazyScroll(key, selector) {
         });
   }, 500)()
 }
-export default { lazyScroll, wait, debounce, lazyScrollInit, lazyScrollRemove }
+export default { lazyScroll, wait, debounce, updateScrollHeight, lazyScrollInit, lazyScrollRemove }

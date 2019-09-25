@@ -4,6 +4,13 @@ import './block.scss'
 import storage from "../../utils/storage";
 import tools from "./tool";
 
+
+interface LazyItem {
+  key: string;
+  className: string;
+  viewHeight: number;
+}
+
 interface State {
 
 }
@@ -20,36 +27,33 @@ class LazyImage extends Component<Props, State> {
 
   static externalClasses = ['img-class']
 
-  lazyClassName = '';
-
-  lazyKey = '';
+  lazyItem: LazyItem = {} as LazyItem;
 
   state = {
     scrollCur: [0]
   };
 
   componentDidMount() {
-    const lazyItem = storage.get('lazyBox')[storage.get('lazyBox').length -1];
-    this.lazyKey = lazyItem.key;
-    this.lazyClassName = lazyItem.className;
-    console.log(lazyItem)
+    this.lazyItem = storage.get('lazyBox')[storage.get('lazyBox').length -1];
     this.bindTextListener();
   }
 
   componentWillUnmount(): void {
-    Taro.eventCenter.off(`lazyBlock${this.lazyKey}`);
+    const { key } = this.lazyItem;
+    Taro.eventCenter.off(`lazyBlock${key}`);
   }
 
-  bindTextListener() {
-    Taro.eventCenter.on(`lazyBlock${this.lazyKey}`, scrollCur => {
+// 绑定函数
+bindTextListener() {
+  const { key, className, viewHeight } = this.lazyItem;
+  Taro.eventCenter.on(`lazyBlock${key}`, scrollCur => {
       this.setState({
         scrollCur
       })
     });
-    // 绑定函数
     // @ts-ignore
-    Taro[this.lazyKey] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `lazyBlock${this.lazyKey}`);
-    tools.lazyScroll(this.lazyKey, this.lazyClassName)
+    Taro[key] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `lazyBlock${key}`);
+    tools.lazyScroll(key, className, viewHeight)
   }
 
   isLoad = (current) => {
@@ -59,7 +63,7 @@ class LazyImage extends Component<Props, State> {
   render() {
     const {current} = this.props;
     return (
-        <View className={`lazy-image-${this.lazyKey} ${this.props.className} `}>
+        <View className={`lazy-image-${this.lazyItem.key} ${this.props.className} `}>
           {
             this.isLoad(current) ? (
                 <View className='blockLoad'>

@@ -107,6 +107,8 @@ class ListView extends Component<Props, State> {
     }
   )();
 
+  lazyViewHeight = 0;
+
   static options = {
     addGlobalClass: true,
   };
@@ -118,13 +120,13 @@ class ListView extends Component<Props, State> {
   state = initialState;
 
   componentDidMount() {
-    console.log('listview')
     this.trBody(0);
     Taro.createSelectorQuery().in(this.$scope)
-      .selectAll('.scroll-view')
+      .select('.scroll-view')
       .boundingClientRect()
       .exec(res => {
-        console.log({ res })
+        tools.updateScrollHeight(this.lazyKey, res[0].height)
+        this.lazyViewHeight = res[0].height
       })
     if (this.props.needInit) this.fetchInit();
   }
@@ -250,6 +252,7 @@ class ListView extends Component<Props, State> {
     const {lowerLoading} = this.state;
     if (hasMore && !lowerLoading && onScrollToLower) {
       this.setState({lowerLoading: true});
+      console.log('onScrollToLower')
       onScrollToLower(() => {
         this.setState({lowerLoading: false});
       });
@@ -263,7 +266,7 @@ class ListView extends Component<Props, State> {
     if (this.props.onScroll) this.props.onScroll()
     this.setState({scrollTop });
     if (this.props.lazy) {
-      tools.lazySc  roll(this.lazyKey,this.lazyClassName)
+      tools.lazyScroll(this.lazyKey,this.lazyClassName, this.lazyViewHeight )
     }
   };
 
@@ -299,7 +302,7 @@ class ListView extends Component<Props, State> {
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
     const {activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
-    const {canScrollY, isInit, blockStyle, needPullDown, downLoading, lowerLoading} = this.state;
+    const {canScrollY, isInit, blockStyle, needPullDown, downLoading} = this.state;
 
     const showTipText = !downLoading && needPullDown && !isInit; // 下拉文案
     const showTipFreedText = !downLoading && !needPullDown && !isInit;// 释放文案
@@ -309,8 +312,8 @@ class ListView extends Component<Props, State> {
     const showFooter = !downLoading && !isEmpty && !isError; // 空、错状态不展示底部
     const footerLoaded = showFooter && !launchFooterLoaded && !hasMore;
     const customFooterLoaded = showFooter && launchFooterLoaded && !hasMore; // 渲染renderLoadedText
-    const footerLoading = showFooter && !launchFooterLoading && lowerLoading;
-    const customFooterLoading = showFooter && launchFooterLoading && lowerLoading; // 渲染renderNoMore
+    const footerLoading = showFooter && !launchFooterLoading && hasMore;
+    const customFooterLoading = showFooter && launchFooterLoading && hasMore; // 渲染renderNoMore
 
     const newStyle = {
       ...style,
@@ -329,7 +332,7 @@ class ListView extends Component<Props, State> {
           className={`${className} scroll-view`}
           style={newStyle}
           scrollY={canScrollY}
-          lowerThreshold={20}
+          lowerThreshold={0}
           onScrollToLower={this.handleScrollToLower}
           scrollWithAnimation
           onScroll={this.onScroll}

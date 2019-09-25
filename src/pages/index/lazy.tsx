@@ -23,7 +23,6 @@ export default class Index extends Component {
         page: pIndex
       }
     })
-    console.log({data})
     return {list : data, hasMore: true, isLoaded: pIndex === 1};
   };
 
@@ -58,13 +57,14 @@ export default class Index extends Component {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
     return (
       <View className='skeleton lazy-view'>
+        <View style={{ height: '40px'}} />
         <ListView
           lazy
           ref={node => this.insRef(node)}
           isLoaded={isLoaded}
           isError={error}
           hasMore={hasMore}
-          style={{height: '100vh'}}
+          style={{height: '50vh'}}
           isEmpty={isEmpty}
           onPullDownRefresh={fn => this.pullDownRefresh(fn)}
           onScrollToLower={this.onScrollToLower}
