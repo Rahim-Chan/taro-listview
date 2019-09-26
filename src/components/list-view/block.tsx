@@ -43,14 +43,14 @@ class LazyImage extends Component<Props, State> {
     Taro.eventCenter.off(`lazyBlock${key}`);
   }
 
-// 绑定函数
-bindTextListener() {
-  const { key, className, viewHeight } = this.lazyItem;
-  Taro.eventCenter.on(`lazyBlock${key}`, scrollCur => {
-      this.setState({
-        scrollCur
-      })
-    });
+  // 绑定函数
+  bindTextListener() {
+    const { key, className, viewHeight } = this.lazyItem;
+    Taro.eventCenter.on(`lazyBlock${key}`, scrollCur => {
+        this.setState({
+          scrollCur
+        })
+      });
     // @ts-ignore
     Taro[key] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `lazyBlock${key}`);
     tools.lazyScroll(key, className, viewHeight)

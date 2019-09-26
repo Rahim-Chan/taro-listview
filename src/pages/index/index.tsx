@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
-import ListView from '../../components/list-view';
+import ListView, { LazyBlock } from '../../index';
 
 const blankList = [{
   author: {},
@@ -69,8 +69,9 @@ export default class Index extends Component {
   render() {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
     return (
-        <View className='skeleton'>
+        <View className='skeleton lazy-view'>
           <ListView
+            lazy
             ref={node => this.insRef(node)}
             isLoaded={isLoaded}
             isError={error}
@@ -83,7 +84,9 @@ export default class Index extends Component {
             {list.map((item, index) => {
               return (
                   <View className='item skeleton-bg' key={index}>
-                    <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
+                    <LazyBlock current={index} className='avatar'>
+                      <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
+                    </LazyBlock>
                     <View className='title skeleton-rect'>
                       {item.title}
                     </View>
