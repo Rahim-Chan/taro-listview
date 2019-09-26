@@ -101,13 +101,15 @@ class ListView extends Component<Props, State> {
 
   state = initialState;
 
+  startY = 0;
+
   componentDidMount() {
     this.trBody(0);
     if (this.props.needInit) this.fetchInit();
   }
 
   touchEvent = (e: ITouchEvent) => {
-    const {startY} = this.state;
+
     const {type, touches} = e;
     const {onPullDownRefresh, distanceToRefresh, damping} = this.props;
     if (!onPullDownRefresh) return;
@@ -115,16 +117,17 @@ class ListView extends Component<Props, State> {
       case 'touchstart': {
         this.setState({
           touchScrollTop: this.state.scrollTop,
-          startY: touches[0].clientY,
+          // startY: touches[0].clientY,
           needPullDown: true,
         });
+        this.startY = touches[0].clientY;
         break;
       }
       case 'touchmove': {
         // const { clientY: preClientY = 1 } = this.state.blockStyle;
         const {clientY} = touches[0];
         const {touchScrollTop} = this.state;
-        const height = Math.floor((clientY - startY) / 5);
+        const height = Math.floor((clientY - this.startY) / 5);
         // 拖动方向不符合的不处理
         if (height < 0 || touchScrollTop > 5) return;
         this.setState({canScrollY: false});
