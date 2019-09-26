@@ -315,7 +315,7 @@ class ListView extends Component<Props, State> {
               style={trStyle}
               className='bodyView'
             >
-              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className={`pullDownBlock ${!onPullDownRefresh && 'unNeedBlock'}`}>
+              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className={`pullDownBlock ${!onPullDownRefresh?'':'unNeedBlock'}`}>
                 <View className='tip'>
                   {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                   {showTipText && <View>{activate || tipText}</View>}
