@@ -109,7 +109,6 @@ class ListView extends Component<Props, State> {
   }
 
   touchEvent = (e: ITouchEvent) => {
-
     const {type, touches} = e;
     const {onPullDownRefresh, distanceToRefresh, damping} = this.props;
     if (!onPullDownRefresh) return;
@@ -124,7 +123,6 @@ class ListView extends Component<Props, State> {
         break;
       }
       case 'touchmove': {
-        // const { clientY: preClientY = 1 } = this.state.blockStyle;
         const {clientY} = touches[0];
         const {touchScrollTop} = this.state;
         const height = Math.floor((clientY - this.startY) / 5);
