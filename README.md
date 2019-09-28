@@ -12,7 +12,7 @@
 
 ## 安装方式
 
-> 安装：`npm i taro-listview`， `yarn add taro-listview`
+> 安装：`npm i taro-listview`，`yarn add taro-listview`
 
 
 ## 使用案例
