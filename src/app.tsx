@@ -21,7 +21,9 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/index',
       'pages/index/index',
+      'pages/index/lazy',
       'pages/skeleton/index'
     ],
     window: {
