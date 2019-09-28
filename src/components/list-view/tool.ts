@@ -86,10 +86,8 @@ function lazyScroll(key, selector, height) {
         .boundingClientRect()
         .exec(res => {
           const list = res[0];
-          console.log({ list })
           const indexs = [];
           list.forEach((i, index) => {
-            console.log({ i })
             if (i.top > - height*1.5 && i.top < height*1.5) {
               // @ts-ignore
               indexs.push(index);

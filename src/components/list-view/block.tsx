@@ -53,7 +53,9 @@ class LazyImage extends Component<Props, State> {
       });
     // @ts-ignore
     Taro[key] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `lazyBlock${key}`);
-    tools.lazyScroll(key, className, viewHeight)
+    setTimeout(() => {
+      tools.lazyScroll(key, className, viewHeight)
+    }, 0)
   }
 
   isLoad = (current) => {
