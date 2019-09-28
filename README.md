@@ -52,7 +52,7 @@
 | renderFooterLoaded   | 自定义底部加载完毕    | Taro.Node | - | - |
 | renderFooterLoading   | 自定义底部加载    | Taro.Node | - | - |
 | indicator   | 下拉提示语    | Object | ```{ release = '加载中', activate = '下拉刷新', deactivate = '释放刷新'}``` | - |
-*错误屏默认样式中重新初始化方法与下拉刷新方法一致
+*错误屏中重新初始化方法与下拉刷新方法一致
 
 ```jsx
 import Taro, {Component} from '@tarojs/taro';
