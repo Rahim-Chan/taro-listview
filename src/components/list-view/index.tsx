@@ -123,13 +123,15 @@ class ListView extends Component<Props, State> {
 
   componentDidMount() {
     this.trBody(0);
-    Taro.createSelectorQuery().in(this.$scope)
-      .select('.scroll-view')
-      .boundingClientRect()
-      .exec(res => {
-        tools.updateScrollHeight(this.lazyKey, res[0].height)
-        this.lazyViewHeight = res[0].height
-      })
+    if (this.props.lazy) {
+      Taro.createSelectorQuery().in(this.$scope)
+        .select('.scroll-view')
+        .boundingClientRect()
+        .exec(res => {
+          tools.updateScrollHeight(this.lazyKey, res[0].height)
+          this.lazyViewHeight = res[0].height
+        })
+    }
     if (this.props.needInit) this.fetchInit();
   }
 
@@ -354,7 +356,7 @@ class ListView extends Component<Props, State> {
                   {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
                   {showTipText && <View>{activate || tipText}</View>}
                   {/*{downLoading && <View>{release}</View>}*/}
-                  {downLoading && <Loading color={circleColor}/>}
+                  {downLoading && <Loading color={circleColor} />}
                 </View>
               </View>
               {/* present children */}
