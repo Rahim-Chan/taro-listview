@@ -1,10 +1,20 @@
 import Taro, {Component} from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
-import ListView from '../../components/list-view';
-import { wait } from 'utils/utils';
-import './index.scss'
+import ListView, { LazyBlock } from '../../index';
 
-const NUM_ROWS = 10;
+const blankList = [{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+}]
 let pageIndex = 1;
 
 export default class Index extends Component {
@@ -12,27 +22,23 @@ export default class Index extends Component {
     isLoaded: false,
     error: false,
     hasMore: true,
-    style: {},
     isEmpty: false,
-    list: [],
+    list: blankList,
   };
 
-  getData = async(pIndex = pageIndex) => {
-    if (pIndex === 1) this.setState({ isLoaded: false })
-    const list = [];
-    for (let i = 0; i < NUM_ROWS; i++) {
-      list.push({
-        value: i + (pIndex - 1) * NUM_ROWS,
-        avatar: require('./assets/avatar.jpg'),
-        title: 'this is title'
-      });
-    }
-    await wait(1000)
-    console.log({ pIndex })
-    return {list, hasMore: pIndex !== 4, isLoaded: pIndex === 1};
+  getData = async (pIndex = pageIndex) => {
+    if (pIndex === 1) this.setState({isLoaded: false})
+    const { data: { data } } = await Taro.request({
+      url: 'https://cnodejs.org/api/v1/topics',
+      data: {
+        limit: 10,
+        page: pIndex
+      }
+    })
+    return {list : data, hasMore: true, isLoaded: pIndex === 1};
   };
+
   componentDidMount() {
-    console.log('componentDidMount')
     this.refList.fetchInit()
   }
 
@@ -44,7 +50,6 @@ export default class Index extends Component {
   };
 
   onScrollToLower = async (fn) => {
-    console.log(fn)
     const {list} = this.state;
     const {list: newList, hasMore} = await this.getData(++pageIndex);
     this.setState({
@@ -62,52 +67,33 @@ export default class Index extends Component {
 
   render() {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
-
     return (
-      <View>
-          header
-          <View className='skeleton'>
-              <ListView
-                  ref={node => this.insRef(node)}
-                  isLoaded={isLoaded}
-                  isError={error}
-                  hasMore={hasMore}
-                  style={{ height: '100vh' }}
-                  isEmpty={isEmpty}
-                  // renderEmpty={(
-                  //   <View>
-                  //     renderEmpty
-                  //   </View>
-                  // )}
-                  // launch={{
-                  //   launchEmpty: false,
-                  //   launchFooterLoading: true,
-                  //   launchFooterLoaded: false,
-                  // }}
-                  // indicator={{
-                  //     activate: '下拉刷新',
-                  //     deactivate: '释放刷新',
-                  //     release: '刷新中',
-                  //   }}
-                  onPullDownRefresh={fn => this.pullDownRefresh(fn)}
-                  onScrollToLower={this.onScrollToLower}
-              >
-                  {list.map((item, index) => {
-                      return (
-                          <View className='item skeleton-bg' key={index}>
-                              <Image className='avatar skeleton-radius' src={item.avatar}/>
-                              <View className='title skeleton-rect'>
-                                  { item.title }
-                              </View>
-                              <View className='skeleton-rect'>
-                                  { item.value }
-                              </View>
-                          </View>
-                      )
-                  })}
-              </ListView>
-          </View>
-      </View>
+        <View className='skeleton lazy-view'>
+          <ListView
+            lazy
+            ref={node => this.insRef(node)}
+            isLoaded={isLoaded}
+            isError={error}
+            hasMore={hasMore}
+            style={{height: '100vh'}}
+            isEmpty={isEmpty}
+            onPullDownRefresh={fn => this.pullDownRefresh(fn)}
+            onScrollToLower={this.onScrollToLower}
+          >
+            {list.map((item, index) => {
+              return (
+                  <View className='item skeleton-bg' key={index}>
+                    <LazyBlock current={index} className='avatar'>
+                      <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
+                    </LazyBlock>
+                    <View className='title skeleton-rect'>
+                      {item.title}
+                    </View>
+                  </View>
+              )
+            })}
+          </ListView>
+        </View>
     )
   }
 }

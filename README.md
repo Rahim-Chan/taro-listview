@@ -8,7 +8,7 @@
 </p>
 
 - [ ] skeleton拓展状态屏
-- [ ] 列表内部图片懒-解决小程序图片过多内存问题
+- [x] 列表内部懒模块-解决小程序图片过多内存问题
 
 ## 安装方式
 
@@ -20,54 +20,17 @@
 ### 引入组件
 [列表Demo](https://github.com/Rahim-Chan/taro-listview/blob/master/src/pages/index/index.tsx)
 
-需给组件设置固定高度
+!!!需给组件设置固定高度
 
-```jsx
-import ListView from 'taro-listview'
+### API
+#### ListView
 
-onPullDownRefresh = async (rest) => {
-    const res = await fetch(1);// { list: array, hasMore: boolean }
-    this.setState(res);
-    rest()
-  };
-
-onScrollToLower = async (fn) => {
-  const { list } = this.state;
-  const { list: newList, ...rest } = await fetch(++pageIndex);
-  this.setState({
-    list: list.concat(newList),
-    ...rest,
-  });
-  fn();
-};
-
-const { hasMore, list } = this.state;
-// 组件一定要设置高度
-<ListView
-  hasMore={hasMore}
-  style={{ height: '100vh' }}
-  onScrollToLower={fn => this.onScrollToLower(fn)}
->
-  {
-    list.map((item, index) => (
-      <View key={index}>
-        <Image className='avatar skeleton-radius' src={item.avatar}/>
-        <View>
-          { item.title }
-        </View>
-        <View>
-          { item.value }
-        </View>
-      </View>
-    ))
-  }
-</ListView>
-```
 ## 可配置参数
 ### 页面状态控制参数
 | 属性 | 说明                | 类型   |默认值   |必传   |
 | :------- | :---------------  | :--------- |:--------- |:--------- |
 | style   | -    | - | - | - |
+| lazy   | 开启懒加载(传入字符串为父元素className且开启)    | boolean or string | false or '.lazy-view' | - |
 | hasMore   | 加载更多    | boolean | true |true |
 | isEmpty   | 展示空凭页    | boolean | - | - |
 | isError   | 展示错误页    | boolean | - | - |
@@ -91,17 +54,214 @@ const { hasMore, list } = this.state;
 | indicator   | 下拉提示语    | Object | ```{ release = '加载中', activate = '下拉刷新', deactivate = '释放刷新'}``` | - |
 *错误屏默认样式中重新初始化方法与下拉刷新方法一致
 
+```jsx
+import Taro, {Component} from '@tarojs/taro';
+import {View, Image} from '@tarojs/components';
+import ListView, { LazyBlock } from 'taro-listview';
 
+const blankList = [{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+},{
+  author: {},
+  title: 'this is a example',
+}]
+
+let pageIndex = 1;
+
+export default class Index extends Component {
+  state = {
+    isLoaded: false,
+    error: false,
+    hasMore: true,
+    isEmpty: false,
+    list: blankList,
+  };
+
+  getData = async (pIndex = pageIndex) => {
+    if (pIndex === 1) this.setState({isLoaded: false})
+    const { data: { data } } = await Taro.request({
+      url: 'https://cnodejs.org/api/v1/topics',
+      data: {
+        limit: 10,
+        page: pIndex
+      }
+    })
+    console.log({data})
+    return {list : data, hasMore: true, isLoaded: pIndex === 1};
+  };
+
+  componentDidMount() {
+    this.refList.fetchInit()
+  }
+
+  pullDownRefresh = async (rest) => {
+    pageIndex = 1;
+    const res = await this.getData(1);
+    this.setState(res);
+    rest()
+  };
+
+  onScrollToLower = async (fn) => {
+    const {list} = this.state;
+    const {list: newList, hasMore} = await this.getData(++pageIndex);
+    this.setState({
+      list: list.concat(newList),
+      hasMore
+    });
+    fn();
+  };
+
+  refList = {};
+
+  insRef = (node) => {
+    this.refList = node;
+  };
+
+  render() {
+    const {isLoaded, error, hasMore, isEmpty, list} = this.state;
+    return (
+        <View className='skeleton lazy-view'>
+          <ListView
+            lazy
+            ref={node => this.insRef(node)}
+            isLoaded={isLoaded}
+            isError={error}
+            hasMore={hasMore}
+            style={{height: '100vh'}}
+            isEmpty={isEmpty}
+            onPullDownRefresh={fn => this.pullDownRefresh(fn)}
+            onScrollToLower={this.onScrollToLower}
+          >
+            {list.map((item, index) => {
+              return (
+                  <View className='item skeleton-bg' key={index}>
+                    <LazyBlock current={index} className='avatar'>
+                      <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
+                    </LazyBlock>
+                    <View className='title skeleton-rect'>
+                      {item.title}
+                    </View>
+                  </View>
+              )
+            })}
+          </ListView>
+        </View>
+    )
+  }
+}
+
+
+```
+### 模块懒加载
+1.模块需固定同一高度。
+
+2.只能在ListView组件内使用，并开启lazy模式，且父元素的className='lazy-view'!!!
+
+3.组件需传入模块遍历后的下标。
+
+#### API
+##### LazyBlock
+| 属性 | 说明                | 类型   |默认值   |必传   |
+| :------- | :---------------  | :--------- |:--------- |:--------- |
+| current   | 传入模块遍历后的下标    | number | null | true |
+
+```jsx
+import Taro, {Component} from '@tarojs/taro';
+import {View, Image} from '@tarojs/components';
+import ListView, { LazyBlock } from 'taro-listView';
+
+let pageIndex = 1;
+
+export default class Index extends Component {
+  state = {
+    isLoaded: false,
+    error: false,
+    hasMore: true,
+    isEmpty: false,
+    list: [],
+  };
+
+  getData = async (pIndex = pageIndex) => {
+    if (pIndex === 1) this.setState({isLoaded: false})
+    const { data: { data } } = await Taro.request({
+      url: 'https://cnodejs.org/api/v1/topics',
+      data: {
+        limit: 10,
+        page: pIndex
+      }
+    })
+    return {list : data, hasMore: true, isLoaded: pIndex === 1};
+  };
+
+  componentDidMount() {
+    this.getData()
+  }
+
+  onScrollToLower = async (fn) => {
+    const {list} = this.state;
+    const {list: newList, hasMore} = await this.getData(++pageIndex);
+    this.setState({
+      list: list.concat(newList),
+      hasMore
+    });
+    fn();
+  };
+
+  render() {
+    const {isLoaded, error, hasMore, isEmpty, list} = this.state;
+    return (
+      <View className='lazy-view'>
+        <ListView
+          lazy
+          isLoaded={isLoaded}
+          hasMore={hasMore}
+          style={{height: '100vh'}}
+          onScrollToLower={this.onScrollToLower}
+        >
+          {list.map((item, index) => {
+            return (
+              <View className='item' key={index}>
+                <LazyBlock current={index} className='avatar'>
+                  <Image className='avatar' src={item.author.avatar_url} />
+                </LazyBlock>
+                <View className='title'>
+                  {item.title}
+                </View>
+              </View>
+            )
+          })}
+        </ListView>
+      </View>
+    )
+  }
+}
+
+```
 ### 骨架屏
 1.因骨架屏是捕捉已有占位数据的样式，再绘制出骨架，所以要先注入默认空白占位数据。
 
-2.且需要一个传入父元素的class名(默认获取class为“skeleton”,及className为"skeleton"元素下的所有“关节”元素。可通过传入selector参数自定义class名。
+2.且需要一个传入父元素的className(默认获取为“skeleton”），以便寻找元素下的所有“关节”元素。可通过传入selector参数自定义className。
 
     有且只有捕捉以下提供的“关节”样式名：背景（'skeleton-bg'）、矩阵（'skeleton-rect'）、圆形（'skeleton-redius'）。
 
 3.ListView组件已嵌套Skeleton组件，直接调用对应属性即可。
 
-*元素需内容撑开，或者固定高度。
+*“关节”元素需内容撑开，或者固定高度。
+
+#### API
+##### Skeleton
+| 属性 | 说明                | 类型   |默认值   |必传   |
+| :------- | :---------------  | :--------- |:--------- |:--------- |
+| isLoaded   | 骨架屏是否显示（eg:加载第一页时开启）    | boolean | false | - |
+| selector   | 骨架屏外层class名称    | skeleton | - | - |
+
 
 [骨架屏Demo](https://github.com/Rahim-Chan/taro-listview/blob/master/src/pages/skeleton/index.tsx)
 ```jsx
@@ -133,11 +293,6 @@ export default () => {
     )
 }
 ```
-
-| 属性 | 说明                | 类型   |默认值   |必传   |
-| :------- | :---------------  | :--------- |:--------- |:--------- |
-| isLoaded   | 骨架屏是否显示（eg:加载第一页时开启）    | boolean | false | - |
-| selector   | 骨架屏外层class名称    | skeleton | - | - |
 
 
 ### 方法参数

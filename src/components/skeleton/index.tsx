@@ -63,17 +63,20 @@ class Skeleton extends Component<Props, State> {
     setTimeout(() => {
       const { selector } = this.props;
       // @ts-ignore
-      const rect = document.querySelector(selector).getBoundingClientRect();
-      const parentStyle = {};
-      Object.keys(rect.toJSON()).forEach(i => {
-        parentStyle[i] = `${rect[i]}px`
-      });
-      this.setState({
-        parentRect: parentStyle
-      })
-      selAll('bg');
-      selAll('list');
-      selAll('listRadius');
+      const dom = document.querySelector(selector);
+      if (dom) {
+        const rect = dom.getBoundingClientRect();
+        const parentStyle = {};
+        Object.keys(rect.toJSON()).forEach(i => {
+          parentStyle[i] = `${rect[i]}px`
+        });
+        this.setState({
+          parentRect: parentStyle
+        })
+        selAll('bg');
+        selAll('list');
+        selAll('listRadius');
+      }
     }, 300)
   }
 
