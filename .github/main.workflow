@@ -59,7 +59,8 @@ action "thonatos/github-actions-nodejs@v0.1.1" {
   needs = ["GitHub Action for npm"]
   args = "npm run semantic-release"
   secrets = ["GITHUB_TOKEN", "NPM_TOKEN"]
-} # .github/main.workflow
+}
+# .github/main.workflow
 
 # # CI: 需先安装依赖
 # action "CI" {
