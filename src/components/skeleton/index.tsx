@@ -59,7 +59,7 @@ class Skeleton extends Component<Props, State> {
         [selector]: list,
       });
     };
-    //window.requestAnimationFrame todo 渲染完毕
+    //todo 渲染完毕
     setTimeout(() => {
       const { selector } = this.props;
       // @ts-ignore
