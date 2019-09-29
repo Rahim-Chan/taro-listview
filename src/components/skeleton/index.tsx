@@ -72,7 +72,7 @@ class Skeleton extends Component<Props, State> {
         });
         this.setState({
           parentRect: parentStyle
-        })
+        });
         selAll('bg');
         selAll('list');
         selAll('listRadius');
