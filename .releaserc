@@ -1,18 +1,14 @@
 {
-    "branch": "develop",
+    "branch": "master",
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github"
       [
-            "@semantic-release/npm",
-            {
-              "tarballDir": "dist"
-            }
-          ],
-      [
-        "@semantic-release/github",
+        "@semantic-release/changelog",
         {
-          "assets": "dist/*.tgz"
+          "changelogFile": "CHANGELOG.md"
         }
       ],
       [
