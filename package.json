@@ -68,8 +68,12 @@
 		"nervjs": "^1.4.4"
 	},
 	"devDependencies": {
-        "@semantic-release/changelog": "^3.0.4",
+		"@semantic-release/commit-analyzer": "^6.3.0",
 		"@semantic-release/git": "^7.0.16",
+		"@semantic-release/github": "^5.5.0",
+		"@semantic-release/npm": "^5.2.0",
+		"@semantic-release/release-notes-generator": "^7.3.0",
+		"semantic-release": "^15.13.19",
 		"@tarojs/plugin-babel": "1.3.15",
 		"@tarojs/plugin-csso": "1.3.15",
 		"@tarojs/plugin-sass": "1.3.15",
@@ -89,7 +93,6 @@
 		"eslint-plugin-import": "^2.12.0",
 		"eslint-plugin-react": "^7.8.2",
 		"eslint-plugin-taro": "1.3.15",
-		"semantic-release": "^15.13.19",
 		"stylelint": "9.3.0",
 		"stylelint-config-taro-rn": "1.3.15",
 		"stylelint-taro-rn": "1.3.15",
