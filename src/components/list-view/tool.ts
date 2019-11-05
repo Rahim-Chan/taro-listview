@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import storage  from "utils/storage";
+import storage  from "../../utils/storage";
 
 interface LazyItem {
   key: string;
