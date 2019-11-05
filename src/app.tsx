@@ -15,6 +15,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/lazy-list',
       'pages/index',
       'pages/index/index',
       'pages/index/lazy',

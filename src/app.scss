@@ -1,9 +1,9 @@
 .item {
   display: flex;
-  margin-bottom: 10px;
-  padding: 40px;
+  //margin-bottom: 10px;
+  //padding: 40px;
   border: 1px solid;
-  box-shadow: 0 0.08533rem 0.512rem 0 rgba(0, 0, 0, 0.09);
+  //box-shadow: 0 0.08533rem 0.512rem 0 rgba(0, 0, 0, 0.09);
   .avatar {
     display:block;
     width: 100px;
@@ -24,4 +24,15 @@
   font-size: 30px;
   margin: 20px auto;
   width: 500px;
+}
+.list {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(red, yellow, blue, orange);
+  z-index: -1;
+}
+.recycleWrap {
+  position: relative;
 }

@@ -301,15 +301,12 @@ class ListView extends Component<Props, State> {
       footerLoadedText,
       damping,
       circleColor,
-      onPullDownRefresh,
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
     const {activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
     const {canScrollY, isInit, blockStyle, needPullDown, downLoading} = this.state;
 
-    const showTipText = !downLoading && needPullDown && !isInit; // 下拉文案
-    const showTipFreedText = !downLoading && !needPullDown && !isInit;// 释放文案
-
+    const showTip = !downLoading && !isInit;// 展示下拉区域文案
     const showChildren = !(isEmpty || isError); // 展示children内容
 
     const showFooter = !downLoading && !isEmpty && !isError; // 空、错状态不展示底部
@@ -326,6 +323,7 @@ class ListView extends Component<Props, State> {
       ...blockStyle
     };
     //taro scrollView 组建scrollY无效
+    const dampText = showTip ? (needPullDown ? (activate || tipText) : (deactivate || tipFreedText)) : ''
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
         <ScrollView
@@ -335,7 +333,7 @@ class ListView extends Component<Props, State> {
           className={`${className} scroll-view`}
           style={newStyle}
           scrollY={canScrollY}
-          lowerThreshold={0}
+          lowerThreshold={80}
           onScrollToLower={this.handleScrollToLower}
           scrollWithAnimation
           onScroll={this.onScroll}
@@ -351,11 +349,9 @@ class ListView extends Component<Props, State> {
               style={trStyle}
               className='bodyView'
             >
-              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className={`pullDownBlock ${onPullDownRefresh?'':'unNeedBlock'}`}>
+              <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
                 <View className='tip'>
-                  {showTipFreedText && <View>{deactivate || tipFreedText}</View>}
-                  {showTipText && <View>{activate || tipText}</View>}
-                  {/*{downLoading && <View>{release}</View>}*/}
+                  <View>{dampText}</View>
                   {downLoading && <Loading color={circleColor} />}
                 </View>
               </View>
