@@ -26,12 +26,12 @@
   width: 500px;
 }
 .list {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(red, yellow, blue, orange);
-  z-index: -1;
+  .recycleItem {
+    position: absolute;
+    overflow: hidden;
+    left: 0;
+
+  }
 }
 .recycleWrap {
   position: relative;
