@@ -4,12 +4,12 @@ import Index from './index'
 import { loadScript } from './utils/utils';
 import './app.scss'
 
-if (Taro.getEnv() === 'WEB') {
-  loadScript('https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.3.4/vconsole.min.js', () => {
-  // eslint-disable-next-line
-    new VConsole();
-  });
-}
+// if (Taro.getEnv() === 'WEB') {
+//   loadScript('https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.3.4/vconsole.min.js', () => {
+//   // eslint-disable-next-line
+//     new VConsole();
+//   });
+// }
 class App extends Component {
 
   /**

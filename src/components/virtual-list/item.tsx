@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useMemo} from "@tarojs/taro";
+import Taro, {useEffect, useState, useMemo, useRef} from "@tarojs/taro";
 import {View} from "@tarojs/components";
 import tools from './virtual';
 
@@ -11,29 +11,31 @@ interface Props {
 
 const Item: Taro.FunctionComponent<Props> = (props) => {
   const { identifier, current } = props;
-  const [range, setRange] = useState([]);
-  const canIShow = useMemo(() => {
-    if (range.length) {
-      // @ts-ignore
-      const [preIndex, endIndex] = range;
-      return current >= preIndex && current<= endIndex
-    } else {
-      return true
-    }
-  }, [current, range]);
-  useEffect(() => {
-    const key = tools.getEventKey(identifier);
-    // @ts-ignore
-    Taro.eventCenter.on(key, res => {
-      // rangeIndex.current = res;
-      setRange(res)
-    });
-    return () => {
-      Taro.eventCenter.off(key);
-    }
+  // const [canIShow, setCan] = useState(false);
+  const key = useMemo(() => {
+    return tools.getEventKey(identifier)
   }, [identifier]);
 
-  if (canIShow) {
+  //
+  // useEffect(() => {
+  //   const key = tools.getEventKey(identifier) as string;
+  //   setCan()
+  // }, [current, identifier]);
+  // //
+  // useEffect(() => {
+  //   const key = tools.getEventKey(identifier) as string;
+  //   Taro.eventCenter.on(key, res => {
+  //     const [preIndex, endIndex] = res;
+  //     const status = current >= preIndex && current<= endIndex;
+  //     console.log({ current, status, canIShow})
+  //     setCan(status)
+  //   });
+  //   return () => {
+  //
+  //     Taro.eventCenter.off(key);
+  //   }
+  // }, [current, identifier, canIShow]);
+  if (tools.shouldChildShow(key, current)) {
     return (
       <View style={{ height: '100px', position: 'absolute', top: `${(current*100)}px` }}>
         {props.children}

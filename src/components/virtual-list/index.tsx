@@ -7,26 +7,29 @@ interface Props {
   children?: any;
   list: any[];
   identifier?: string | number;
+  onScrollToLower?: () => void;
 }
 const itemSize = {
   width: 100,
   height: 100,
 }
 const { windowHeight } = Taro.getSystemInfoSync();
-let preIndex = 0;
 let visibleCount = 0;
 let spaceCount = 0;
+const spaceStep = .2;
 const VirList: Taro.FunctionComponent<Props>= (props) => {
-  const isLast = useRef();
-  const keyRef = useRef();
-  const { list } = props;
-  const [makeUpList, setMUList] = useState([]);
+  const isLast = useRef(false);
+  const preIndex = useRef(0);
+  const [vrKey, setVr] = useState('');
+  const { list = [], onScrollToLower } = props;
+  const [makeUpList, setMUList] = useState([{ bottom: 0 }]);
   const [startIndex, setStartIndex] = useState(0)
   const [totalHeight, setHeight] = useState();
   const handleLower = () => {
     throttle(() => {
       console.log('handleLower')
       // fetchList()
+      onScrollToLower()
     }, 800)
   }
 
@@ -37,23 +40,27 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
     } else {
       index = 0
     }
-    preIndex = index;
+    preIndex.current = index;
   }, [startIndex]);
 
   useEffect(() => {
-    if (keyRef.current) {
+    if (vrKey) {
       if (!isLast.current) {
-        Taro[keyRef.current]([preIndex, startIndex + spaceCount])
+        throttle(() => {
+          // console.log([preIndex.current, startIndex + spaceCount])
+          Taro[vrKey]([preIndex.current, startIndex + spaceCount])
+        }, 300)
+        tool.setRange(vrKey, [preIndex.current, startIndex + spaceCount])
       }
       isLast.current = !(startIndex + visibleCount <= list.length-1)
     }
-  }, [list.length, startIndex]);
+  }, [list.length, startIndex, vrKey]);
 
   useEffect(() => {
     // 初始化
-    keyRef.current = tool.initVir(props.identifier);
+    setVr(tool.initVir(props.identifier))
     visibleCount = Math.ceil(windowHeight / itemSize.height);
-    spaceCount = visibleCount = Math.ceil(visibleCount * 1.5);
+    spaceCount = visibleCount + Math.ceil(visibleCount * spaceStep);
   }, [props.identifier]);
   //
   useEffect(() => {
@@ -67,6 +74,11 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
     setMUList(temList)
   }, [list]);
 
+  // useEffect(() => {
+  //   setStartIndex(0)
+  // }, [makeUpList])
+
+  
   const binarySearch = (res,value) => {
     const index = res.findIndex(i => i && i.bottom > value);
     setStartIndex(index)
@@ -86,7 +98,9 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
       onScroll={handleScroll}
       lowerThreshold={20}
       onScrollToLower={handleLower}
+      id='foo'
     >
+    
       <View className='recycleList' style={{ height: totalHeight }}>
         {this.props.children}
       </View>
