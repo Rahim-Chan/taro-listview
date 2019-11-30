@@ -1,7 +1,7 @@
 import Taro, {useState, useEffect, useRef } from '@tarojs/taro';
 import {View, ScrollView} from '@tarojs/components';
 import { throttle } from "../../utils/utils";
-import tool from "./virtual";
+import tool, {registered} from "./virtual";
 
 interface Props {
   children?: any;
@@ -20,19 +20,45 @@ const spaceStep = .2;
 const VirList: Taro.FunctionComponent<Props>= (props) => {
   const isLast = useRef(false);
   const preIndex = useRef(0);
-  const [vrKey, setVr] = useState('');
+  const [vrKey] = useState(props.identifier);
   const { list = [], onScrollToLower } = props;
   const [makeUpList, setMUList] = useState([{ bottom: 0 }]);
   const [startIndex, setStartIndex] = useState(0)
   const [totalHeight, setHeight] = useState();
+  const [isReady, getReady] = useState(false)
+
   const handleLower = () => {
     throttle(() => {
-      console.log('handleLower')
       // fetchList()
       onScrollToLower()
     }, 800)
   }
 
+  useEffect(() => {
+    // 初始化
+    tool.initVir(props.identifier)
+  }, [props.identifier])
+  useEffect(() => {
+    if (list.length) {
+      //registered the son lister
+      registered(props.identifier, list.length)
+      // confirm all child is ready;
+      Taro.eventCenter.on(`${props.identifier}-cb`, nthSon => {
+        // console.log(nthSon, 'nthSon', list.length)
+        if (nthSon === list.length-1) {
+          getReady(true)
+        }
+      });
+    }
+
+    visibleCount = Math.ceil(windowHeight / itemSize.height);
+    spaceCount = visibleCount + Math.ceil(visibleCount * spaceStep);
+    return () => {
+      Taro.eventCenter.off(`${props.identifier}-cb`);
+    }
+  }, [props.identifier, list]);
+
+  // useEffect(() => {console.log(new VirList())}, [])
   useEffect(() => {
     let index = startIndex;
     if (index > spaceCount) {
@@ -44,24 +70,20 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
   }, [startIndex]);
 
   useEffect(() => {
-    if (vrKey) {
+    if (vrKey && list.length && isReady) {
       if (!isLast.current) {
-        throttle(() => {
-          // console.log([preIndex.current, startIndex + spaceCount])
-          Taro[vrKey]([preIndex.current, startIndex + spaceCount])
-        }, 300)
-        tool.setRange(vrKey, [preIndex.current, startIndex + spaceCount])
+        // throttle(() => {
+        // }, 300)
+        // console.log([preIndex.current, startIndex + spaceCount])
+        let lastIndex = startIndex + spaceCount
+        lastIndex = lastIndex > list.length ? list.length : lastIndex;
+        tool.callMySon(vrKey,[preIndex.current, lastIndex])
       }
       isLast.current = !(startIndex + visibleCount <= list.length-1)
     }
-  }, [list.length, startIndex, vrKey]);
+  }, [list, startIndex, vrKey, isReady]);
 
-  useEffect(() => {
-    // 初始化
-    setVr(tool.initVir(props.identifier))
-    visibleCount = Math.ceil(windowHeight / itemSize.height);
-    spaceCount = visibleCount + Math.ceil(visibleCount * spaceStep);
-  }, [props.identifier]);
+
   //
   useEffect(() => {
     if (!list.length) return;

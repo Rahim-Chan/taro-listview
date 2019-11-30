@@ -11,7 +11,7 @@ const Page = () => {
     const { data: { data } } = await Taro.request({
       url: 'https://cnodejs.org/api/v1/topics',
       data: {
-        limit: 100,
+        limit: 20,
         page
       }
     })
@@ -25,6 +25,7 @@ const Page = () => {
   return (
     <View>
       <VirtualList
+        identifier='foo'
         onScrollToLower={fetchList}
         list={list}
       >
@@ -32,6 +33,7 @@ const Page = () => {
           list.map((i, index)=>{
             return (
               <VirtualItem
+                identifier='foo'
                 key={index}
                 current={index}
                 height={100}
