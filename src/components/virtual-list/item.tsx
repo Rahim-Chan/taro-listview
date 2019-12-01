@@ -1,5 +1,6 @@
 import Taro, {useEffect, useState } from "@tarojs/taro";
 import {View} from "@tarojs/components";
+import vrTool from "./virtual";
 
 interface Props {
   children: any;
@@ -13,13 +14,10 @@ const Item: Taro.FunctionComponent<Props> = (props) => {
   const [canIShow, setCan] = useState(false);
 
   useEffect(() => {
-    // console.log('cb', current)
-    Taro[`${identifier}-cb`](current)
+    vrTool.childReady(identifier, current)
   }, [current, identifier]);
   useEffect(() => {
-    // const key = tools.getEventKey(identifier) as string;
     Taro.eventCenter.on(`${identifier}-${current}`, status => {
-      // console.log(status, current)
       setCan(status)
     });
     return () => {

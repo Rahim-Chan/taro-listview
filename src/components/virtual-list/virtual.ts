@@ -3,6 +3,7 @@ import Taro from "@tarojs/taro";
 type EventList = {
   [id: string] : {
     whoInShow: number[]
+    readyNum: number;
   }
 }
 type Child = {
@@ -16,7 +17,7 @@ export const setRange = (key, range) => {
 }
 export const shouldChildShow = (key, current) => {
   if (!key) return false
-  const [preIndex, endIndex] = rangeList[key];
+  const [preIndex, endIndex] = rangeList[key] || [0,0];
   return current >= preIndex && current <= endIndex
 };
 
@@ -27,7 +28,8 @@ export const initVir = (id) => {
   Taro[`${id}-cb`] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `${id}-cb`);
   // const vrKey = `vr${new Date().getTime()}`;
   eventList[id] = {
-    whoInShow: [0, 0]
+    whoInShow: [0, 0],
+    readyNum: 0,
   }
   // registered(id, length)
   // return vrKey
@@ -37,6 +39,16 @@ export const registered = (id, length) => {
   Array(length).fill('1').forEach((_, index) => {
     Taro[`${id}-${index}`] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `${id}-${index}`);
   })
+
+}
+
+export const childReady = (identifier, current) => {
+  Taro[`${identifier}-cb`](current)
+  eventList[identifier].readyNum += 1;
+}
+
+export const allChildReady = (identifier, length) => {
+  return length === eventList[identifier].readyNum;
 }
 
 export const callMySon = (key, range) => {
@@ -84,6 +96,8 @@ const diff = (pre, next) => {
 };
 
 export default {
+  allChildReady,
+  childReady,
   callMySon,
   shouldChildShow,
   setRange,

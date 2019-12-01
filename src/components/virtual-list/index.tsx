@@ -21,16 +21,17 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
   const isLast = useRef(false);
   const preIndex = useRef(0);
   const [vrKey] = useState(props.identifier);
+  const id = useRef(props.identifier)
   const { list = [], onScrollToLower } = props;
   const [makeUpList, setMUList] = useState([{ bottom: 0 }]);
   const [startIndex, setStartIndex] = useState(0)
   const [totalHeight, setHeight] = useState();
   const [isReady, getReady] = useState(false)
-
   const handleLower = () => {
     throttle(() => {
       // fetchList()
-      onScrollToLower()
+      getReady(false)
+      if(onScrollToLower) onScrollToLower()
     }, 800)
   }
 
@@ -38,25 +39,31 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
     // 初始化
     tool.initVir(props.identifier)
   }, [props.identifier])
+
   useEffect(() => {
     if (list.length) {
-      //registered the son lister
-      registered(props.identifier, list.length)
-      // confirm all child is ready;
-      Taro.eventCenter.on(`${props.identifier}-cb`, nthSon => {
-        // console.log(nthSon, 'nthSon', list.length)
-        if (nthSon === list.length-1) {
+      //注册子元素监听器
+      registered(props.identifier, list.length);
+      //判断子元素是否就位（两种方法）
+      //小程序环境下（子元素先粗发）
+      // console.log(tool.allChildReady(props.identifier, list.length), 'isReady')
+      getReady(tool.allChildReady(props.identifier, list.length))
+      //h5环境下（父元素先触发）
+
+      Taro.eventCenter.on(`${id.current}-cb`, nthSon => {
+        if (nthSon === list.length - 1) {
           getReady(true)
+        } else {
+          getReady(false)
         }
       });
     }
-
     visibleCount = Math.ceil(windowHeight / itemSize.height);
     spaceCount = visibleCount + Math.ceil(visibleCount * spaceStep);
     return () => {
-      Taro.eventCenter.off(`${props.identifier}-cb`);
+      Taro.eventCenter.off(`${id.current}-cb`);
     }
-  }, [props.identifier, list]);
+  }, [list.length, props.identifier]);
 
   // useEffect(() => {console.log(new VirList())}, [])
   useEffect(() => {
@@ -71,6 +78,7 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
 
   useEffect(() => {
     if (vrKey && list.length && isReady) {
+      isLast.current = !(startIndex + visibleCount <= list.length-1)
       if (!isLast.current) {
         // throttle(() => {
         // }, 300)
@@ -79,16 +87,15 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
         lastIndex = lastIndex > list.length ? list.length : lastIndex;
         tool.callMySon(vrKey,[preIndex.current, lastIndex])
       }
-      isLast.current = !(startIndex + visibleCount <= list.length-1)
     }
-  }, [list, startIndex, vrKey, isReady]);
+  }, [startIndex, vrKey, isReady, list.length]);
 
 
   //
   useEffect(() => {
     if (!list.length) return;
     setHeight(list.length * itemSize.height + 'px')
-    const temList = list.map((item, y) => {
+    const temList = list.map((_, y) => {
       return {
         bottom:(y + 1) * itemSize.height,
       }
@@ -96,11 +103,6 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
     setMUList(temList)
   }, [list]);
 
-  // useEffect(() => {
-  //   setStartIndex(0)
-  // }, [makeUpList])
-
-  
   const binarySearch = (res,value) => {
     const index = res.findIndex(i => i && i.bottom > value);
     setStartIndex(index)
@@ -122,7 +124,6 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
       onScrollToLower={handleLower}
       id='foo'
     >
-    
       <View className='recycleList' style={{ height: totalHeight }}>
         {this.props.children}
       </View>

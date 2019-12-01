@@ -37,7 +37,6 @@ const Page = () => {
                 key={index}
                 current={index}
                 height={100}
-
               >
                 <View style={{ fontSize: 18 }}>
                   {i.title}{index}
