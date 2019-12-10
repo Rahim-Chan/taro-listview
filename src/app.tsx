@@ -1,8 +1,32 @@
 import Taro, { Component } from '@tarojs/taro'
 import '@tarojs/async-await'
 import Index from './index'
+import './app.scss';
 
-import './app.scss'
+/**
+ * 异步加载外部 JavaScript
+ */
+function loadScript(url: string, callback: () => void, props?: { [key: string]: any }) {
+  const script = document.createElement('script');
+  script.onload = () => callback();
+  script.src = url;
+  if (props) {
+    // eslint-disable-next-line
+    for (const prop in props) {
+      if (Object.prototype.hasOwnProperty.call(props, prop)) {
+        script[prop] = props[prop];
+      }
+    }
+  }
+  document.body.appendChild(script);
+}
+
+if (Taro.getEnv() !== 'WEAPP') {
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.3.4/vconsole.min.js', () => {
+    // eslint-disable-next-line
+    new VConsole();
+  });
+}
 
 class App extends Component {
 
