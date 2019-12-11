@@ -27,7 +27,8 @@ jobs:
 
     # 代码拉取
     - uses: actions/checkout@v1
-
+      with:
+        ref: master
     # 依赖安装并打包
     - name: Install Dependencies and Build
       run: |
