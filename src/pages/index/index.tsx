@@ -70,7 +70,7 @@ export default class Index extends Component {
     return (
         <View className='skeleton lazy-view'>
           <ListView
-            // lazy
+            lazy
             ref={node => this.insRef(node)}
             isLoaded={isLoaded}
             isError={error}
