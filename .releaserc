@@ -1,5 +1,5 @@
 {
-    "branch": "develop",
+    "branch": "master",
     "plugins": [
        ["@semantic-release/changelog", {
           "changelogFile": "CHANGELOG.md"
