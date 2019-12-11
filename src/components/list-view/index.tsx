@@ -143,7 +143,7 @@ class ListView extends Component<Props, State> {
     tools.lazyScrollRemove()
   }
 
-  touchEvent = (e: ITouchEvent) => {
+  touchEvent = (e) => {
     const {type, touches} = e;
     const {onPullDownRefresh, distanceToRefresh, damping} = this.props;
     if (!onPullDownRefresh) return;
