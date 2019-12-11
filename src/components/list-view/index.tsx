@@ -180,11 +180,7 @@ class ListView extends Component<Props, State> {
         break;
       }
       case 'touchcancel': {
-        if (!this.needPullDown) {
-          this.fetchInit();
-        } else {
-          this.resetLoad(0);
-        }
+        this.resetLoad(0);
         break;
       }
       default: {
@@ -208,6 +204,7 @@ class ListView extends Component<Props, State> {
 
   resetLoad = (status = 0, cb?) => {
     // status: 0:回复初始值 1：加载中
+    console.log({ status })
     const {distanceToRefresh} = this.props;
     let state = {};
     switch (status) {
@@ -217,6 +214,7 @@ class ListView extends Component<Props, State> {
           downLoading: false,
         };
         this.updateDampText(true);
+        this.moveBox(0);
         break;
       case 1:
         state = {
@@ -229,7 +227,7 @@ class ListView extends Component<Props, State> {
       default:
     }
     // state = Object.assign({}, state,{ blockStyle });
-    this.moveBox(0);
+    // this.moveBox(0);
     this.setState(state);
     // todo 监听真正动画结束
     setTimeout(function () {
@@ -268,6 +266,7 @@ class ListView extends Component<Props, State> {
 
   moveBox = (y) => {
     const transition = y ? 'none' : '300ms linear';
+    // console.log({ y })
     if (Taro.getEnv() === 'WEB') {
       const target = document.getElementById('bodyView') as HTMLElement;
       target.style.transform = `translate3d(0,${y}px,0)`;
@@ -364,7 +363,9 @@ class ListView extends Component<Props, State> {
               >
                 <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
                   <View className='tip'>
-                    <View id='tip-dampText'>{dampText}</View>
+                    {
+                      !downLoading && <View id='tip-dampText'>{dampText}</View>
+                    }
                     {downLoading && <Loading color={circleColor} />}
                   </View>
                 </View>
