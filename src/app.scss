@@ -4,6 +4,29 @@
   padding: 40px;
   border: 1px solid;
   box-shadow: 0 0.08533rem 0.512rem 0 rgba(0, 0, 0, 0.09);
+  .box {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    box-shadow: 0 0 20px gold;
+    position: relative;
+    .tab {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+
+    }
+  }
+  .content {
+    //height: 150px;
+    width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off   */
+    -webkit-box-orient: vertical;
+  }
   .avatar {
     display:block;
     width: 100px;

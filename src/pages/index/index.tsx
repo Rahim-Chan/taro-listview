@@ -70,7 +70,7 @@ export default class Index extends Component {
     return (
         <View className='skeleton lazy-view'>
           <ListView
-            lazy
+            // lazy
             ref={node => this.insRef(node)}
             isLoaded={isLoaded}
             isError={error}
@@ -86,8 +86,15 @@ export default class Index extends Component {
                     <LazyBlock current={index} className='avatar'>
                       <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
                     </LazyBlock>
-                    <View className='title skeleton-rect'>
-                      {item.title}
+                    <View className='box'>
+                      <View className='tab'>{item.tab}{item.visit_count}次</View>
+                      <View className='time'>{item.create_at}</View>
+                      <View className='content'>
+                        {item.content}
+                      </View>
+                      <View className='title skeleton-rect'>
+                        {item.title}
+                      </View>
                     </View>
                   </View>
               )
