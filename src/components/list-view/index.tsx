@@ -246,7 +246,6 @@ class ListView extends Component<Props, State> {
     const {lowerLoading} = this.state;
     if (hasMore && !lowerLoading && onScrollToLower) {
       this.setState({lowerLoading: true});
-      console.log('onScrollToLower')
       onScrollToLower(() => {
         this.setState({lowerLoading: false});
       });
