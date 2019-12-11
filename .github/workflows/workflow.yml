@@ -26,7 +26,7 @@ jobs:
     steps:
 
     # 代码拉取
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v1
 
     # 依赖安装并打包
     - name: Install Dependencies and Build
