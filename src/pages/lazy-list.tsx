@@ -1,21 +1,26 @@
-import Taro, {useEffect, useState} from "@tarojs/taro";
+import Taro, {useEffect} from "@tarojs/taro";
 import {View} from "@tarojs/components";
 import { VirtualItem, VirtualList } from '../components/index';
+import useList from '../components/virtual-list/hooksList';
+import './index.scss'
 
 let page = 0;
 
 const Page = () => {
-  const [list, setList] = useState([])
+  const [list, {append}] = useList([]);
+  // const [dbList, setDb] = useState([]);
   const fetchList = async () => {
-    page +=1
-    const { data: { data } } = await Taro.request({
-      url: 'https://cnodejs.org/api/v1/topics',
-      data: {
-        limit: 20,
-        page
-      }
-    })
-    setList(list.concat(data))
+    page += 1;
+    // const { data: { data } } = await Taro.request({
+    //   url: 'https://cnodejs.org/api/v1/topics',
+    //   data: {
+    //     limit: 200,
+    //     page
+    //   }
+    // })
+    const list = new Array(100).fill('').map((i, index) => index)
+    // setDb(list)
+    append(list)
   }
 
   useEffect(() => {
@@ -26,20 +31,19 @@ const Page = () => {
     <View>
       <VirtualList
         identifier='foo'
-        onScrollToLower={fetchList}
-        list={list}
+        onScrollToLower={() => {console.log('onScrollToLower')}}
       >
         {
-          list.map((i, index)=>{
+          list.map((i)=>{
             return (
               <VirtualItem
                 identifier='foo'
-                key={index}
-                current={index}
+                key={i.__index__}
+                current={i.__index__}
                 height={100}
               >
                 <View style={{ fontSize: 18 }}>
-                  {i.title}{index}
+                  {i.__index__}
                 </View>
               </VirtualItem>
             )

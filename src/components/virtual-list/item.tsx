@@ -1,7 +1,10 @@
-import Taro, {useEffect, useState } from "@tarojs/taro";
+import Taro from "@tarojs/taro";
 import {View} from "@tarojs/components";
 import vrTool from "./virtual";
 
+function areEqual (preProps, nextProps) {
+  return preProps.current === nextProps.current
+}
 interface Props {
   children: any;
   current: number;
@@ -10,27 +13,13 @@ interface Props {
 }
 
 const Item: Taro.FunctionComponent<Props> = (props) => {
-  const { identifier, current } = props;
-  const [canIShow, setCan] = useState(false);
+  const { current } = props;
 
-  useEffect(() => {
-    vrTool.childReady(identifier, current)
-  }, [current, identifier]);
-  useEffect(() => {
-    Taro.eventCenter.on(`${identifier}-${current}`, status => {
-      setCan(status)
-    });
-    return () => {
-      Taro.eventCenter.off(`${identifier}-${current}`);
-    }
-  }, [current, identifier]);
-  if (canIShow) {
-    return (
-      <View style={{ height: '100px', position: 'absolute', top: `${(current*100)}px` }}>
-        {props.children}
-      </View>
-    )
-  }
+  return (
+    <View style={{ height: `${vrTool.height}px`, position: 'absolute', top: `${(current*vrTool.height)}px` }}>
+      {props.children}
+    </View>
+  )
 }
 
-export default Item
+export default Taro.memo(Item,areEqual)

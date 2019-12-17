@@ -1,6 +1,7 @@
 import Taro, {useState, useEffect, useRef } from '@tarojs/taro';
 import {View, ScrollView} from '@tarojs/components';
 import { throttle } from "../../utils/utils";
+import {ctx} from './hooksList';
 import tool, {registered} from "./virtual";
 
 interface Props {
@@ -11,12 +12,12 @@ interface Props {
 }
 const itemSize = {
   width: 100,
-  height: 100,
+  height: tool.height,
 }
 const { windowHeight } = Taro.getSystemInfoSync();
 let visibleCount = 0;
 let spaceCount = 0;
-const spaceStep = .2;
+const spaceStep = 2;
 const VirList: Taro.FunctionComponent<Props>= (props) => {
   const isLast = useRef(false);
   const preIndex = useRef(0);
@@ -115,19 +116,27 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
   }
 
   return (
-    <ScrollView
-      style={{ height: '100vh' }}
-      // className='recycleWrap'
-      scrollY
-      onScroll={handleScroll}
-      lowerThreshold={20}
-      onScrollToLower={handleLower}
-      id='foo'
-    >
-      <View className='recycleList' style={{ height: totalHeight }}>
-        {this.props.children}
-      </View>
-    </ScrollView>
+    <View>
+      <View onClick={() => {
+        console.log('ctx.outSetList([])')
+        console.log(ctx)
+        ctx.outSetList([])
+      }}
+      >ctx</View>
+      <ScrollView
+        style={{ height: '100vh' }}
+        // className='recycleWrap'
+        scrollY
+        onScroll={handleScroll}
+        lowerThreshold={20}
+        onScrollToLower={handleLower}
+      >
+        <View id='foo' className='recycleList' style={{ height: totalHeight }}>
+          {this.props.children}
+        </View>
+      </ScrollView>
+    </View>
+
   )
 }
 export default VirList

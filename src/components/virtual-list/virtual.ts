@@ -96,6 +96,7 @@ const diff = (pre, next) => {
 };
 
 export default {
+  height: 100,
   allChildReady,
   childReady,
   callMySon,

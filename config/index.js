@@ -77,6 +77,9 @@ const config = {
   },
   h5: {
     publicPath: '/',
+    devServer: {
+      host: '0.0.0.0'
+    },
     staticDirectory: 'static',
     module: {
       postcss: {
