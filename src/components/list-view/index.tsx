@@ -204,7 +204,7 @@ class ListView extends Component<Props, State> {
 
   resetLoad = (status = 0, cb?) => {
     // status: 0:回复初始值 1：加载中
-    console.log({ status })
+    // console.log({ status })
     const {distanceToRefresh} = this.props;
     let state = {};
     switch (status) {
