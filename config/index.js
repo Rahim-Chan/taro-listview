@@ -30,6 +30,14 @@ const config = {
   },
   copy: {
     patterns: [
+      {
+        from: 'src/components/list-view/pulldown.wxs',
+        to: 'dist/components/list-view/pulldown.wxs'
+      },
+      {
+        from: 'src/components/list-view/index.template.wxml',
+        to: 'dist/components/list-view/index.template.wxml'
+      },
     ],
     options: {
     }

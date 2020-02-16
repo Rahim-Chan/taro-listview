@@ -4,92 +4,9 @@ import Skeleton from '../skeleton';
 import Loading from '../loading';
 import tools from './tool'
 import ResultPage from '../result-page';
+import { initialProps, initialState } from './init'
+import { Props, Indicator, Launch } from './type';
 import './index.scss';
-
-interface Props {
-  lazy?: boolean | string;
-  circleColor?: string;
-  style?: any;
-  className?: string;
-  emptyText?: string;
-  footerLoadedText?: string;
-  footerLoadingText?: string;
-  noMore?: string;
-  tipText?: string;
-  tipFreedText?: string;
-  onScrollToLower: (any) => void;
-  onPullDownRefresh?: (any) => void;
-  hasMore: boolean;
-  needInit?: boolean;
-  isEmpty?: boolean;
-  isError?: boolean;
-  launch?: Launch;
-  renderEmpty?: JSX.Element;
-  renderError?: JSX.Element;
-  renderFooterLoading?: any;
-  renderFooterLoaded?: any;
-  damping?: number;
-  distanceToRefresh?: number;
-  indicator?: Indicator;
-  isLoaded?: boolean;
-  selector?: string;
-  onScroll?: () => void;
-}
-
-interface Indicator {
-  activate?: any,
-  deactivate?: any,
-  release?: any,
-  tipFreedText?: any;
-}
-
-interface Launch {
-  launchEmpty?: boolean;
-  launchError?: boolean;
-  launchFooterLoading?: boolean;
-  launchFooterLoaded?: boolean;
-}
-
-const initialState = {
-  canScrollY: true,
-  touchScrollTop: 0,
-  scrollTop: 0,
-  startY: 0,
-  downLoading: false,
-  lowerLoading: false,
-  // needPullDown: true,
-  isInit: false,
-  blockStyle: {
-    transform: 'translate3d(0,0,0)',
-    transition: 'none',
-  },
-  dampText: '',
-};
-
-const initialProps = {
-  lazy: false,
-  distanceToRefresh: 50,
-  damping: 150,
-  isLoaded: true,
-  isEmpty: false,
-  emptyText: '',
-  noMore: '暂无更多内容',
-  footerLoadingText: '加载中',
-  footerLoadedText: '暂无更多内容',
-  scrollTop: 0,
-  touchScrollTop: 0,
-  onScrollToLower: () => {
-  },
-  className: '',
-  onPullDownRefresh: null,
-  hasMore: false,
-  needInit: false,
-  isError: false,
-  launch: {},
-  renderEmpty: null,
-  renderError: null,
-  indicator: {}
-};
 
 type State = Readonly<typeof initialState>
 
@@ -129,7 +46,7 @@ class ListView extends Component<Props, State> {
     this.moveBox(0);
     if (this.props.lazy) {
       Taro.createSelectorQuery().in(this.$scope)
-        .select('.scroll-view')
+        .select('.scrollView')
         .boundingClientRect()
         .exec(res => {
           tools.updateScrollHeight(this.lazyKey, res[0].height)
@@ -287,7 +204,7 @@ class ListView extends Component<Props, State> {
     const showTip = !downLoading && !isInit;// 展示下拉区域文案
     if (!showTip) return ''
     const { indicator = {}, tipFreedText, tipText } = this.props;
-    const {activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
+    const {activate = '释放刷新', deactivate = '下拉刷新'} = indicator as Indicator;
     let text = ''
     if (act) {
       text = activate || tipText
@@ -337,7 +254,7 @@ class ListView extends Component<Props, State> {
           ref={node => {
             this.scrollView = node;
           }}
-          className={`${className} scroll-view`}
+          className={`${className} scrollView`}
           style={style}
           scrollY={canScrollY}
           lowerThreshold={80}

@@ -1,7 +1,19 @@
-.bodyView {
-  will-change: transform;
+.animateEase {
+  transition: transform ease 300ms;
+}
+.scrollView {
+  position: relative;
+  height: 100vh;
+  width: 100%;
 }
 
+.bodyView {
+  position: relative;
+  overflow: visible;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
 .containView {
   position: relative;
 }
@@ -69,4 +81,7 @@
   to {
     transform: rotate(1turn);
   }
+}
+.hide {
+  visibility: hidden;
 }
