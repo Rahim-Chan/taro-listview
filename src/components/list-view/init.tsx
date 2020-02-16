@@ -6,6 +6,7 @@ export const initialState = {
   downLoading: false,
   lowerLoading: false,
   // needPullDown: true,
+  canScrollY: true,
   isInit: false,
   blockStyle: {
     transform: 'translate3d(0,0,0)',
