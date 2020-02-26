@@ -2,7 +2,7 @@
 	"miniprogramRoot": "dist/",
 	"projectname": "taro-listView",
 	"description": "",
-	"appid": "wxff20cb8e12345bfa",
+	"appid": "touristappid",
 	"setting": {
 		"urlCheck": false,
 		"es6": false,
