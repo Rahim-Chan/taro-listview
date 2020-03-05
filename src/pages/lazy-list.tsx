@@ -1,13 +1,13 @@
 import Taro, {useEffect} from "@tarojs/taro";
 import {View} from "@tarojs/components";
 import { VirtualItem, VirtualList } from '../components/index';
-import useList from '../components/virtual-list/hooksList';
+import useList, { link } from '../components/virtual-list/use-list';
 import './index.scss'
 
 let page = 0;
 
 const Page = () => {
-  const [list, {append}] = useList([]);
+  const [list, append] = useList('id');
   // const [dbList, setDb] = useState([]);
   const fetchList = async () => {
     page += 1;
@@ -18,9 +18,10 @@ const Page = () => {
     //     page
     //   }
     // })
-    const list = new Array(100).fill('').map((i, index) => index)
+    const data = new Array(100).fill('').map((i, index) => index)
     // setDb(list)
-    append(list)
+    // link['id']([1,2,])
+    append(data)
   }
 
   useEffect(() => {
@@ -40,6 +41,7 @@ const Page = () => {
                 identifier='foo'
                 key={i.__index__}
                 current={i.__index__}
+                // height={i.__itemHeight__}
                 height={100}
               >
                 <View style={{ fontSize: 18 }}>

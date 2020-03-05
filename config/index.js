@@ -1,5 +1,11 @@
 const path = require('path');
-
+const pages = [
+  'pages/lazy-list',
+  'pages/index/index',
+  'pages/index',
+  'pages/index/lazy',
+  'pages/skeleton/index'
+]
 const config = {
   projectName: 'taro-listView',
   date: '2019-7-10',
@@ -27,6 +33,7 @@ const config = {
     }
   },
   defineConstants: {
+    PAGES: JSON.stringify(pages)
   },
   copy: {
     patterns: [

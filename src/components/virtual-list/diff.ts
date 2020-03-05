@@ -14,7 +14,6 @@ export default (start, list, oldData, newList) => {
         unusedPositionInOldList.push(position);
       }
     });
-    console.log(unusedPositionInOldList)
     const addNewItemIntoOldList = (positionInNewListForInsertingIntoOldList) => {
       const itemInNewListForInsertingIntoOldList = newList[positionInNewListForInsertingIntoOldList];
       if (unusedPositionInOldList.length) {
