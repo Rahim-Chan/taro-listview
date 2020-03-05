@@ -94,7 +94,7 @@ function lazyScroll(key, selector, height) {
             }
           });
           // @ts-ignore
-          Taro[key](indexs)
+          if (Taro[key] && typeof  Taro[key] === 'function') Taro[key](indexs)
         });
   }, 500)()
 }
