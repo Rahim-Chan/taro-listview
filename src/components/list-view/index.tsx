@@ -282,7 +282,11 @@ class ListView extends Component<Props, State> {
                     {
                       !downLoading && <View id='tip-dampText'>{dampText}</View>
                     }
-                    {downLoading && <Loading color={circleColor} />}
+                    {
+                      downLoading && (
+                        this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
+                      )
+                    }
                   </View>
                 </View>
                 {/* present children */}

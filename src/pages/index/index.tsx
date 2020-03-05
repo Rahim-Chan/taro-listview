@@ -79,6 +79,8 @@ export default class Index extends Component {
             isEmpty={isEmpty}
             onPullDownRefresh={fn => this.pullDownRefresh(fn)}
             onScrollToLower={this.onScrollToLower}
+            renderCustomizeLoading={(<View>自定义</View>)}
+            customizeLoading
           >
             {list.map((item, index) => {
               return (

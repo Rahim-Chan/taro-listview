@@ -20,6 +20,8 @@ export interface Props {
   renderError?: JSX.Element;
   renderFooterLoading?: any;
   renderFooterLoaded?: any;
+  renderCustomizeLoading?:JSX.Element;
+  customizeLoading?: boolean;
   damping?: number;
   distanceToRefresh?: number;
   indicator?: Indicator;
