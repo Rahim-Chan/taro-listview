@@ -40,13 +40,6 @@ const UseList = (initData: any[] | (() => any[])): [any[], Methods<any>] => {
   ctx.updateList = useCallback((scrollTop) => {
     const rectList = pureList.current;
     const start = rectList.findIndex(i => i && i.bottom > scrollTop);
-    // if (cacheList.current.list.length) {
-    //   const lastIndex = cacheList.current.endIndex;
-    //   // console.log(cacheList.current.beginIndex, start)
-    //   if (start < (lastIndex)/2) {
-    //     return
-    //   }
-    // }
     let lastIndex = start + moreNum;
     lastIndex = lastIndex > rectList.length ? rectList.length : lastIndex;
     let index = start;
@@ -56,12 +49,9 @@ const UseList = (initData: any[] | (() => any[])): [any[], Methods<any>] => {
       index = 0
     }
     const newList = rectList.slice(index, lastIndex);
-    console.log(newList)
-    const showList = diff(start, rectList, cacheList.current, newList);
-    console.log(`dom节点：${showList.list.length}`)
-    console.log(showList.list)
+    const showList = diff(cacheList.current, newList);
     setList(showList.list);
-    //cache list and next will be old
+    //cache list and next will be oldx
     cacheList.current = showList
   }, []);
 

@@ -1,13 +1,18 @@
-import Taro, {useEffect} from "@tarojs/taro";
+import Taro, {useEffect, useMemo} from "@tarojs/taro";
 import {View} from "@tarojs/components";
 import { VirtualItem, VirtualList } from '../components/index';
-import useList, { link } from '../components/virtual-list/use-list';
+import useList from '../components/virtual-list/use-list';
 import './index.scss'
 
 let page = 0;
 
+const handleGetItemHeight = (index) => {
+  return index%2 ? 50: 100
+}
+
 const Page = () => {
   const [list, append] = useList('id');
+  const [list1, append1] = useList('id1');
   // const [dbList, setDb] = useState([]);
   const fetchList = async () => {
     page += 1;
@@ -22,6 +27,7 @@ const Page = () => {
     // setDb(list)
     // link['id']([1,2,])
     append(data)
+    append1(data)
   }
 
   useEffect(() => {
@@ -31,18 +37,42 @@ const Page = () => {
   return (
     <View>
       <VirtualList
-        identifier='foo'
+        itemHeight={100}
+        identifier='id'
         onScrollToLower={() => {console.log('onScrollToLower')}}
       >
         {
           list.map((i)=>{
             return (
               <VirtualItem
-                identifier='foo'
+                identifier='id'
                 key={i.__index__}
                 current={i.__index__}
-                // height={i.__itemHeight__}
-                height={100}
+                height={i.__height__}
+                top={i.__top__}
+              >
+                <View style={{ fontSize: 18 }}>
+                  {i.__index__ + 1}
+                </View>
+              </VirtualItem>
+            )
+          })
+        }
+      </VirtualList>
+     {/* <VirtualList
+        identifier='id1'
+        itemHeight={handleGetItemHeight}
+        onScrollToLower={() => {console.log('onScrollToLower')}}
+      >
+        {
+          list1.map((i)=>{
+            return (
+              <VirtualItem
+                identifier='id1'
+                key={i.__index__}
+                current={i.__index__}
+                height={i.__height__}
+                top={i.__top__}
               >
                 <View style={{ fontSize: 18 }}>
                   {i.__index__}
@@ -51,7 +81,7 @@ const Page = () => {
             )
           })
         }
-      </VirtualList>
+      </VirtualList>*/}
     </View>
   )
 }

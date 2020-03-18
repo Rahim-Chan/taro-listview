@@ -16,7 +16,7 @@ const Item: Taro.FunctionComponent<Props> = (props) => {
   const { current } = props;
 
   return (
-    <View style={{ height: `${vrTool.height}px`, position: 'absolute', top: `${(current*vrTool.height)}px` }}>
+    <View style={{ position: 'absolute', border: '1px solid black', width: '100%',top: `${props.top}px`, height: `${props.height}px`}}>
       {props.children}
     </View>
   )

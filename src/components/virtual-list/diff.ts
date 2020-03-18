@@ -1,5 +1,5 @@
 
-export default (start, list, oldData, newList) => {
+export default (oldData, newList) => {
   //最小渲染下标
   const beginItemInNewList = newList[0];
   const endItemInNewList = newList[newList.length - 1];
@@ -11,6 +11,7 @@ export default (start, list, oldData, newList) => {
     // console.log({ newData })
     oldList.forEach((oldItem, position) => {
       if (oldItem.__index__ > endItemInNewList.__index__ || oldItem.__index__ < beginItemInNewList.__index__) {
+        //过滤出不要的index
         unusedPositionInOldList.push(position);
       }
     });
@@ -18,7 +19,9 @@ export default (start, list, oldData, newList) => {
       const itemInNewListForInsertingIntoOldList = newList[positionInNewListForInsertingIntoOldList];
       if (unusedPositionInOldList.length) {
         const index = unusedPositionInOldList.pop();
+        //弹出下标
         oldList.splice(index, 1, itemInNewListForInsertingIntoOldList);
+        //替换
       } else {
         oldList.push(itemInNewListForInsertingIntoOldList);
       }
