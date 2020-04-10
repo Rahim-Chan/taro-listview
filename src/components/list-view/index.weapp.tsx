@@ -133,10 +133,9 @@ class ListView extends Component<Props, State> {
       distanceToRefresh,
       circleColor,
       showIndicator,
-      indicator,
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
-    const {downLoading, dampText, hideInd } = this.state;
+    const {downLoading, dampText } = this.state;
     const showChildren = !(isEmpty || isError); // 展示children内容
     const showFooter = !downLoading && !isEmpty && !isError; // 空、错状态不展示底部
     const footerLoaded = showFooter && !launchFooterLoaded && !hasMore;
@@ -215,7 +214,7 @@ class ListView extends Component<Props, State> {
             {
               footerLoaded && (
                 <View className='loaded'>
-                  {noMore || footerLoadedText}
+                  {footerLoadedText || noMore}
                 </View>
               )
             }
