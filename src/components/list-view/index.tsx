@@ -235,6 +235,7 @@ class ListView extends Component<Props, State> {
       footerLoadedText,
       damping,
       circleColor,
+      autoHeight,
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
 
@@ -247,7 +248,89 @@ class ListView extends Component<Props, State> {
     const customFooterLoaded = showFooter && launchFooterLoaded && !hasMore; // 渲染renderLoadedText
     const footerLoading = showFooter && !launchFooterLoading && hasMore;
     const customFooterLoading = showFooter && launchFooterLoading && hasMore; // 渲染renderNoMore
-
+    if(autoHeight) {
+      return (
+        <ScrollView
+          ref={node => {
+            this.scrollView = node;
+          }}
+          className={`${className} ${downLoading && 'downLoadingStyle'} scrollView`}
+          style={{...style }}
+          scrollY={canScrollY}
+          lowerThreshold={80}
+          onScrollToLower={this.handleScrollToLower}
+          scrollWithAnimation
+          onScroll={this.onScroll}
+        >
+          <View
+            style={{ minHeight: '100%', overflowY: 'hidden' }}
+            onTouchMove={(e) => this.touchEvent(e)}
+            onTouchEnd={(e) => this.touchEvent(e)}
+            onTouchStart={(e) => this.touchEvent(e)}
+            onTouchCancel={(e) => this.touchEvent(e)}
+          >
+            <View
+              // style={trStyle}
+              className='bodyView'
+              id='bodyView'
+            >
+              <View
+                style={blockStyle}
+              >
+                <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
+                  <View className='tip'>
+                    {
+                      !downLoading && <View id='tip-dampText'>{dampText}</View>
+                    }
+                    {
+                      downLoading && (
+                        this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
+                      )
+                    }
+                  </View>
+                </View>
+                {/* present children */}
+                {showChildren && this.props.children}
+                <ResultPage
+                  renderError={this.props.renderError}
+                  renderEmpty={this.props.renderEmpty}
+                  launchError={launchError}
+                  launchEmpty={launchEmpty}
+                  isError={isError || false}
+                  isEmpty={isEmpty || false}
+                  emptyText={emptyText || ''}
+                  fetchInit={this.fetchInit}
+                />
+                {/* default page */}
+                {
+                  footerLoading && (
+                    <View className='loading'>
+                      {footerLoadingText}
+                    </View>
+                  )
+                }
+                {/* custom footer loading page*/}
+                {
+                  customFooterLoading && this.props.renderFooterLoading
+                }
+                {/* default footer loaded page*/}
+                {
+                  footerLoaded && (
+                    <View className='loaded'>
+                      {footerLoadedText || noMore}
+                    </View>
+                  )
+                }
+                {/* custom footer loaded page*/}
+                {
+                  customFooterLoaded && this.props.renderFooterLoaded
+                }
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      )
+    }
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
         <ScrollView

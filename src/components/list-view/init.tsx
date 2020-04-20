@@ -38,6 +38,7 @@ export const initialProps ={
   launch: {},
   renderEmpty: null,
   renderError: null,
+  autoHeight: false,
   indicator: {
     activate: '下拉刷新',
     deactivate: '释放刷新'

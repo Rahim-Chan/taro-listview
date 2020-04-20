@@ -29,6 +29,7 @@ export interface Props {
   selector?: string;
   onScroll?: () => void;
   showIndicator?: boolean;
+  autoHeight?: boolean;
 }
 
 export interface Indicator {

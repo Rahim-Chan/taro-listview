@@ -1,9 +1,12 @@
 .animateEase {
   transition: transform ease 300ms;
 }
+.downLoadingStyle {
+  overflow: hidden;
+}
 .scrollView {
   position: relative;
-  height: 100vh;
+  height: 100%;
   width: 100%;
 }
 

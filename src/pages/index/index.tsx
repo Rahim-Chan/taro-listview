@@ -68,14 +68,15 @@ export default class Index extends Component {
   render() {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
     return (
-        <View className='skeleton lazy-view'>
+        <View className='skeleton lazy-view' style={{ height: '300px' }} >
           <ListView
+            autoHeight
             lazy
             ref={node => this.insRef(node)}
             isLoaded={isLoaded}
             isError={error}
             hasMore={hasMore}
-            style={{height: '100vh'}}
+            // style={{height: '100vh'}}
             isEmpty={isEmpty}
             onPullDownRefresh={fn => this.pullDownRefresh(fn)}
             onScrollToLower={this.onScrollToLower}

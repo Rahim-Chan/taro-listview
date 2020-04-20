@@ -5,12 +5,12 @@ import Loading from '../loading';
 import tools from './tool'
 import ResultPage from '../result-page';
 import { initialProps, initialState } from './init'
-import { Props, Indicator, Launch } from './type';
+import { Indicator, Launch } from './type';
 import './index.scss';
 
 type State = Readonly<typeof initialState>
 
-class ListView extends Component<Props, State> {
+class ListView extends Component<typeof initialProps, State> {
   static defaultProps = initialProps;
 
   state = initialState;
@@ -124,6 +124,7 @@ class ListView extends Component<Props, State> {
       emptyText,
       className,
       isError,
+      autoHeight,
       isLoaded,
       selector,
       launch = {},
@@ -142,10 +143,9 @@ class ListView extends Component<Props, State> {
     const customFooterLoaded = showFooter && launchFooterLoaded && !hasMore; // 渲染renderLoadedText
     const footerLoading = showFooter && !launchFooterLoading && hasMore;
     const customFooterLoading = showFooter && launchFooterLoading && hasMore; // 渲染renderNoMore
-    return (
-      <Skeleton isLoaded={isLoaded || isError} selector={selector}>
-        <wxs module='pulldown' src='./pulldown.wxs'></wxs>
-        <include src='./index.template.wxml' />
+
+    if (autoHeight) {
+      return (
         <ScrollView
           ref={node => {
             this.scrollView = node;
@@ -162,6 +162,8 @@ class ListView extends Component<Props, State> {
           onTouchEnd='{{pulldown.handleTouchEnd}}'
           onTouchCancel='{{pulldown.handleTouchEnd}}'
         >
+          <wxs module='pulldown' src='./pulldown.wxs'></wxs>
+          <include src='./index.template.wxml' />
           <View
             data-config={{
               damping,
@@ -224,7 +226,94 @@ class ListView extends Component<Props, State> {
             }
           </View>
         </ScrollView>
-      </Skeleton>
+      )
+    }
+
+    return (
+      <View>
+        <Skeleton isLoaded={isLoaded || isError} selector={selector}>
+          <wxs module='pulldown' src='./pulldown.wxs'></wxs>
+          <include src='./index.template.wxml' />
+          <ScrollView
+            ref={node => {
+              this.scrollView = node;
+            }}
+            className={`${className} scrollView`}
+            style={style}
+            scrollY={!downLoading}
+            lowerThreshold={80}
+            onScrollToLower={this.handleScrollToLower}
+            scrollWithAnimation
+            onScroll={this.onScroll}
+            onTouchStart='{{pulldown.handleTouchStart}}'
+            onTouchMove='{{pulldown.handleTouchMove}}'
+            onTouchEnd='{{pulldown.handleTouchEnd}}'
+            onTouchCancel='{{pulldown.handleTouchEnd}}'
+          >
+            <View
+              data-config={{
+                damping,
+                distanceToRefresh
+              }}
+              className='bodyView'
+              id='bodyView'
+            >
+              <View
+                data-config={showIndicator}
+                style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
+                className='pullDownBlock indicator'
+              >
+                <View className='tip'>
+                  {
+                    !downLoading && <View id='tip-dampText'>{dampText}</View>
+                  }
+                  {
+                    downLoading && (
+                      this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
+                    )
+                  }
+                </View>
+              </View>
+              {/* present children */}
+              {showChildren && this.props.children}
+              <ResultPage
+                renderError={this.props.renderError}
+                renderEmpty={this.props.renderEmpty}
+                launchError={launchError}
+                launchEmpty={launchEmpty}
+                isError={isError || false}
+                isEmpty={isEmpty || false}
+                emptyText={emptyText || ''}
+                fetchInit={this.fetchInit}
+              />
+              {/* default page */}
+              {
+                footerLoading && (
+                  <View className='loading'>
+                    {footerLoadingText}
+                  </View>
+                )
+              }
+              {/* custom footer loading page*/}
+              {
+                customFooterLoading && this.props.renderFooterLoading
+              }
+              {/* default footer loaded page*/}
+              {
+                footerLoaded && (
+                  <View className='loaded'>
+                    {footerLoadedText || noMore}
+                  </View>
+                )
+              }
+              {/* custom footer loaded page*/}
+              {
+                customFooterLoaded && this.props.renderFooterLoaded
+              }
+            </View>
+          </ScrollView>
+        </Skeleton>
+      </View>
     );
   }
 }
