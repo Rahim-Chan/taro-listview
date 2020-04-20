@@ -16,6 +16,8 @@ export const initialState = {
 };
 
 export const initialProps ={
+  selector: '',
+  circleColor: '',
   lazy: false,
   distanceToRefresh: 50,
   damping: 150,
@@ -31,7 +33,7 @@ export const initialProps ={
   },
   showIndicator: true,
   className: '',
-  onPullDownRefresh: null,
+  onPullDownRefresh: () => {},
   hasMore: false,
   needInit: false,
   isError: false,

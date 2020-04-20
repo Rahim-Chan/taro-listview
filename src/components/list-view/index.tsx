@@ -5,10 +5,12 @@ import Loading from '../loading';
 import tools from './tool'
 import ResultPage from '../result-page';
 import { initialProps, initialState } from './init'
-import { Props, Indicator, Launch } from './type';
+// eslint-disable-next-line no-unused-vars
+import { Indicator, Launch, State, Props } from './type';
 import './index.scss';
 
-type State = Readonly<typeof initialState>
+// type State = Readonly<typeof initialState>
+// type Props = Readonly<typeof initialProps>
 
 class ListView extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp

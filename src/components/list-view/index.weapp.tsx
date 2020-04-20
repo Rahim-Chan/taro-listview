@@ -5,10 +5,9 @@ import Loading from '../loading';
 import tools from './tool'
 import ResultPage from '../result-page';
 import { initialProps, initialState } from './init'
-import { Props, Indicator, Launch } from './type';
+// eslint-disable-next-line no-unused-vars
+import { Props, Indicator, Launch, State } from './type';
 import './index.scss';
-
-type State = Readonly<typeof initialState>
 
 class ListView extends Component<Props, State> {
   static defaultProps = initialProps;
@@ -112,7 +111,7 @@ class ListView extends Component<Props, State> {
       text = deactivate || tipFreedText
     }
 
-    this.setState({ dampText: text, hideInd: !show })
+    this.setState({ dampText: text })
   }
 
   render() {
@@ -132,7 +131,7 @@ class ListView extends Component<Props, State> {
       footerLoadedText,
       damping,
       distanceToRefresh,
-      circleColor,
+      circleColor = '',
       showIndicator,
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
@@ -191,7 +190,9 @@ class ListView extends Component<Props, State> {
             {/* present children */}
             {showChildren && this.props.children}
             <ResultPage
+              //eslint-disable-next-line taro/render-props
               renderError={this.props.renderError}
+              // eslint-disable-next-line taro/render-props
               renderEmpty={this.props.renderEmpty}
               launchError={launchError}
               launchEmpty={launchEmpty}
@@ -230,90 +231,90 @@ class ListView extends Component<Props, State> {
     }
 
     return (
-      <View>
-        <Skeleton isLoaded={isLoaded || isError} selector={selector}>
-          <wxs module='pulldown' src='./pulldown.wxs'></wxs>
-          <include src='./index.template.wxml' />
-          <ScrollView
-            ref={node => {
-              this.scrollView = node;
+      <Skeleton isLoaded={isLoaded || isError} selector={selector}>
+        <wxs module='pulldown' src='./pulldown.wxs'/>
+        <include src='./index.template.wxml' />
+        <ScrollView
+          ref={node => {
+            this.scrollView = node;
+          }}
+          className={`${className} scrollView`}
+          style={style}
+          scrollY={!downLoading}
+          lowerThreshold={80}
+          onScrollToLower={this.handleScrollToLower}
+          scrollWithAnimation
+          onScroll={this.onScroll}
+          onTouchStart='{{pulldown.handleTouchStart}}'
+          onTouchMove='{{pulldown.handleTouchMove}}'
+          onTouchEnd='{{pulldown.handleTouchEnd}}'
+          onTouchCancel='{{pulldown.handleTouchEnd}}'
+        >
+          <View
+            data-config={{
+              damping,
+              distanceToRefresh
             }}
-            className={`${className} scrollView`}
-            style={style}
-            scrollY={!downLoading}
-            lowerThreshold={80}
-            onScrollToLower={this.handleScrollToLower}
-            scrollWithAnimation
-            onScroll={this.onScroll}
-            onTouchStart='{{pulldown.handleTouchStart}}'
-            onTouchMove='{{pulldown.handleTouchMove}}'
-            onTouchEnd='{{pulldown.handleTouchEnd}}'
-            onTouchCancel='{{pulldown.handleTouchEnd}}'
+            className='bodyView'
+            id='bodyView'
           >
             <View
-              data-config={{
-                damping,
-                distanceToRefresh
-              }}
-              className='bodyView'
-              id='bodyView'
+              data-config={showIndicator}
+              style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
+              className='pullDownBlock indicator'
             >
-              <View
-                data-config={showIndicator}
-                style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
-                className='pullDownBlock indicator'
-              >
-                <View className='tip'>
-                  {
-                    !downLoading && <View id='tip-dampText'>{dampText}</View>
-                  }
-                  {
-                    downLoading && (
-                      this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
-                    )
-                  }
-                </View>
+              <View className='tip'>
+                {
+                  !downLoading && <View id='tip-dampText'>{dampText}</View>
+                }
+                {
+                  downLoading && (
+                    this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
+                  )
+                }
               </View>
-              {/* present children */}
-              {showChildren && this.props.children}
-              <ResultPage
-                renderError={this.props.renderError}
-                renderEmpty={this.props.renderEmpty}
-                launchError={launchError}
-                launchEmpty={launchEmpty}
-                isError={isError || false}
-                isEmpty={isEmpty || false}
-                emptyText={emptyText || ''}
-                fetchInit={this.fetchInit}
-              />
-              {/* default page */}
-              {
-                footerLoading && (
-                  <View className='loading'>
-                    {footerLoadingText}
-                  </View>
-                )
-              }
-              {/* custom footer loading page*/}
-              {
-                customFooterLoading && this.props.renderFooterLoading
-              }
-              {/* default footer loaded page*/}
-              {
-                footerLoaded && (
-                  <View className='loaded'>
-                    {footerLoadedText || noMore}
-                  </View>
-                )
-              }
-              {/* custom footer loaded page*/}
-              {
-                customFooterLoaded && this.props.renderFooterLoaded
-              }
             </View>
-          </ScrollView>
-        </Skeleton>
-      </View>
+            {/* present children */}
+            {showChildren && this.props.children}
+            <ResultPage
+              // eslint-disable-next-line taro/render-props
+              renderError={this.props.renderError}
+              // eslint-disable-next-line taro/render-props
+              renderEmpty={this.props.renderEmpty}
+              launchError={launchError}
+              launchEmpty={launchEmpty}
+              isError={isError || false}
+              isEmpty={isEmpty || false}
+              emptyText={emptyText || ''}
+              fetchInit={this.fetchInit}
+            />
+            {/* default page */}
+            {
+              footerLoading && (
+                <View className='loading'>
+                  {footerLoadingText}
+                </View>
+              )
+            }
+            {/* custom footer loading page*/}
+            {
+              customFooterLoading && this.props.renderFooterLoading
+            }
+            {/* default footer loaded page*/}
+            {
+              footerLoaded && (
+                <View className='loaded'>
+                  {footerLoadedText || noMore}
+                </View>
+              )
+            }
+            {/* custom footer loaded page*/}
+            {
+              customFooterLoaded && this.props.renderFooterLoaded
+            }
+          </View>
+        </ScrollView>
+      </Skeleton>
     );
   }
 }

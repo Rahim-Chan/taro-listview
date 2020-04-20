@@ -1,3 +1,5 @@
+import {initialState} from "components/list-view/init";
+
 export interface Props {
   lazy?: boolean | string;
   circleColor?: string;
@@ -45,3 +47,5 @@ export interface Launch {
   launchFooterLoading?: boolean;
   launchFooterLoaded?: boolean;
 }
+
+export type State = Readonly<typeof initialState>
