@@ -5,12 +5,12 @@ import Loading from '../loading';
 import tools from './tool'
 import ResultPage from '../result-page';
 import { initialProps, initialState } from './init'
-import { Indicator, Launch } from './type';
+import { Props, Indicator, Launch } from './type';
 import './index.scss';
 
 type State = Readonly<typeof initialState>
 
-class ListView extends Component<typeof initialProps, State> {
+class ListView extends Component<Props, State> {
   static defaultProps = initialProps;
 
   state = initialState;
