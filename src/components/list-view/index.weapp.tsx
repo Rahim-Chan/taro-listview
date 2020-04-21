@@ -161,7 +161,7 @@ class ListView extends Component<Props, State> {
           onTouchEnd='{{pulldown.handleTouchEnd}}'
           onTouchCancel='{{pulldown.handleTouchEnd}}'
         >
-          <wxs module='pulldown' src='./pulldown.wxs'></wxs>
+          <wxs module='pulldown' src='./pull-down.wxs'></wxs>
           <include src='./index.template.wxml' />
           <View
             data-config={{
@@ -232,7 +232,7 @@ class ListView extends Component<Props, State> {
 
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
-        <wxs module='pulldown' src='./pulldown.wxs'/>
+        <wxs module='pulldown' src='./pull-down.wxs'/>
         <include src='./index.template.wxml' />
         <ScrollView
           ref={node => {
