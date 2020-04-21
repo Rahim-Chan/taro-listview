@@ -38,6 +38,8 @@
 | needInit   | 初始化&自动调用下拉刷新方法   | boolean | - | - |
 | distanceToRefresh   | 下拉刷新距离    | number | - | - |
 | damping   | 最大下拉距离    | number | - | - |
+| autoHeight   | 开启自适应高度    | boolean | - | - |
+
 
 
 ### 自定义页面UI（状态提示语，空白屏、错误屏、底部状态的UI自定义）
