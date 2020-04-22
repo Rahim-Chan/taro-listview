@@ -1,8 +1,5 @@
 {
     "branch": "master",
-    "publishConfig": {
-      "tag": "2x"
-    },
     "plugins": [
        ["@semantic-release/changelog", {
           "changelogFile": "CHANGELOG.md"
