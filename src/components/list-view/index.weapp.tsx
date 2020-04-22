@@ -145,7 +145,6 @@ class ListView extends Component<Props, State> {
           refresher-enabled
           refresherTriggered={downLoading}
           refresherThreshold={100}
-          // onRefresherRestore={(e) => console.log(e)}
           onRefresherRefresh={this.onRefresh}
           onScroll={this.onScroll}
         >
