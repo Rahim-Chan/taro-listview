@@ -6,6 +6,7 @@ import tools from './tool'
 import ResultPage from '../result-page';
 import { initialProps, initialState } from './init'
 // eslint-disable-next-line no-unused-vars
+import {minGetMore} from '../../utils/utils';
 import { Indicator, Launch, State, Props } from './type';
 import './index.scss';
 
@@ -108,16 +109,22 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  fetchInit = () => {
-    const {onPullDownRefresh} = this.props;
+  fetchInit = async () => {
+    const {onPullDownRefresh,async} = this.props;
     this.resetLoad(1);
     if (onPullDownRefresh) {
-      onPullDownRefresh(() => {
+      const reset = () => {
         this.setState({isInit: true});
         this.resetLoad(0, () =>{
           this.setState({isInit: false});
         });
-      });
+      }
+      if (async) {
+        await onPullDownRefresh();
+        reset()
+      } else {
+        onPullDownRefresh(reset);
+      }
     }
   };
 
@@ -156,19 +163,9 @@ class ListView extends Component<Props, State> {
 
   handleScrollToLower = () => {
     tools.debounce(() => {
-      this.getMore();
+      // this.getMore();
+      minGetMore(this)
     })();
-  };
-
-  getMore = () => {
-    const {onScrollToLower, hasMore} = this.props;
-    const {lowerLoading} = this.state;
-    if (hasMore && !lowerLoading && onScrollToLower) {
-      this.setState({lowerLoading: true});
-      onScrollToLower(() => {
-        this.setState({lowerLoading: false});
-      });
-    }
   };
 
   onScroll = e => {

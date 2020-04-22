@@ -1,13 +1,14 @@
 import Taro, {Component} from '@tarojs/taro';
 import {ScrollView, View } from '@tarojs/components';
 import Skeleton from '../skeleton';
-import Loading from '../loading';
 import tools from './tool'
 import ResultPage from '../result-page';
 import { initialProps, initialState } from './init'
 // eslint-disable-next-line no-unused-vars
 import { Props, Indicator, Launch, State } from './type';
+import {isPromise, minGetMore} from '../../utils/utils';
 import './index.scss';
+
 
 class ListView extends Component<Props, State> {
   static defaultProps = initialProps;
@@ -32,14 +33,19 @@ class ListView extends Component<Props, State> {
     addGlobalClass: true,
   };
 
-  onRefresh = () => {
+  onRefresh = async () => {
     this.setState({downLoading: true});
-    const {onPullDownRefresh} = this.props;
+    const {onPullDownRefresh, async} = this.props;
     if (onPullDownRefresh) {
       const cancel = () => {
         this.setState({downLoading: false})
       };
-      onPullDownRefresh(cancel)
+      if (!async) {
+        onPullDownRefresh(cancel);
+      } else {
+        await onPullDownRefresh();
+        cancel()
+      }
     }
   };
 
@@ -68,30 +74,15 @@ class ListView extends Component<Props, State> {
     tools.lazyScrollRemove()
   }
 
-  fetchInit = () => {
-    const {onPullDownRefresh} = this.props;
-    if (onPullDownRefresh) {
-      onPullDownRefresh(() => {
-        this.setState({isInit: true});
-      });
-    }
+  fetchInit = async () => {
+    this.onRefresh();
   };
 
   handleScrollToLower = () => {
+    console.log('handleScrollToLower')
     tools.debounce(() => {
-      this.getMore();
+      minGetMore(this);
     })();
-  };
-
-  getMore = () => {
-    const {onScrollToLower, hasMore} = this.props;
-    const {lowerLoading} = this.state;
-    if (hasMore && !lowerLoading && onScrollToLower) {
-      this.setState({lowerLoading: true});
-      onScrollToLower(() => {
-        this.setState({lowerLoading: false});
-      });
-    }
   };
 
   onScroll = () => {
@@ -101,7 +92,7 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  updateDampText = ({ act, show = true }) => {
+  updateDampText = ({ act }) => {
     const { indicator = {}, tipFreedText, tipText } = this.props;
     const {activate = '下拉刷新', deactivate = '释放刷新'} = indicator as Indicator;
     let text = ''
@@ -129,13 +120,9 @@ class ListView extends Component<Props, State> {
       launch = {},
       footerLoadingText,
       footerLoadedText,
-      damping,
-      distanceToRefresh,
-      circleColor = '',
-      showIndicator,
     } = this.props;
     const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
-    const {downLoading, dampText } = this.state;
+    const {downLoading} = this.state;
     const showChildren = !(isEmpty || isError); // 展示children内容
     const showFooter = !downLoading && !isEmpty && !isError; // 空、错状态不展示底部
     const footerLoaded = showFooter && !launchFooterLoaded && !hasMore;
@@ -149,44 +136,23 @@ class ListView extends Component<Props, State> {
           ref={node => {
             this.scrollView = node;
           }}
-          className={`${className} scrollView`}
+          className={`${className} scrollView autoHeight`}
           style={style}
           scrollY={!downLoading}
           lowerThreshold={80}
           onScrollToLower={this.handleScrollToLower}
           scrollWithAnimation
+          refresher-enabled
+          refresherTriggered={downLoading}
+          refresherThreshold={100}
+          // onRefresherRestore={(e) => console.log(e)}
+          onRefresherRefresh={this.onRefresh}
           onScroll={this.onScroll}
-          onTouchStart='{{pulldown.handleTouchStart}}'
-          onTouchMove='{{pulldown.handleTouchMove}}'
-          onTouchEnd='{{pulldown.handleTouchEnd}}'
-          onTouchCancel='{{pulldown.handleTouchEnd}}'
         >
-          <wxs module='pulldown' src='./pull-down.wxs'></wxs>
-          <include src='./index.template.wxml' />
           <View
-            data-config={{
-              damping,
-              distanceToRefresh
-            }}
             className='bodyView'
             id='bodyView'
           >
-            <View
-              data-config={showIndicator}
-              style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
-              className='pullDownBlock indicator'
-            >
-              <View className='tip'>
-                {
-                  !downLoading && <View id='tip-dampText'>{dampText}</View>
-                }
-                {
-                  downLoading && (
-                    this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
-                  )
-                }
-              </View>
-            </View>
             {/* present children */}
             {showChildren && this.props.children}
             <ResultPage
@@ -232,52 +198,31 @@ class ListView extends Component<Props, State> {
 
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
-        <wxs module='pulldown' src='./pull-down.wxs'/>
-        <include src='./index.template.wxml' />
         <ScrollView
           ref={node => {
             this.scrollView = node;
           }}
-          className={`${className} scrollView`}
+          className={`${className} scrollView autoHeight`}
           style={style}
           scrollY={!downLoading}
           lowerThreshold={80}
           onScrollToLower={this.handleScrollToLower}
           scrollWithAnimation
+          refresher-enabled
+          refresherTriggered={downLoading}
+          refresherThreshold={100}
+          // onRefresherRestore={(e) => console.log(e)}
+          onRefresherRefresh={this.onRefresh}
           onScroll={this.onScroll}
-          onTouchStart='{{pulldown.handleTouchStart}}'
-          onTouchMove='{{pulldown.handleTouchMove}}'
-          onTouchEnd='{{pulldown.handleTouchEnd}}'
-          onTouchCancel='{{pulldown.handleTouchEnd}}'
         >
           <View
-            data-config={{
-              damping,
-              distanceToRefresh
-            }}
             className='bodyView'
             id='bodyView'
           >
-            <View
-              data-config={showIndicator}
-              style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
-              className='pullDownBlock indicator'
-            >
-              <View className='tip'>
-                {
-                  !downLoading && <View id='tip-dampText'>{dampText}</View>
-                }
-                {
-                  downLoading && (
-                    this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
-                  )
-                }
-              </View>
-            </View>
             {/* present children */}
             {showChildren && this.props.children}
             <ResultPage
-              // eslint-disable-next-line taro/render-props
+              //eslint-disable-next-line taro/render-props
               renderError={this.props.renderError}
               // eslint-disable-next-line taro/render-props
               renderEmpty={this.props.renderEmpty}

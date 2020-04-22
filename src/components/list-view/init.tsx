@@ -16,6 +16,7 @@ export const initialState = {
 };
 
 export const initialProps ={
+  async: true,
   selector: '',
   circleColor: '',
   lazy: false,

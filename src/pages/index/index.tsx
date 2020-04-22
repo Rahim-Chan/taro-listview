@@ -42,21 +42,19 @@ export default class Index extends Component {
     this.refList.fetchInit()
   }
 
-  pullDownRefresh = async (rest) => {
+  pullDownRefresh = async () => {
     pageIndex = 1;
     const res = await this.getData(1);
     this.setState(res);
-    rest()
   };
 
-  onScrollToLower = async (fn) => {
+  onScrollToLower = async () => {
     const {list} = this.state;
     const {list: newList, hasMore} = await this.getData(++pageIndex);
     this.setState({
       list: list.concat(newList),
       hasMore
     });
-    fn();
   };
 
   refList = {};
@@ -78,7 +76,7 @@ export default class Index extends Component {
             hasMore={hasMore}
             // style={{height: '100vh'}}
             isEmpty={isEmpty}
-            onPullDownRefresh={fn => this.pullDownRefresh(fn)}
+            onPullDownRefresh={this.pullDownRefresh}
             onScrollToLower={this.onScrollToLower}
             renderCustomizeLoading={(<View>自定义</View>)}
             customizeLoading

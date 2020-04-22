@@ -4,9 +4,7 @@ const fs = require('fs');
 const root = path.dirname(__dirname);
 
 const files = [
-  'pull-down.wxs',
   'index.weapp.tsx',
-  'index.template.wxml',
 ];
 // const deleteFiles = ['ComponentResizeObserver.tsx', 'index.h5.tsx'];
 

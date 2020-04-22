@@ -1,6 +1,7 @@
 import {initialState} from "components/list-view/init";
 
 export interface Props {
+  async?: boolean;
   lazy?: boolean | string;
   circleColor?: string;
   style?: any;
@@ -11,8 +12,8 @@ export interface Props {
   noMore?: string;
   tipText?: string;
   tipFreedText?: string;
-  onScrollToLower: (any) => void;
-  onPullDownRefresh?: (any) => void;
+  onScrollToLower: (any?) => void;
+  onPullDownRefresh?: (any?) => void;
   hasMore: boolean;
   needInit?: boolean;
   isEmpty?: boolean;
