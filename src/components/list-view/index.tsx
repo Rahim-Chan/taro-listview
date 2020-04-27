@@ -10,9 +10,6 @@ import {minGetMore} from '../../utils/utils';
 import { Indicator, Launch, State, Props } from './type';
 import './index.scss';
 
-// type State = Readonly<typeof initialState>
-// type Props = Readonly<typeof initialProps>
-
 class ListView extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp
   lazyClassName = (() => {
