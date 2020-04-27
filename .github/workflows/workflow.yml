@@ -35,7 +35,6 @@ jobs:
         npm install -g npminstall
         npminstall
         npm run build
-        npm run copy
         npm run types
 
     # NPM 包发布
