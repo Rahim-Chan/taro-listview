@@ -1,6 +1,6 @@
 {
 	"name": "taro-listview",
-	"version": "2.1.0",
+	"version": "1.2.0",
 	"description": "listView pullDownRefresh and skeleton",
 	"templateInfo": {
 		"name": "default",
