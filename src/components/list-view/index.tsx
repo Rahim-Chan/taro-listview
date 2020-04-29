@@ -313,7 +313,7 @@ class ListView extends Component<Props, State> {
                 {
                   footerLoaded && (
                     <View className='loaded'>
-                      {footerLoadedText || noMore}
+                      {footerLoadedText}
                     </View>
                   )
                 }
