@@ -219,7 +219,6 @@ class ListView extends Component<Props, State> {
     const {
       style,
       hasMore,
-      noMore,
       isEmpty,
       emptyText,
       className,

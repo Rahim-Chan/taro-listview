@@ -47,7 +47,7 @@
 | :------- | :---------------  | :--------- |:--------- |:--------- |
 | color   | 下拉加载时loading的颜色    | string | #667baf | - |
 | emptyText   | 空白页提示语    | string | - | - |
-| footerLoaded   | 列表底部提示语    | string | 暂无更多内容 | - |
+| footerLoaded   | 列表底部提示语    | string | - |
 | footerLoading   | 列表底部提示语    | string | 加载中 | - |
 | launch   | *是否开启状态屏的渲染，状态屏节点对应以下renderXX属性（如下） | object | ```{ launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false }```  |- | 
 | renderError   | 错误页    | Taro.Node | - | - |

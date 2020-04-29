@@ -25,9 +25,9 @@ export const initialProps ={
   isLoaded: true,
   isEmpty: false,
   emptyText: '',
-  noMore: '暂无更多内容',
+  noMore: '',
   footerLoadingText: '加载中',
-  footerLoadedText: '暂无更多内容',
+  footerLoadedText: '',
   scrollTop: 0,
   touchScrollTop: 0,
   onScrollToLower: () => {
