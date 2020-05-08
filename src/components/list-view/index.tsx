@@ -254,7 +254,7 @@ class ListView extends Component<Props, State> {
             this.scrollView = node;
           }}
           className={`${className} ${downLoading &&
-            "downLoadingStyle"} scrollView`}
+            "downLoadingStyle"} scrollView autoHeight`}
           style={{ ...style }}
           scrollY={canScrollY}
           lowerThreshold={80}
