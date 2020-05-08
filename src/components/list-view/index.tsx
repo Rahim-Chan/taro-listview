@@ -271,16 +271,16 @@ class ListView extends Component<Props, State> {
           >
             <View
               // style={trStyle}
-              className="bodyView"
-              id="bodyView"
+              className='bodyView'
+              id='bodyView'
             >
               <View style={blockStyle}>
                 <View
                   style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
-                  className="pullDownBlock"
+                  className='pullDownBlock'
                 >
-                  <View className="tip">
-                    {!downLoading && <View id="tip-dampText">{dampText}</View>}
+                  <View className='tip'>
+                    {!downLoading && <View id='tip-dampText'>{dampText}</View>}
                     {downLoading &&
                       (this.props.customizeLoading ? (
                         this.props.renderCustomizeLoading
@@ -303,13 +303,13 @@ class ListView extends Component<Props, State> {
                 />
                 {/* default page */}
                 {footerLoading && (
-                  <View className="loading">{footerLoadingText}</View>
+                  <View className='loading'>{footerLoadingText}</View>
                 )}
                 {/* custom footer loading page*/}
                 {customFooterLoading && this.props.renderFooterLoading}
                 {/* default footer loaded page*/}
                 {footerLoaded && (
-                  <View className="loaded">{footerLoadedText}</View>
+                  <View className='loaded'>{footerLoadedText}</View>
                 )}
                 {/* custom footer loaded page*/}
                 {customFooterLoaded && this.props.renderFooterLoaded}
@@ -342,16 +342,16 @@ class ListView extends Component<Props, State> {
           >
             <View
               // style={trStyle}
-              className="bodyView"
-              id="bodyView"
+              className='bodyView'
+              id='bodyView'
             >
               <View style={blockStyle}>
                 <View
                   style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
-                  className="pullDownBlock"
+                  className='pullDownBlock'
                 >
-                  <View className="tip">
-                    {!downLoading && <View id="tip-dampText">{dampText}</View>}
+                  <View className='tip'>
+                    {!downLoading && <View id='tip-dampText'>{dampText}</View>}
                     {downLoading &&
                       (this.props.customizeLoading ? (
                         this.props.renderCustomizeLoading
@@ -374,13 +374,13 @@ class ListView extends Component<Props, State> {
                 />
                 {/* default page */}
                 {footerLoading && (
-                  <View className="loading">{footerLoadingText}</View>
+                  <View className='loading'>{footerLoadingText}</View>
                 )}
                 {/* custom footer loading page*/}
                 {customFooterLoading && this.props.renderFooterLoading}
                 {/* default footer loaded page*/}
                 {footerLoaded && (
-                  <View className="loaded">{footerLoadedText}</View>
+                  <View className='loaded'>{footerLoadedText}</View>
                 )}
                 {/* custom footer loaded page*/}
                 {customFooterLoaded && this.props.renderFooterLoaded}
