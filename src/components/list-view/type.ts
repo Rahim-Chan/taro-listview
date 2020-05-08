@@ -1,7 +1,6 @@
 import {initialState} from "components/list-view/init";
 
 export interface Props {
-  async?: boolean;
   lazy?: boolean | string;
   circleColor?: string;
   style?: any;
