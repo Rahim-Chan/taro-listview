@@ -28,20 +28,6 @@ const config = {
   },
   defineConstants: {
   },
-  copy: {
-    patterns: [
-      {
-        from: 'src/components/list-view/pull-down.wxs',
-        to: 'dist/components/list-view/pull-down.wxs'
-      },
-      {
-        from: 'src/components/list-view/index.template.wxml',
-        to: 'dist/components/list-view/index.template.wxml'
-      },
-    ],
-    options: {
-    }
-  },
   alias: {
     components: path.resolve(__dirname, '..', 'src/components'),
     models: path.resolve(__dirname, '..', 'src/models'),
