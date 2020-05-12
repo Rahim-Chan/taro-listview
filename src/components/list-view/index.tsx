@@ -1,11 +1,12 @@
-import Taro, {Component} from '@tarojs/taro';
-import {ScrollView, View } from '@tarojs/components';
+import Taro, { Component } from '@tarojs/taro';
+import { ScrollView, View } from '@tarojs/components';
 import Skeleton from '../skeleton';
 import Loading from '../loading';
 import tools from './tool'
 import ResultPage from '../result-page';
 import { initialProps, initialState } from './init'
 import { Props, Indicator, Launch } from './type';
+
 import './index.scss';
 
 type State = Readonly<typeof initialState>
@@ -13,13 +14,15 @@ type State = Readonly<typeof initialState>
 class ListView extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp
   lazyClassName = (() => {
-    return typeof this.props.lazy === 'boolean' ? '.lazy-view': this.props.lazy;
+    return typeof this.props.lazy === 'boolean' ? '.lazy-view' : this.props.lazy;
   })();
 
   lazyKey = (
     () => {
       if (this.props.lazy) {
-        return  tools.lazyScrollInit(this.lazyClassName)
+        const { lazyStorage } = this.props;
+
+        return tools.lazyScrollInit(this.lazyClassName, lazyStorage)
       }
     }
   )();
@@ -49,7 +52,8 @@ class ListView extends Component<Props, State> {
         .select('.scrollView')
         .boundingClientRect()
         .exec(res => {
-          tools.updateScrollHeight(this.lazyKey, res[0].height)
+          const { lazyStorage } = this.props;
+          tools.updateScrollHeight(this.lazyKey, res[0].height, lazyStorage)
           this.lazyViewHeight = res[0].height
         })
     }
@@ -57,24 +61,25 @@ class ListView extends Component<Props, State> {
   }
 
   componentWillUnmount(): void {
-    tools.lazyScrollRemove()
+    const { lazyStorage } = this.props;
+    tools.lazyScrollRemove(lazyStorage)
   }
 
   touchEvent = (e) => {
-    const {type, touches} = e;
-    const {onPullDownRefresh, distanceToRefresh, damping} = this.props;
+    const { type, touches } = e;
+    const { onPullDownRefresh, distanceToRefresh, damping } = this.props;
     if (!onPullDownRefresh) return;
     switch (type) {
       case 'touchstart': {
-          this.touchScrollTop = this.state.scrollTop
-          this.needPullDown = true,
+        this.touchScrollTop = this.state.scrollTop
+        this.needPullDown = true,
           this.startY = touches[0].clientY;
         break;
       }
-        // 拖动方向不符合的不处理
+      // 拖动方向不符合的不处理
       case 'touchmove': {
-        const {clientY} = touches[0];
-        const {touchScrollTop} = this;
+        const { clientY } = touches[0];
+        const { touchScrollTop } = this;
         const height = Math.floor((clientY - this.startY) / 5);
         if (height < 0 || touchScrollTop > 5) return;
         e.preventDefault(); // 阻止默认的处理方式(阻止下拉滑动的效果)
@@ -107,13 +112,13 @@ class ListView extends Component<Props, State> {
   };
 
   fetchInit = () => {
-    const {onPullDownRefresh} = this.props;
+    const { onPullDownRefresh } = this.props;
     this.resetLoad(1);
     if (onPullDownRefresh) {
       onPullDownRefresh(() => {
-        this.setState({isInit: true});
-        this.resetLoad(0, () =>{
-          this.setState({isInit: false});
+        this.setState({ isInit: true });
+        this.resetLoad(0, () => {
+          this.setState({ isInit: false });
         });
       });
     }
@@ -122,12 +127,12 @@ class ListView extends Component<Props, State> {
   resetLoad = (status = 0, cb?) => {
     // status: 0:回复初始值 1：加载中
     // console.log({ status })
-    const {distanceToRefresh} = this.props;
+    const { distanceToRefresh } = this.props;
     let state = {};
     switch (status) {
       case 0:
         state = {
-          canScrollY:true,
+          canScrollY: true,
           downLoading: false,
         };
         this.updateDampText(true);
@@ -135,7 +140,7 @@ class ListView extends Component<Props, State> {
         break;
       case 1:
         state = {
-          canScrollY:false,
+          canScrollY: false,
           downLoading: true,
         };
         this.updateDampText(false);
@@ -159,24 +164,24 @@ class ListView extends Component<Props, State> {
   };
 
   getMore = () => {
-    const {onScrollToLower, hasMore} = this.props;
-    const {lowerLoading} = this.state;
+    const { onScrollToLower, hasMore } = this.props;
+    const { lowerLoading } = this.state;
     if (hasMore && !lowerLoading && onScrollToLower) {
-      this.setState({lowerLoading: true});
+      this.setState({ lowerLoading: true });
       onScrollToLower(() => {
-        this.setState({lowerLoading: false});
+        this.setState({ lowerLoading: false });
       });
     }
   };
 
   onScroll = e => {
     const {
-      detail: {scrollTop},
+      detail: { scrollTop },
     } = e;
     if (this.props.onScroll) this.props.onScroll()
-    this.setState({scrollTop });
+    this.setState({ scrollTop });
     if (this.props.lazy) {
-      tools.lazyScroll(this.lazyKey,this.lazyClassName, this.lazyViewHeight )
+      tools.lazyScroll(this.lazyKey, this.lazyClassName, this.lazyViewHeight)
     }
   };
 
@@ -200,11 +205,11 @@ class ListView extends Component<Props, State> {
 
   updateDampText = (act) => {
     this.needPullDown = act;
-    const {isInit, downLoading} = this.state;
+    const { isInit, downLoading } = this.state;
     const showTip = !downLoading && !isInit;// 展示下拉区域文案
     if (!showTip) return ''
     const { indicator = {}, tipFreedText, tipText } = this.props;
-    const {activate = '释放刷新', deactivate = '下拉刷新'} = indicator as Indicator;
+    const { activate = '释放刷新', deactivate = '下拉刷新' } = indicator as Indicator;
     let text = ''
     if (act) {
       text = activate || tipText
@@ -236,9 +241,9 @@ class ListView extends Component<Props, State> {
       damping,
       circleColor,
     } = this.props;
-    const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
+    const { launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false } = launch as Launch;
 
-    const {canScrollY, blockStyle, downLoading, dampText} = this.state;
+    const { canScrollY, blockStyle, downLoading, dampText } = this.state;
 
     const showChildren = !(isEmpty || isError); // 展示children内容
 
@@ -284,7 +289,7 @@ class ListView extends Component<Props, State> {
                     }
                     {
                       downLoading && (
-                        this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
+                        this.props.customizeLoading ? this.props.renderCustomizeLoading : <Loading color={circleColor} />
                       )
                     }
                   </View>
