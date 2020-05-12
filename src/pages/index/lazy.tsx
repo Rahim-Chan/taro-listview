@@ -11,6 +11,11 @@ export default class Index extends Component {
     list: [],
   };
 
+  componentDidMount = async () => {
+    const res = await this.getData()
+    this.setState(res)
+  }
+
   getData = async (pIndex = pageIndex) => {
     const { data: { data } } = await Taro.request({
       url: 'https://cnodejs.org/api/v1/topics',
@@ -21,11 +26,6 @@ export default class Index extends Component {
     })
     return {list : data, hasMore: true };
   };
-
-  componentDidMount = async () => {
-    const res = await this.getData()
-    this.setState(res)
-  }
 
   onScrollToLower = async (fn) => {
     const {list} = this.state;
@@ -46,11 +46,12 @@ export default class Index extends Component {
           hasMore={hasMore}
           style={{height: '100vh'}}
           onScrollToLower={this.onScrollToLower}
+          lazyStorage='listViewLazy'
         >
           {list.map((item, index) => {
             return (
-              <View className='item' key={index}>
-                <LazyBlock current={index} className='avatar'>
+              <View className='item' key={`item_${index}`}>
+                <LazyBlock current={index} className='avatar' lazyStorage='listViewLazy'>
                   <Image className='avatar' src={item.author.avatar_url} />
                 </LazyBlock>
                 <View className='title'>

@@ -19,7 +19,8 @@ class ListView extends Component<Props, State> {
   lazyKey = (
     () => {
       if (this.props.lazy) {
-        return  tools.lazyScrollInit(this.lazyClassName)
+        const { lazyStorage } = this.props;
+        return tools.lazyScrollInit(this.lazyClassName, lazyStorage)
       }
     }
   )();
@@ -49,7 +50,9 @@ class ListView extends Component<Props, State> {
         .select('.scrollView')
         .boundingClientRect()
         .exec(res => {
-          tools.updateScrollHeight(this.lazyKey, res[0].height)
+          const { lazyStorage } = this.props;
+          tools.updateScrollHeight(this.lazyKey, res[0].height, lazyStorage)
+
           this.lazyViewHeight = res[0].height
         })
     }
@@ -57,7 +60,8 @@ class ListView extends Component<Props, State> {
   }
 
   componentWillUnmount(): void {
-    tools.lazyScrollRemove()
+    const { lazyStorage } = this.props;
+    tools.lazyScrollRemove(lazyStorage)
   }
 
   touchEvent = (e) => {

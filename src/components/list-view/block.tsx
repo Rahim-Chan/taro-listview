@@ -18,6 +18,7 @@ interface State {
 interface Props {
   className?: string;
   current: number;
+  lazyStorage?: string;
 }
 
 class LazyImage extends Component<Props, State> {
@@ -33,8 +34,13 @@ class LazyImage extends Component<Props, State> {
     scrollCur: [0]
   };
 
+  static defaultProps = {
+    lazyStorage: 'box'
+  };
+
   componentDidMount() {
-    this.lazyItem = storage.get('lazyBox')[storage.get('lazyBox').length -1];
+    const { lazyStorage } = this.props;
+    this.lazyItem = storage.get(`lazyBox_${lazyStorage}`)[storage.get(`lazyBox_${lazyStorage}`).length -1];
     this.bindTextListener();
   }
 
