@@ -38,6 +38,7 @@
 | needInit   | 初始化&自动调用下拉刷新方法   | boolean | - | - |
 | distanceToRefresh   | 下拉刷新距离    | number | - | - |
 | damping   | 最大下拉距离    | number | - | - |
+| lazyStorage   | Storage Key值用于区分ListView    | string | box | - |
 
 
 ### 自定义页面UI（状态提示语，空白屏、错误屏、底部状态的UI自定义）
@@ -139,11 +140,12 @@ export default class Index extends Component {
             isEmpty={isEmpty}
             onPullDownRefresh={fn => this.pullDownRefresh(fn)}
             onScrollToLower={this.onScrollToLower}
+            lazyStorage='ListView'
           >
             {list.map((item, index) => {
               return (
                   <View className='item skeleton-bg' key={index}>
-                    <LazyBlock current={index} className='avatar'>
+                    <LazyBlock current={index} className='avatar' lazyStorage='ListView'>
                       <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
                     </LazyBlock>
                     <View className='title skeleton-rect'>
@@ -172,7 +174,7 @@ export default class Index extends Component {
 | 属性 | 说明                | 类型   |默认值   |必传   |
 | :------- | :---------------  | :--------- |:--------- |:--------- |
 | current   | 传入模块遍历后的下标    | number | null | true |
-
+| lazyStorage   | Storage Key值用于区分ListView(获取是哪一个ListView)    | string | box | - |
 ```jsx
 import Taro, {Component} from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
@@ -225,11 +227,12 @@ export default class Index extends Component {
           hasMore={hasMore}
           style={{height: '100vh'}}
           onScrollToLower={this.onScrollToLower}
+          lazyStorage='lazyViewBlock'
         >
           {list.map((item, index) => {
             return (
               <View className='item' key={index}>
-                <LazyBlock current={index} className='avatar'>
+                <LazyBlock current={index} className='avatar' lazyStorage='lazyViewBlock'>
                   <Image className='avatar' src={item.author.avatar_url} />
                 </LazyBlock>
                 <View className='title'>

@@ -26,6 +26,12 @@ export default class Index extends Component {
     list: blankList,
   };
 
+
+
+  componentDidMount() {
+    this.refList.fetchInit()
+  }
+
   getData = async (pIndex = pageIndex) => {
     if (pIndex === 1) this.setState({isLoaded: false})
     const { data: { data } } = await Taro.request({
@@ -37,10 +43,6 @@ export default class Index extends Component {
     })
     return {list : data, hasMore: true, isLoaded: pIndex === 1};
   };
-
-  componentDidMount() {
-    this.refList.fetchInit()
-  }
 
   pullDownRefresh = async (rest) => {
     pageIndex = 1;
@@ -81,11 +83,12 @@ export default class Index extends Component {
             onScrollToLower={this.onScrollToLower}
             renderCustomizeLoading={(<View>自定义</View>)}
             customizeLoading
+            lazyStorage='lazy-view'
           >
             {list.map((item, index) => {
               return (
-                  <View className='item skeleton-bg' key={index}>
-                    <LazyBlock current={index} className='avatar'>
+                  <View className='item skeleton-bg' key={`item_${index}`}>
+                    <LazyBlock current={index} className='avatar' lazyStorage='lazy-view'>
                       <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
                     </LazyBlock>
                     <View className='box'>
