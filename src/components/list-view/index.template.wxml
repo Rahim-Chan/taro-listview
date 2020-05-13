@@ -1,1 +1,0 @@
-<view style="display:none" prop="{{downLoading}}" change:prop="{{pulldown.finish}}"></view>
