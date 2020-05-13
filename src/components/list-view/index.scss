@@ -1,12 +1,16 @@
 .animateEase {
   transition: transform ease 300ms;
 }
+.downLoadingStyle {
+  overflow: hidden;
+}
 .scrollView {
   position: relative;
-  height: 100vh;
   width: 100%;
 }
-
+.autoHeight {
+  height: 100%;
+}
 .bodyView {
   position: relative;
   overflow: visible;

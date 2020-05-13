@@ -45,17 +45,15 @@ export default class Index extends Component {
     pageIndex = 1;
     const res = await this.getData(1);
     this.setState(res);
-    rest()
   };
 
-  onScrollToLower = async (fn) => {
+  onScrollToLower = async () => {
     const {list} = this.state;
     const {list: newList, hasMore} = await this.getData(++pageIndex);
     this.setState({
       list: list.concat(newList),
       hasMore
     });
-    fn();
   };
 
   refList = {};
@@ -67,25 +65,28 @@ export default class Index extends Component {
   render() {
     const {isLoaded, error, hasMore, isEmpty, list} = this.state;
     return (
-        <View className='skeleton lazy-view'>
-          <ListView
-            lazy
-            ref={node => this.insRef(node)}
-            isLoaded={isLoaded}
-            isError={error}
-            hasMore={hasMore}
-            style={{height: '100vh'}}
-            isEmpty={isEmpty}
-            onPullDownRefresh={fn => this.pullDownRefresh(fn)}
-            onScrollToLower={this.onScrollToLower}
-            renderCustomizeLoading={(<View>自定义</View>)}
-            customizeLoading
-            lazyStorage='lazyView'
-          >
-            {list.map((item, index) => {
-              return (
+        <View>
+          Demo开启AutoHeight
+          <View className='skeleton lazy-view' style={{ height: '500px' }} >
+            <ListView
+              autoHeight
+              lazy
+              ref={node => this.insRef(node)}
+              isLoaded={isLoaded}
+              isError={error}
+              hasMore={hasMore}
+              // style={{height: '100vh'}}
+              isEmpty={isEmpty}
+              onPullDownRefresh={this.pullDownRefresh}
+              onScrollToLower={this.onScrollToLower}
+              renderCustomizeLoading={(<View>自定义</View>)}
+              customizeLoading
+              lazyStorage='listView'
+            >
+              {list.map((item, index) => {
+                return (
                   <View className='item skeleton-bg' key={`item_${index}`}>
-                    <LazyBlock current={index} className='avatar' lazyStorage='lazyView'>
+                    <LazyBlock current={index} className='avatar' lazyStorage='listView'>
                       <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
                     </LazyBlock>
                     <View className='box'>
@@ -99,9 +100,10 @@ export default class Index extends Component {
                       </View>
                     </View>
                   </View>
-              )
-            })}
-          </ListView>
+                )
+              })}
+            </ListView>
+          </View>
         </View>
     )
   }

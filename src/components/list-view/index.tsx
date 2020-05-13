@@ -1,19 +1,21 @@
-import Taro, {Component} from '@tarojs/taro';
-import {ScrollView, View } from '@tarojs/components';
-import Skeleton from '../skeleton';
-import Loading from '../loading';
-import tools from './tool'
-import ResultPage from '../result-page';
-import { initialProps, initialState } from './init'
-import { Props, Indicator, Launch } from './type';
-import './index.scss';
-
-type State = Readonly<typeof initialState>
+import Taro, { Component } from "@tarojs/taro";
+import { ScrollView, View } from "@tarojs/components";
+import Skeleton from "../skeleton";
+import Loading from "../loading";
+import tools from "./tool";
+import ResultPage from "../result-page";
+import { initialProps, initialState } from "./init";
+// eslint-disable-next-line no-unused-vars
+import { minGetMore } from "../../utils/utils";
+import { Indicator, Launch, State, Props } from "./type";
+import "./index.scss";
 
 class ListView extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp
   lazyClassName = (() => {
-    return typeof this.props.lazy === 'boolean' ? '.lazy-view': this.props.lazy;
+    return typeof this.props.lazy === "boolean"
+      ? ".lazy-view"
+      : this.props.lazy;
   })();
 
   lazyKey = (
@@ -22,13 +24,12 @@ class ListView extends Component<Props, State> {
         const { lazyStorage } = this.props;
         return tools.lazyScrollInit(this.lazyClassName, lazyStorage)
       }
-    }
-  )();
+  })();
 
   lazyViewHeight = 0;
 
   static options = {
-    addGlobalClass: true,
+    addGlobalClass: true
   };
 
   static defaultProps = initialProps;
@@ -46,8 +47,9 @@ class ListView extends Component<Props, State> {
   componentDidMount() {
     this.moveBox(0);
     if (this.props.lazy) {
-      Taro.createSelectorQuery().in(this.$scope)
-        .select('.scrollView')
+      Taro.createSelectorQuery()
+        .in(this.$scope)
+        .select(".scrollView")
         .boundingClientRect()
         .exec(res => {
           const { lazyStorage } = this.props;
@@ -64,21 +66,20 @@ class ListView extends Component<Props, State> {
     tools.lazyScrollRemove(lazyStorage)
   }
 
-  touchEvent = (e) => {
-    const {type, touches} = e;
-    const {onPullDownRefresh, distanceToRefresh, damping} = this.props;
+  touchEvent = e => {
+    const { type, touches } = e;
+    const { onPullDownRefresh, distanceToRefresh, damping } = this.props;
     if (!onPullDownRefresh) return;
     switch (type) {
-      case 'touchstart': {
-          this.touchScrollTop = this.state.scrollTop
-          this.needPullDown = true,
-          this.startY = touches[0].clientY;
+      case "touchstart": {
+        this.touchScrollTop = this.state.scrollTop;
+        (this.needPullDown = true), (this.startY = touches[0].clientY);
         break;
       }
-        // 拖动方向不符合的不处理
-      case 'touchmove': {
-        const {clientY} = touches[0];
-        const {touchScrollTop} = this;
+      // 拖动方向不符合的不处理
+      case "touchmove": {
+        const { clientY } = touches[0];
+        const { touchScrollTop } = this;
         const height = Math.floor((clientY - this.startY) / 5);
         if (height < 0 || touchScrollTop > 5) return;
         e.preventDefault(); // 阻止默认的处理方式(阻止下拉滑动的效果)
@@ -92,7 +93,7 @@ class ListView extends Component<Props, State> {
         }
         break;
       }
-      case 'touchend': {
+      case "touchend": {
         if (!this.needPullDown) {
           this.fetchInit();
         } else {
@@ -100,7 +101,7 @@ class ListView extends Component<Props, State> {
         }
         break;
       }
-      case 'touchcancel': {
+      case "touchcancel": {
         this.resetLoad(0);
         break;
       }
@@ -110,37 +111,39 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  fetchInit = () => {
-    const {onPullDownRefresh} = this.props;
+  fetchInit = async () => {
+    const { onPullDownRefresh } = this.props;
     this.resetLoad(1);
     if (onPullDownRefresh) {
-      onPullDownRefresh(() => {
-        this.setState({isInit: true});
-        this.resetLoad(0, () =>{
-          this.setState({isInit: false});
+      const reset = () => {
+        this.setState({ isInit: true });
+        this.resetLoad(0, () => {
+          this.setState({ isInit: false });
         });
-      });
+      };
+      await onPullDownRefresh(() => {});
+      reset();
     }
   };
 
   resetLoad = (status = 0, cb?) => {
     // status: 0:回复初始值 1：加载中
     // console.log({ status })
-    const {distanceToRefresh} = this.props;
+    const { distanceToRefresh } = this.props;
     let state = {};
     switch (status) {
       case 0:
         state = {
-          canScrollY:true,
-          downLoading: false,
+          canScrollY: true,
+          downLoading: false
         };
         this.updateDampText(true);
         this.moveBox(0);
         break;
       case 1:
         state = {
-          canScrollY:false,
-          downLoading: true,
+          canScrollY: false,
+          downLoading: true
         };
         this.updateDampText(false);
         this.moveBox(distanceToRefresh);
@@ -151,44 +154,34 @@ class ListView extends Component<Props, State> {
     // this.moveBox(0);
     this.setState(state);
     // todo 监听真正动画结束
-    setTimeout(function () {
+    setTimeout(function() {
       if (cb) cb();
     }, 400);
   };
 
   handleScrollToLower = () => {
     tools.debounce(() => {
-      this.getMore();
+      // this.getMore();
+      minGetMore(this);
     })();
-  };
-
-  getMore = () => {
-    const {onScrollToLower, hasMore} = this.props;
-    const {lowerLoading} = this.state;
-    if (hasMore && !lowerLoading && onScrollToLower) {
-      this.setState({lowerLoading: true});
-      onScrollToLower(() => {
-        this.setState({lowerLoading: false});
-      });
-    }
   };
 
   onScroll = e => {
     const {
-      detail: {scrollTop},
+      detail: { scrollTop }
     } = e;
-    if (this.props.onScroll) this.props.onScroll()
-    this.setState({scrollTop });
+    if (this.props.onScroll) this.props.onScroll();
+    this.setState({ scrollTop });
     if (this.props.lazy) {
-      tools.lazyScroll(this.lazyKey,this.lazyClassName, this.lazyViewHeight )
+      tools.lazyScroll(this.lazyKey, this.lazyClassName, this.lazyViewHeight);
     }
   };
 
-  moveBox = (y) => {
-    const transition = y ? 'none' : '300ms linear';
+  moveBox = y => {
+    const transition = y ? "none" : "300ms linear";
     // console.log({ y })
-    if (Taro.getEnv() === 'WEB') {
-      const target = document.getElementById('bodyView') as HTMLElement;
+    if (Taro.getEnv() === "WEB") {
+      const target = document.getElementById("bodyView") as HTMLElement;
       target.style.transform = `translate3d(0,${y}px,0)`;
       target.style.transition = transition;
     } else {
@@ -196,38 +189,40 @@ class ListView extends Component<Props, State> {
         canScrollY: !y,
         blockStyle: {
           transform: `translate3d(0,${y}px,0)`,
-          transition: transition,
-        },
+          transition: transition
+        }
       });
     }
   };
 
-  updateDampText = (act) => {
+  updateDampText = act => {
     this.needPullDown = act;
-    const {isInit, downLoading} = this.state;
-    const showTip = !downLoading && !isInit;// 展示下拉区域文案
-    if (!showTip) return ''
+    const { isInit, downLoading } = this.state;
+    const showTip = !downLoading && !isInit; // 展示下拉区域文案
+    if (!showTip) return "";
     const { indicator = {}, tipFreedText, tipText } = this.props;
-    const {activate = '释放刷新', deactivate = '下拉刷新'} = indicator as Indicator;
-    let text = ''
+    const {
+      activate = "释放刷新",
+      deactivate = "下拉刷新"
+    } = indicator as Indicator;
+    let text = "";
     if (act) {
-      text = activate || tipText
+      text = activate || tipText;
     } else {
-      text = deactivate || tipFreedText
+      text = deactivate || tipFreedText;
     }
-    if (Taro.getEnv() === 'WEB') {
-      const target = document.getElementById('tip-dampText') as HTMLElement;
+    if (Taro.getEnv() === "WEB") {
+      const target = document.getElementById("tip-dampText") as HTMLElement;
       target.innerText = text;
     } else {
-      this.setState({ dampText: text })
+      this.setState({ dampText: text });
     }
-  }
+  };
 
   render() {
     const {
       style,
       hasMore,
-      noMore,
       isEmpty,
       emptyText,
       className,
@@ -239,10 +234,16 @@ class ListView extends Component<Props, State> {
       footerLoadedText,
       damping,
       circleColor,
+      autoHeight
     } = this.props;
-    const {launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false} = launch as Launch;
+    const {
+      launchError = false,
+      launchEmpty = false,
+      launchFooterLoaded = false,
+      launchFooterLoading = false
+    } = launch as Launch;
 
-    const {canScrollY, blockStyle, downLoading, dampText} = this.state;
+    const { canScrollY, blockStyle, downLoading, dampText } = this.state;
 
     const showChildren = !(isEmpty || isError); // 展示children内容
 
@@ -251,7 +252,78 @@ class ListView extends Component<Props, State> {
     const customFooterLoaded = showFooter && launchFooterLoaded && !hasMore; // 渲染renderLoadedText
     const footerLoading = showFooter && !launchFooterLoading && hasMore;
     const customFooterLoading = showFooter && launchFooterLoading && hasMore; // 渲染renderNoMore
-
+    if (autoHeight) {
+      return (
+        <ScrollView
+          ref={node => {
+            this.scrollView = node;
+          }}
+          className={`${className} ${downLoading &&
+            "downLoadingStyle"} scrollView autoHeight`}
+          style={{ ...style }}
+          scrollY={canScrollY}
+          lowerThreshold={80}
+          onScrollToLower={this.handleScrollToLower}
+          scrollWithAnimation
+          onScroll={this.onScroll}
+        >
+          <View
+            style={{ minHeight: "100%", overflowY: "hidden" }}
+            onTouchMove={e => this.touchEvent(e)}
+            onTouchEnd={e => this.touchEvent(e)}
+            onTouchStart={e => this.touchEvent(e)}
+            onTouchCancel={e => this.touchEvent(e)}
+          >
+            <View
+              // style={trStyle}
+              className='bodyView'
+              id='bodyView'
+            >
+              <View style={blockStyle}>
+                <View
+                  style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
+                  className='pullDownBlock'
+                >
+                  <View className='tip'>
+                    {!downLoading && <View id='tip-dampText'>{dampText}</View>}
+                    {downLoading &&
+                      (this.props.customizeLoading ? (
+                        this.props.renderCustomizeLoading
+                      ) : (
+                        <Loading color={circleColor} />
+                      ))}
+                  </View>
+                </View>
+                {/* present children */}
+                {showChildren && this.props.children}
+                <ResultPage
+                  renderError={this.props.renderError}
+                  renderEmpty={this.props.renderEmpty}
+                  launchError={launchError}
+                  launchEmpty={launchEmpty}
+                  isError={isError || false}
+                  isEmpty={isEmpty || false}
+                  emptyText={emptyText || ""}
+                  fetchInit={this.fetchInit}
+                />
+                {/* default page */}
+                {footerLoading && (
+                  <View className='loading'>{footerLoadingText}</View>
+                )}
+                {/* custom footer loading page*/}
+                {customFooterLoading && this.props.renderFooterLoading}
+                {/* default footer loaded page*/}
+                {footerLoaded && (
+                  <View className='loaded'>{footerLoadedText}</View>
+                )}
+                {/* custom footer loaded page*/}
+                {customFooterLoaded && this.props.renderFooterLoaded}
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      );
+    }
     return (
       <Skeleton isLoaded={isLoaded || isError} selector={selector}>
         <ScrollView
@@ -267,30 +339,30 @@ class ListView extends Component<Props, State> {
           onScroll={this.onScroll}
         >
           <View
-            style={{ minHeight: '100%', overflowY: 'hidden' }}
-            onTouchMove={(e) => this.touchEvent(e)}
-            onTouchEnd={(e) => this.touchEvent(e)}
-            onTouchStart={(e) => this.touchEvent(e)}
-            onTouchCancel={(e) => this.touchEvent(e)}
+            style={{ minHeight: "100%", overflowY: "hidden" }}
+            onTouchMove={e => this.touchEvent(e)}
+            onTouchEnd={e => this.touchEvent(e)}
+            onTouchStart={e => this.touchEvent(e)}
+            onTouchCancel={e => this.touchEvent(e)}
           >
             <View
               // style={trStyle}
               className='bodyView'
               id='bodyView'
             >
-              <View
-                style={blockStyle}
-              >
-                <View style={{ height: `${damping}px`, marginTop: `-${damping}px` }} className='pullDownBlock'>
+              <View style={blockStyle}>
+                <View
+                  style={{ height: `${damping}px`, marginTop: `-${damping}px` }}
+                  className='pullDownBlock'
+                >
                   <View className='tip'>
-                    {
-                      !downLoading && <View id='tip-dampText'>{dampText}</View>
-                    }
-                    {
-                      downLoading && (
-                        this.props.customizeLoading ? this.props.renderCustomizeLoading :<Loading color={circleColor} />
-                      )
-                    }
+                    {!downLoading && <View id='tip-dampText'>{dampText}</View>}
+                    {downLoading &&
+                      (this.props.customizeLoading ? (
+                        this.props.renderCustomizeLoading
+                      ) : (
+                        <Loading color={circleColor} />
+                      ))}
                   </View>
                 </View>
                 {/* present children */}
@@ -302,33 +374,21 @@ class ListView extends Component<Props, State> {
                   launchEmpty={launchEmpty}
                   isError={isError || false}
                   isEmpty={isEmpty || false}
-                  emptyText={emptyText || ''}
+                  emptyText={emptyText || ""}
                   fetchInit={this.fetchInit}
                 />
                 {/* default page */}
-                {
-                  footerLoading && (
-                    <View className='loading'>
-                      {footerLoadingText}
-                    </View>
-                  )
-                }
+                {footerLoading && (
+                  <View className='loading'>{footerLoadingText}</View>
+                )}
                 {/* custom footer loading page*/}
-                {
-                  customFooterLoading && this.props.renderFooterLoading
-                }
+                {customFooterLoading && this.props.renderFooterLoading}
                 {/* default footer loaded page*/}
-                {
-                  footerLoaded && (
-                    <View className='loaded'>
-                      {noMore || footerLoadedText}
-                    </View>
-                  )
-                }
+                {footerLoaded && (
+                  <View className='loaded'>{footerLoadedText}</View>
+                )}
                 {/* custom footer loaded page*/}
-                {
-                  customFooterLoaded && this.props.renderFooterLoaded
-                }
+                {customFooterLoaded && this.props.renderFooterLoaded}
               </View>
             </View>
           </View>

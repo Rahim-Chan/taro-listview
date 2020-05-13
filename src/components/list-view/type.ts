@@ -1,3 +1,5 @@
+import {initialState} from "components/list-view/init";
+
 export interface Props {
   lazy?: boolean | string;
   circleColor?: string;
@@ -9,8 +11,8 @@ export interface Props {
   noMore?: string;
   tipText?: string;
   tipFreedText?: string;
-  onScrollToLower: (any) => void;
-  onPullDownRefresh?: (any) => void;
+  onScrollToLower: (any?) => void;
+  onPullDownRefresh?: (any?) => void;
   hasMore: boolean;
   needInit?: boolean;
   isEmpty?: boolean;
@@ -30,6 +32,7 @@ export interface Props {
   onScroll?: () => void;
   showIndicator?: boolean;
   lazyStorage?: string;
+  autoHeight?: boolean;
 }
 
 export interface Indicator {
@@ -45,3 +48,5 @@ export interface Launch {
   launchFooterLoading?: boolean;
   launchFooterLoaded?: boolean;
 }
+
+export type State = Readonly<typeof initialState>

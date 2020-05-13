@@ -9,7 +9,7 @@
       [
             "@semantic-release/npm",
             {
-              "tarballDir": "dist"
+              "tarballDir": "dist",
             }
           ],
       [
