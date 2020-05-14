@@ -42,6 +42,7 @@
 | distanceToRefresh | 下拉刷新距离                                    | number            | -                     | -    |
 | damping           | 最大下拉距离                                    | number            | -                     | -    |
 | autoHeight        | 开启自适应高度                                  | boolean           | -                     | -    |
+| lazyStorage       | Storage Key值用于区分ListView                  | string            | box                   | -    |
 
 ### 自定义页面 UI（状态提示语，空白屏、错误屏、底部状态的 UI 自定义）
 
@@ -150,11 +151,12 @@ export default class Index extends Component {
           isEmpty={isEmpty}
           onPullDownRefresh={this.pullDownRefresh}
           onScrollToLower={this.onScrollToLower}
+          lazyStorage='lazyView'
         >
           {list.map((item, index) => {
             return (
               <View className="item skeleton-bg" key={index}>
-                <LazyBlock current={index} className="avatar">
+                <LazyBlock current={index} className="avatar" lazyStorage='lazyView'>
                   <Image
                     className="avatar skeleton-radius"
                     src={item.author.avatar_url}
@@ -182,10 +184,10 @@ export default class Index extends Component {
 #### API
 
 ##### LazyBlock
-
-| 属性    | 说明                 | 类型   | 默认值 | 必传 |
-| :------ | :------------------- | :----- | :----- | :--- |
-| current | 传入模块遍历后的下标 | number | null   | true |
+| 属性 | 说明                | 类型   |默认值   |必传   |
+| :------- | :---------------  | :--------- |:--------- |:--------- |
+| current   | 传入模块遍历后的下标    | number | null | true |
+| lazyStorage   | Storage Key值用于区分ListView(获取是哪一个ListView)    | string | box | - |
 
 ```jsx
 import Taro, { Component } from "@tarojs/taro";
@@ -241,12 +243,13 @@ export default class Index extends Component {
           hasMore={hasMore}
           style={{ height: "100vh" }}
           onScrollToLower={this.onScrollToLower}
+          lazyStorage='lazyViewBlock'
         >
           {list.map((item, index) => {
             return (
-              <View className="item" key={index}>
-                <LazyBlock current={index} className="avatar">
-                  <Image className="avatar" src={item.author.avatar_url} />
+              <View className='item' key={index}>
+                <LazyBlock current={index} className='avatar' lazyStorage='lazyViewBlock'>
+                  <Image className='avatar' src={item.author.avatar_url} />
                 </LazyBlock>
                 <View className="title">{item.title}</View>
               </View>

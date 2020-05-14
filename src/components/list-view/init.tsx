@@ -44,5 +44,6 @@ export const initialProps ={
   indicator: {
     activate: '下拉刷新',
     deactivate: '释放刷新'
-  }
+  },
+  lazyStorage: 'box'
 };

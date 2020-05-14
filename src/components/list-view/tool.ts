@@ -49,9 +49,9 @@ const wait = function(time = 500) {
     });
 };
 
-function lazyScrollInit(className) {
+function lazyScrollInit(className,storagekey) {
   const lazyKey = `lazy${new Date().getTime()}`
-  const lazyBox: LazyItem[] = storage.get('lazyBox',[])
+  const lazyBox: LazyItem[] = storage.get(`lazyBox_${storagekey}`,[])
   if (lazyBox.length) {
     const length = lazyBox.length;
     const lastKey = lazyBox[length - 1];
@@ -60,22 +60,22 @@ function lazyScrollInit(className) {
     }
   }
   lazyBox.push({ key: lazyKey, className, viewHeight: 0 });
-  storage.set('lazyBox', lazyBox)
+  storage.set(`lazyBox_${storagekey}`, lazyBox)
   return lazyKey
 }
 
-function lazyScrollRemove() {
-  const lazyBox: LazyItem[] = storage.get('lazyBox',[])
+function lazyScrollRemove(storagekey) {
+  const lazyBox: LazyItem[] = storage.get(`lazyBox_${storagekey}`,[])
   lazyBox.pop();
-  storage.set('lazyBox', lazyBox)
+  storage.set(`lazyBox_${storagekey}`, lazyBox)
 }
 
-function updateScrollHeight(key, viewHeight) {
-  const lazyBox: LazyItem[] = storage.get('lazyBox',[])
+function updateScrollHeight(key, viewHeight, storagekey) {
+  const lazyBox: LazyItem[] = storage.get(`lazyBox_${storagekey}`,[])
   const index = lazyBox.findIndex(i => i.key === key)
   const targetLazy = lazyBox[index];
   lazyBox.splice(index, 1, { ...targetLazy, viewHeight })
-  storage.set('lazyBox', lazyBox)
+  storage.set(`lazyBox_${storagekey}`, lazyBox)
 }
 
 function lazyScroll(key, selector, height) {
