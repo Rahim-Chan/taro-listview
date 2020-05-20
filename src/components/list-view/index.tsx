@@ -34,6 +34,10 @@ class ListView extends Component<Props, State> {
 
   static defaultProps = initialProps;
 
+  bodyViewId = `${new Date().getTime()}-bodyViewId`;
+
+  tipDampTextId = `${new Date().getTime()}-tipDampTextId`;
+
   scrollView = {};
 
   state = initialState;
@@ -181,7 +185,7 @@ class ListView extends Component<Props, State> {
     const transition = y ? "none" : "300ms linear";
     // console.log({ y })
     if (Taro.getEnv() === "WEB") {
-      const target = document.getElementById("bodyView") as HTMLElement;
+      const target = document.getElementById(this.bodyViewId) as HTMLElement;
       target.style.transform = `translate3d(0,${y}px,0)`;
       target.style.transition = transition;
     } else {
@@ -212,7 +216,7 @@ class ListView extends Component<Props, State> {
       text = deactivate || tipFreedText;
     }
     if (Taro.getEnv() === "WEB") {
-      const target = document.getElementById("tip-dampText") as HTMLElement;
+      const target = document.getElementById(this.tipDampTextId) as HTMLElement;
       target.innerText = text;
     } else {
       this.setState({ dampText: text });
@@ -277,7 +281,7 @@ class ListView extends Component<Props, State> {
             <View
               // style={trStyle}
               className='bodyView'
-              id='bodyView'
+              id={this.bodyViewId}
             >
               <View style={blockStyle}>
                 <View
@@ -285,7 +289,7 @@ class ListView extends Component<Props, State> {
                   className='pullDownBlock'
                 >
                   <View className='tip'>
-                    {!downLoading && <View id='tip-dampText'>{dampText}</View>}
+                    {!downLoading && <View id={this.tipDampTextId}>{dampText}</View>}
                     {downLoading &&
                       (this.props.customizeLoading ? (
                         this.props.renderCustomizeLoading
@@ -346,9 +350,8 @@ class ListView extends Component<Props, State> {
             onTouchCancel={e => this.touchEvent(e)}
           >
             <View
-              // style={trStyle}
               className='bodyView'
-              id='bodyView'
+              id={this.bodyViewId}
             >
               <View style={blockStyle}>
                 <View
@@ -356,7 +359,7 @@ class ListView extends Component<Props, State> {
                   className='pullDownBlock'
                 >
                   <View className='tip'>
-                    {!downLoading && <View id='tip-dampText'>{dampText}</View>}
+                    {!downLoading && <View id={this.tipDampTextId}>{dampText}</View>}
                     {downLoading &&
                       (this.props.customizeLoading ? (
                         this.props.renderCustomizeLoading
@@ -399,3 +402,4 @@ class ListView extends Component<Props, State> {
 }
 
 export default ListView;
+

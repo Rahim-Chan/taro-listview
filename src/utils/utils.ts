@@ -24,17 +24,11 @@ export function isPromise(object){
 }
 
 export const minGetMore = async (self) => {
-  const {onScrollToLower, hasMore, async} = self.props;
+  const {onScrollToLower, hasMore} = self.props;
   const {lowerLoading} = self.state;
   if (hasMore && !lowerLoading && onScrollToLower) {
     self.setState({lowerLoading: true});
-    if (!async) {
-      onScrollToLower(() => {
-        self.setState({lowerLoading: false});
-      });
-    } else {
-      await onScrollToLower();
-      self.setState({lowerLoading: false});
-    }
+    await onScrollToLower(() => {});
+    self.setState({lowerLoading: false});
   }
 }
