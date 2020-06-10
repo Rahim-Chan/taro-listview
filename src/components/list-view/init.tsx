@@ -16,7 +16,7 @@ export const initialState = {
 };
 
 export const initialProps ={
-  selector: '',
+  selector: 'skeleton',
   circleColor: '',
   lazy: false,
   distanceToRefresh: 50,

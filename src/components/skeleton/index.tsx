@@ -63,6 +63,7 @@ class Skeleton extends Component<Props, State> {
     setTimeout(() => {
       const { selector } = this.props;
       // @ts-ignore
+      console.log({ selector })
       const dom = document.querySelector(selector);
       if (dom) {
         const rect = dom.getBoundingClientRect();
