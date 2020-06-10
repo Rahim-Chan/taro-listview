@@ -98,8 +98,8 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  onScroll = () => {
-    if (this.props.onScroll) this.props.onScroll()
+  onScroll = (e) => {
+    if (this.props.onScroll) this.props.onScroll(e)
     if (this.props.lazy) {
       tools.lazyScroll(this.lazyKey,this.lazyClassName, this.lazyViewHeight )
     }
