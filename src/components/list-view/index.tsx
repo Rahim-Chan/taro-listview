@@ -174,7 +174,7 @@ class ListView extends Component<Props, State> {
     const {
       detail: { scrollTop }
     } = e;
-    if (this.props.onScroll) this.props.onScroll();
+    if (this.props.onScroll) this.props.onScroll(e);
     this.setState({ scrollTop });
     if (this.props.lazy) {
       tools.lazyScroll(this.lazyKey, this.lazyClassName, this.lazyViewHeight);
