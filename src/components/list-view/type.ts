@@ -29,7 +29,7 @@ export interface Props {
   indicator?: Indicator;
   isLoaded?: boolean;
   selector?: string;
-  onScroll?: () => void;
+  onScroll?: (e) => void;
   showIndicator?: boolean;
   lazyStorage?: string;
   autoHeight?: boolean;
