@@ -59,11 +59,8 @@ class Skeleton extends Component<Props, State> {
         [selector]: list,
       });
     };
-    //todo 渲染完毕
-    setTimeout(() => {
-      const { selector } = this.props;
-      // @ts-ignore
-      console.log({ selector })
+    requestAnimationFrame(() => {
+      const { selector = '.skeleton' } = this.props;
       const dom = document.querySelector(selector);
       if (dom) {
         const rect = dom.getBoundingClientRect();
@@ -78,7 +75,7 @@ class Skeleton extends Component<Props, State> {
         selAll('list');
         selAll('listRadius');
       }
-    }, 300)
+    })
   }
 
   weappSkl() {
