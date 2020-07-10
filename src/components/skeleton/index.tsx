@@ -65,7 +65,7 @@ class Skeleton extends Component<Props, State> {
       if (dom) {
         const rect = dom.getBoundingClientRect();
         const parentStyle = {};
-        Object.keys(rect.toJSON()).forEach(i => {
+        Object.keys(rect).forEach(i => {
           parentStyle[i] = `${rect[i]}px`
         });
         this.setState({
