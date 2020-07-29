@@ -7,9 +7,11 @@
 <img alt="GitHub Actions status" src="https://github.com/actions/toolkit/workflows/Main%20workflow/badge.svg" style="max-width:100%;">
 </p>
 
-- [ ] skeleton 拓展状态屏
+
 - [x] 列表内部懒模块-解决小程序图片过多内存问题
+- [ ] skeleton 拓展状态屏
 - [ ] virtual-list(WIP)【虚拟列表】
+- [ ] 支持TaroNext(WIP)
 
 ## 安装方式
 
