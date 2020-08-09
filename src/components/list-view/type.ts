@@ -1,6 +1,7 @@
+import React from 'react'
 import {initialState} from "components/list-view/init";
 
-export interface Props {
+export interface Props extends React.Props<any> {
   lazy?: boolean | string;
   circleColor?: string;
   style?: any;

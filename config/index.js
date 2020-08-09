@@ -48,13 +48,7 @@ const config = {
       postcss: {
         autoprefixer: {
           enable: true,
-          config: {
-            browsers: [
-              'last 3 versions',
-              'Android >= 4.1',
-              'ios >= 8'
-            ]
-          }
+          config: {}
         },
         cssModules: {
           enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
@@ -74,25 +68,24 @@ if (process.env.TARO_BUILD_TYPE === 'ui') {
     enableExtract: false,
     enableDll: false
   });
-  config.h5.webpackChain = chain => {
-    chain.plugins.delete('htmlWebpackPlugin');
-    chain.plugins.delete('addAssetHtmlWebpackPlugin');
-    chain.merge({
-      output: {
-        path: path.join(process.cwd(), 'dist', 'h5'),
-        filename: 'index.js',
-        libraryTarget: 'umd',
-        library: 'taro-list-view'
-      },
-      externals: {
-        nervjs: 'commonjs2 nervjs',
-        classnames: 'commonjs2 classnames',
-        '@tarojs/components': 'commonjs2 @tarojs/components',
-        '@tarojs/taro-h5': 'commonjs2 @tarojs/taro-h5',
-        weui: 'commonjs2 weui'
-      }
-    });
-  };
+  // config.h5.webpackChain = chain => {
+  //   chain.plugins.delete('htmlWebpackPlugin');
+  //   chain.plugins.delete('addAssetHtmlWebpackPlugin');
+  //   chain.merge({
+  //     output: {
+  //       path: path.join(process.cwd(), 'dist', 'h5'),
+  //       filename: 'index.js',
+  //       libraryTarget: 'umd',
+  //       library: 'taro-list-view'
+  //     },
+  //     externals: {
+  //       nervjs: 'commonjs2 nervjs',
+  //       classnames: 'commonjs2 classnames',
+  //       '@tarojs/components': 'commonjs2 @tarojs/components',
+  //       // weui: 'commonjs2 weui'
+  //     }
+  //   });
+  // };
 }
 module.exports = function (merge) {
   if (process.env.NODE_ENV === 'development') {

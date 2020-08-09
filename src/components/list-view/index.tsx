@@ -7,7 +7,7 @@ import tools from "./tool";
 import ResultPage from "../result-page";
 import { initialProps, initialState } from "./init";
 // eslint-disable-next-line no-unused-vars
-import { minGetMore } from "../../utils/utils";
+import { minGetMore } from "utils/utils";
 import { Indicator, Launch, State, Props } from "./type";
 import "./index.scss";
 
@@ -23,7 +23,6 @@ class ListView extends Component<Props, State> {
     () => {
       if (this.props.lazy) {
         const { lazyStorage } = this.props;
-        console.log('lazyScrollInitlazyScrollInit')
         return tools.lazyScrollInit(this.lazyClassName, lazyStorage)
       }
   })();
@@ -185,7 +184,7 @@ class ListView extends Component<Props, State> {
     if (this.props.onScroll) this.props.onScroll(e);
     this.setState({ scrollTop });
     if (this.props.lazy) {
-      tools.lazyScroll(this.lazyKey, this.lazyClassName, this.lazyViewHeight);
+      tools.lazyScroll(this.lazyKey, this.lazyViewHeight);
     }
   };
 
@@ -307,7 +306,7 @@ class ListView extends Component<Props, State> {
                   </View>
                 </View>
                 {/* present children */}
-                {showChildren && this.props.children}
+                {/*{showChildren && this.props.children}*/}
                 <ResultPage
                   renderError={this.props.renderError}
                   renderEmpty={this.props.renderEmpty}

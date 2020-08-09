@@ -15,7 +15,7 @@ interface State {
 
 }
 
-interface Props {
+interface Props extends React.Props<any> {
   className?: string;
   current: number;
   lazyStorage?: string;
@@ -58,7 +58,7 @@ class LazyImage extends Component<Props, State> {
 
   // 绑定函数
   bindTextListener() {
-    const { key, className, viewHeight } = this.lazyItem;
+    const { key, viewHeight } = this.lazyItem;
     Taro.eventCenter.on(`lazyBlock${key}`, scrollCur => {
         this.setState({
           scrollCur
@@ -67,7 +67,7 @@ class LazyImage extends Component<Props, State> {
     // @ts-ignore
     Taro[key] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `lazyBlock${key}`);
     setTimeout(() => {
-      tools.lazyScroll(key, className, viewHeight)
+      tools.lazyScroll(key, viewHeight)
     }, 0)
   }
 

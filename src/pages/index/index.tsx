@@ -72,13 +72,12 @@ export default class Index extends Component {
           <p style={{ textAlign: 'center' }}>双开-AutoHeight</p>
           <View className='skeleton lazy-view' style={{ height: '40vh' }} >
             <ListView
-              // autoHeight
+              autoHeight
               lazy
               ref={node => this.insRef(node)}
               isLoaded={isLoaded}
               isError={error}
               hasMore={hasMore}
-              style={{height: '100vh'}}
               isEmpty={isEmpty}
               onPullDownRefresh={this.pullDownRefresh}
               onScrollToLower={this.onScrollToLower}
@@ -107,43 +106,42 @@ export default class Index extends Component {
               })}
             </ListView>
           </View>
-          {/*<View className='skeleton lazy-view' style={{ height: '40vh',marginTop: 10 }} >*/}
-          {/*  <ListView*/}
-          {/*    autoHeight*/}
-          {/*    lazy*/}
-          {/*    ref={node => this.insRef(node)}*/}
-          {/*    isLoaded={isLoaded}*/}
-          {/*    isError={error}*/}
-          {/*    hasMore={hasMore}*/}
-          {/*    // style={{height: '100vh'}}*/}
-          {/*    isEmpty={isEmpty}*/}
-          {/*    onPullDownRefresh={this.pullDownRefresh}*/}
-          {/*    onScrollToLower={this.onScrollToLower}*/}
-          {/*    renderCustomizeLoading={(<View>自定义</View>)}*/}
-          {/*    customizeLoading*/}
-          {/*    lazyStorage='listView'*/}
-          {/*  >*/}
-          {/*    {list.map((item, index) => {*/}
-          {/*      return (*/}
-          {/*        <View className='item skeleton-bg' key={`item_${index}`}>*/}
-          {/*          <LazyBlock current={index} className='avatar' lazyStorage='listView'>*/}
-          {/*            <Image className='avatar skeleton-radius' src={item.author.avatar_url} />*/}
-          {/*          </LazyBlock>*/}
-          {/*          <View className='box'>*/}
-          {/*            <View className='tab'>{item.tab}{item.visit_count}次</View>*/}
-          {/*            <View className='time'>{item.create_at}</View>*/}
-          {/*            <View className='content'>*/}
-          {/*              {item.content}*/}
-          {/*            </View>*/}
-          {/*            <View className='title skeleton-rect'>*/}
-          {/*              {item.title}*/}
-          {/*            </View>*/}
-          {/*          </View>*/}
-          {/*        </View>*/}
-          {/*      )*/}
-          {/*    })}*/}
-          {/*  </ListView>*/}
-          {/*</View>*/}
+          <View className='skeleton lazy-view' style={{ height: '40vh',marginTop: 10 }} >
+            <ListView
+              autoHeight
+              lazy
+              ref={node => this.insRef(node)}
+              isLoaded={isLoaded}
+              isError={error}
+              hasMore={hasMore}
+              isEmpty={isEmpty}
+              onPullDownRefresh={this.pullDownRefresh}
+              onScrollToLower={this.onScrollToLower}
+              renderCustomizeLoading={(<View>自定义</View>)}
+              customizeLoading
+              lazyStorage='listView'
+            >
+              {list.map((item, index) => {
+                return (
+                  <View className='item skeleton-bg' key={`item_${index}`}>
+                    <LazyBlock current={index} className='avatar' lazyStorage='listView'>
+                      <Image className='avatar skeleton-radius' src={item.author.avatar_url} />
+                    </LazyBlock>
+                    <View className='box'>
+                      <View className='tab'>{item.tab}{item.visit_count}次</View>
+                      <View className='time'>{item.create_at}</View>
+                      <View className='content'>
+                        {item.content}
+                      </View>
+                      <View className='title skeleton-rect'>
+                        {item.title}
+                      </View>
+                    </View>
+                  </View>
+                )
+              })}
+            </ListView>
+          </View>
         </View>
     )
   }

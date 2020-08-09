@@ -79,7 +79,7 @@ function updateScrollHeight(key, viewHeight, storagekey) {
   storage.set(`lazyBox_${storagekey}`, lazyBox)
 }
 
-function lazyScroll(key, selector, height) {
+function lazyScroll(key, height) {
   // console.log({ selector, key })
   const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `.lazy-image-${key}`;
   throttle(() => {
