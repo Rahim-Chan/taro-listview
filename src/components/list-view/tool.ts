@@ -61,6 +61,7 @@ function lazyScrollInit(className,storagekey) {
   }
   lazyBox.push({ key: lazyKey, className, viewHeight: 0 });
   storage.set(`lazyBox_${storagekey}`, lazyBox)
+  console.log('lazyScrollInit``````',)
   return lazyKey
 }
 
@@ -79,9 +80,11 @@ function updateScrollHeight(key, viewHeight, storagekey) {
 }
 
 function lazyScroll(key, selector, height) {
-  const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `${selector} >>> .lazy-image-${key}`;
+  // console.log({ selector, key })
+  const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `.lazy-image-${key}`;
   throttle(() => {
-    Taro.createSelectorQuery()
+    setTimeout(() => {
+      Taro.createSelectorQuery()
         .selectAll(query)
         .boundingClientRect()
         .exec(res => {
@@ -96,6 +99,7 @@ function lazyScroll(key, selector, height) {
           // @ts-ignore
           if (Taro[key] && typeof  Taro[key] === 'function') Taro[key](indexs)
         });
+    }, 0)
   }, 500)()
 }
 

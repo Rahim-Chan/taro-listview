@@ -1,4 +1,5 @@
-import Taro, {Component} from '@tarojs/taro';
+import React, { Component} from 'react';
+import Taro from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
 import ListView from '../../components/list-view';
 import LazyBlock from '../../components/list-view/block';

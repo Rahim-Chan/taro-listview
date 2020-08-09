@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro';
+import React, { Component } from 'react';
+import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import './index.scss';
 
@@ -81,21 +82,23 @@ class Skeleton extends Component<Props, State> {
   weappSkl() {
     const { selector } = this.props;
     Taro.createSelectorQuery()
-      .selectAll(`${selector} >>> .skeleton-bg`)
+      .in(Taro.Current.page)
+      .selectAll(`.skeleton-bg`)
       .boundingClientRect()
       .exec(res => {
+        console.log(res, 'resresres')
         this.setState({ bg: res[0] });
       });
 
     Taro.createSelectorQuery()
-      .selectAll(`${selector} >>> .skeleton-rect`)
+      .selectAll(`.skeleton-rect`)
       .boundingClientRect()
       .exec(res => {
         this.setState({ list: res[0] });
       });
 
     Taro.createSelectorQuery()
-      .selectAll(`${selector} >>> .skeleton-radius`)
+      .selectAll(`.skeleton-radius`)
       .boundingClientRect()
       .exec(res => {
         this.setState({ listRadius: res[0] });

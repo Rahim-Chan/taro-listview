@@ -1,4 +1,5 @@
-import Taro, { Component } from "@tarojs/taro";
+import React, { Component } from "react";
+import Taro from "@tarojs/taro";
 import { ScrollView, View } from "@tarojs/components";
 import Skeleton from "../skeleton";
 import Loading from "../loading";
@@ -22,6 +23,7 @@ class ListView extends Component<Props, State> {
     () => {
       if (this.props.lazy) {
         const { lazyStorage } = this.props;
+        console.log('lazyScrollInitlazyScrollInit')
         return tools.lazyScrollInit(this.lazyClassName, lazyStorage)
       }
   })();
@@ -48,19 +50,25 @@ class ListView extends Component<Props, State> {
 
   touchScrollTop = 0;
 
+  componentWillMount(): void {
+
+  }
+
   componentDidMount() {
     this.moveBox(0);
     if (this.props.lazy) {
-      Taro.createSelectorQuery()
-        .in(this.$scope)
-        .select(".scrollView")
-        .boundingClientRect()
-        .exec(res => {
-          const { lazyStorage } = this.props;
-          tools.updateScrollHeight(this.lazyKey, res[0].height, lazyStorage)
-
-          this.lazyViewHeight = res[0].height
-        })
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          Taro.createSelectorQuery()
+            .select(".scrollView")
+            .boundingClientRect()
+            .exec(res => {
+              const { lazyStorage } = this.props;
+              tools.updateScrollHeight(this.lazyKey, res[0].height, lazyStorage)
+              this.lazyViewHeight = res[0].height
+            })
+        }, 0)
+      })
     }
     if (this.props.needInit) this.fetchInit();
   }

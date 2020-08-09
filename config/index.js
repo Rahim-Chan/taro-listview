@@ -2,7 +2,7 @@ const path = require('path');
 
 const config = {
   projectName: 'taro-listView',
-  date: '2019-7-10',
+  date: '2020-08-07',
   designWidth: 750,
   deviceRatio: {
     '640': 2.34 / 2,
@@ -20,13 +20,10 @@ const config = {
   framework: 'react',
   mini: {
     postcss: {
-      autoprefixer: {
-        enable: true,
-      },
       pxtransform: {
         enable: true,
         config: {
-
+          onePxTransform: false,
         }
       },
       url: {
