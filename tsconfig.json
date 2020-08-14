@@ -26,6 +26,6 @@
     },
     "noImplicitAny": false
   },
-  "include": ["./src"],
-  "exclude": ["node_modules", "scripts", "webpack", "jest"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "scripts", "webpack", "jest"]
 }

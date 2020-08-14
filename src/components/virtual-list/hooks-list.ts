@@ -1,14 +1,14 @@
-import {Dispatch, SetStateAction, useCallback, useRef, useState} from '@tarojs/taro';
+import {useCallback, useRef, useState} from 'react';
 import diff from './diff';
 import vr from './virtual'
 
 interface Methods<S> {
-  append: Dispatch<SetStateAction<S>>
+  append: any
 }
 const screenNum = 7;
 const screenPage = 3;
 const moreNum = screenNum * screenPage;
-let outSetList: Taro.Dispatch<Taro.SetStateAction<any[]>> = () => {};
+let outSetList = () => {};
 let updateList: (scrollTop) => void = () => {
 };
 
@@ -23,6 +23,7 @@ const UseList = (initData: any[] | (() => any[])): [any[], Methods<any>] => {
   const append = (newData) => {
     pureList.current = list.concat(newData).map((i, y) => {
       return {
+        // @ts-ignore
         ...i,
         __index__: y,
         bottom: (y + 1) * vr.height,
@@ -31,6 +32,7 @@ const UseList = (initData: any[] | (() => any[])): [any[], Methods<any>] => {
     // setList(newList);
     setTimeout(() => {
       if (setHeightRef.current !== null) {
+        // @ts-ignore
         setHeightRef.current(pureList.current.length * vr.height + 'px')
       }
     }, 300)
@@ -55,6 +57,7 @@ const UseList = (initData: any[] | (() => any[])): [any[], Methods<any>] => {
     cacheList.current = showList
   }, []);
 
+  // @ts-ignore
   ctx.calcHeight = (setHeight) => {
     setHeightRef.current = setHeight;
   }

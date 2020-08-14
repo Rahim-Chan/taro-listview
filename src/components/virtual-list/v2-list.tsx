@@ -1,4 +1,5 @@
-import Taro, {useState, useEffect } from '@tarojs/taro';
+import React, {useState, useEffect } from 'react';
+import Taro from '@tarojs/taro';
 import {View, ScrollView} from '@tarojs/components';
 import {utils} from './use-list';
 import { throttle } from "../../utils/utils";
@@ -45,7 +46,7 @@ const VirList: Taro.FunctionComponent<Props>= (props) => {
       onScrollToLower={handleLower}
     >
       <View id='foo' className='recycleList' style={{ position:'relative', height: `${totalHeight}px` }}>
-        {this.props.children}
+        {props.children}
       </View>
     </ScrollView>
   )

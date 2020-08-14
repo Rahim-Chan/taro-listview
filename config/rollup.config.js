@@ -62,7 +62,7 @@ export default {
     }),
     RollupJson(),
     RollupTypescript({
-      tsconfig: resolveFile('tsconfig.rollup.json')
+      tsconfig: resolveFile('tsconfig.json')
     }),
     RollupCopy({
       targets: [

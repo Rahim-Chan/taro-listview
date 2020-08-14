@@ -49,7 +49,7 @@ export default class Index extends Component {
           onScrollToLower={this.onScrollToLower}
           lazyStorage='listViewLazy'
         >
-          {list.map((item, index) => {
+          {list.map((item: any, index) => {
             return (
               <View className='item' key={`item_${index}`}>
                 <LazyBlock current={index} className='avatar' lazyStorage='listViewLazy'>

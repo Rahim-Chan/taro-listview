@@ -10,7 +10,8 @@ interface LazyItem {
 export function debounce(method, time = 500) {
     let timer = null;
     return function() {
-        const context = this;
+        // @ts-ignore
+      const context = this;
         // 在函数执行的时候先清除timer定时器;
         // @ts-ignore
         clearTimeout(timer);
@@ -27,6 +28,7 @@ const throttle = function(func, delay) {
   return function() {
     const curTime = Date.now();
     const remaining = delay - (curTime - startTime);
+    // @ts-ignore
     const context = this;
     const args = arguments;
     // @ts-ignore

@@ -1,6 +1,6 @@
 {
 	"name": "taro-listview",
-	"version": "1.4.9",
+	"version": "1.4.3",
 	"description": "listView pullDownRefresh and skeleton",
 	"templateInfo": {
 		"name": "default",
@@ -38,7 +38,7 @@
 		"dev:tt": "npm run build:tt -- --watch",
 		"dev:h5": "npm run build:h5 -- --watch",
 		"dev:rn": "npm run build:rn -- --watch",
-		"build:lib": "tsc --project ./tsconfig.build.json",
+		"build:lib": "tsc --project ./tsconfig.json",
 		"build:rollup": "rollup --config ./config/rollup.config.js",
 		"copy": "node ./scripts/build.js",
 		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types",
@@ -47,7 +47,7 @@
 	},
 	"author": "rahim <chenrixi93@gmail.com>",
 	"publishConfig": {
-		"registry": "http://152.136.203.150:4873"
+		"registry": "https://registry.npmjs.org"
 	},
 	"repository": {
 		"type": "git",

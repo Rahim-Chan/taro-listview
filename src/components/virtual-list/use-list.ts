@@ -1,4 +1,4 @@
-import {useState, useCallback, useEffect, useRef} from '@tarojs/taro';
+import {useState, useCallback, useEffect, useRef} from 'react';
 import diff from './diff';
 
 interface UTILS {
@@ -28,10 +28,10 @@ interface ListItem {
 
 const UseList = (id: string) => {
   const [renderList, setList] = useState<ListItem[]>([]);//render in viewpoint
-  const [isMount, setIsMount] = useState<boolean>(false);//render in viewpoint
+  const [, setIsMount] = useState<boolean>(false);//render in viewpoint
   const totalHeight = useRef(0);//height of contain
   const cacheList = useRef<ListItem[]>([]);//cache all data<ListItem[]>
-  const cacheScrollTop = useRef(0); //recode scrollTop of list
+  // const cacheScrollTop = useRef(0); //recode scrollTop of list
   const cacheViewPointData = useRef({
     beginIndex: 0,
     endIndex: totalAmount,

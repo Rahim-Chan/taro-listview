@@ -24,6 +24,8 @@ class ListView extends Component<Props, State> {
       if (this.props.lazy) {
         const { lazyStorage } = this.props;
         return tools.lazyScrollInit(this.lazyClassName, lazyStorage)
+      } else {
+        return undefined
       }
   })();
 
@@ -206,28 +208,33 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  updateDampText = act => {
+  updateDampText = (act: boolean) => {
     this.needPullDown = act;
     const { isInit, downLoading } = this.state;
     const showTip = !downLoading && !isInit; // 展示下拉区域文案
-    if (!showTip) return "";
-    const { indicator = {}, tipFreedText, tipText } = this.props;
-    const {
-      activate = "释放刷新",
-      deactivate = "下拉刷新"
-    } = indicator as Indicator;
-    let text = "";
-    if (act) {
-      text = activate || tipText;
+    if (!showTip) {
+      return ''
     } else {
-      text = deactivate || tipFreedText;
+      const { indicator = {}, tipFreedText, tipText } = this.props;
+      const {
+        activate = "释放刷新",
+        deactivate = "下拉刷新"
+      } = indicator as Indicator;
+      let text = "";
+      if (act) {
+        text = activate || tipText;
+      } else {
+        text = deactivate || tipFreedText;
+      }
+      if (Taro.getEnv() === "WEB") {
+        const target = document.getElementById(this.tipDampTextId) as HTMLElement;
+        target.innerText = text;
+      } else {
+        this.setState({ dampText: text });
+      }
+      return undefined
     }
-    if (Taro.getEnv() === "WEB") {
-      const target = document.getElementById(this.tipDampTextId) as HTMLElement;
-      target.innerText = text;
-    } else {
-      this.setState({ dampText: text });
-    }
+
   };
 
   render() {
@@ -306,7 +313,7 @@ class ListView extends Component<Props, State> {
                   </View>
                 </View>
                 {/* present children */}
-                {/*{showChildren && this.props.children}*/}
+                {showChildren && this.props.children}
                 <ResultPage
                   renderError={this.props.renderError}
                   renderEmpty={this.props.renderEmpty}

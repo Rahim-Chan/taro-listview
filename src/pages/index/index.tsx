@@ -85,7 +85,7 @@ export default class Index extends Component {
               customizeLoading
               lazyStorage='listView'
             >
-              {list.map((item, index) => {
+              {list.map((item: any, index) => {
                 return (
                   <View className='item skeleton-bg' key={`item_${index}`}>
                     <LazyBlock current={index} className='avatar' lazyStorage='listView'>
@@ -121,7 +121,7 @@ export default class Index extends Component {
               customizeLoading
               lazyStorage='listView'
             >
-              {list.map((item, index) => {
+              {list.map((item: any, index) => {
                 return (
                   <View className='item skeleton-bg' key={`item_${index}`}>
                     <LazyBlock current={index} className='avatar' lazyStorage='listView'>
