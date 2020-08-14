@@ -1,4 +1,3 @@
-import scss from 'rollup-plugin-scss'
 import NodePath from 'path'
 import RollupJson from '@rollup/plugin-json'
 import RollupNodeResolve from '@rollup/plugin-node-resolve'
