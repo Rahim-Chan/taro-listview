@@ -35,7 +35,7 @@ jobs:
         npm install -g npminstall
         npminstall
         npm run build
-        npm run types
+        npm run build:lib
 
     # NPM 包发布
     - name: Release NPN Package
