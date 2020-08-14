@@ -2,7 +2,7 @@ import {useCallback, useRef, useState} from 'react';
 import diff from './diff';
 import vr from './virtual'
 
-interface Methods<S> {
+interface Methods {
   append: any
 }
 const screenNum = 7;
@@ -12,7 +12,7 @@ let outSetList = () => {};
 let updateList: (scrollTop) => void = () => {
 };
 
-const UseList = (initData: any[] | (() => any[])): [any[], Methods<any>] => {
+const UseList = (initData: any[] | (() => any[])): [any[], Methods] => {
   if (!Array.isArray(initData)) throw new Error('初始值必须为数组');
   const [list, setList] = useState([]);
   const setHeightRef = useRef(null)

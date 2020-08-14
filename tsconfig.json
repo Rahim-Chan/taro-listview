@@ -16,7 +16,8 @@
     "noUnusedLocals": true,
     "allowJs": true,
     "experimentalDecorators": true,
-    "strict": true,
+    "maxNodeModuleJsDepth": 3,
+//    "strict": false,
     "paths": {
       "components": ["./src/components/index.ts"],
       "components/*": ["./src/components/*"],
@@ -26,6 +27,6 @@
     },
     "noImplicitAny": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules/*", "scripts", "webpack", "jest"]
+  "include": ["src/components/*"],
+  "exclude": ["**/node_modules/*", "scripts", "webpack", "jest", "dist"]
 }
