@@ -1,0 +1,28 @@
+.errorPage {
+  text-align: center;
+  padding: 40px;
+  font-size: 30px;
+  .button {
+    border-radius: 10px;
+    margin-top: 10px;
+    display: inline-block;
+    border: 1px solid cornflowerblue;
+    color: cornflowerblue;
+    padding: 10px;
+  }
+}
+.noContentTips {
+  display: flex;
+  padding: 100px 20px 20px;
+  text-align: center;
+  flex-direction: column;
+  .emptyBanner {
+    width: 250px;
+    height: 170px;
+    display: inline-block;
+    margin: 0 auto 20px;
+  }
+}
+.marginBottom30 {
+  margin-bottom: 30px;
+}

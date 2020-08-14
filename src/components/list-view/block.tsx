@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Taro from '@tarojs/taro';
 import {View} from '@tarojs/components';
-import './block.scss'
+import '../../style/components/list-view/block.scss'
 import storage from "../../utils/storage";
 import tools from "./tool";
 

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Image, View } from '@tarojs/components';
-import './index.scss';
+import { View } from '@tarojs/components';
+import '../../style/components/result-page/index.scss'
 
-const emptyImg = require("./assets/empty.png");
 interface PagePros {
   renderError?: JSX.Element;
   renderEmpty?: JSX.Element;
@@ -38,7 +37,6 @@ class Page extends Component<PagePros> {
         {/* default blank page */}
         {showEmptyText && (
           <View className='noContentTips'>
-            <Image src={emptyImg} className='emptyBanner' />
             {emptyText}
           </View>
         )}

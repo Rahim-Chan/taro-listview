@@ -1,9 +1,10 @@
+import scss from 'rollup-plugin-scss'
 import NodePath from 'path'
 import RollupJson from '@rollup/plugin-json'
-import scss from 'rollup-plugin-scss'
 import RollupNodeResolve from '@rollup/plugin-node-resolve'
 import RollupCommonjs from '@rollup/plugin-commonjs'
 import RollupTypescript from 'rollup-plugin-typescript2'
+import postcss from 'rollup-plugin-postcss'
 import RollupCopy from 'rollup-plugin-copy'
 import Package from '../package.json'
 
@@ -34,7 +35,7 @@ export default {
     {
       file: resolveFile(Package.browser),
       format: 'umd',
-      name: 'taro-listview',
+      name: 'taro-ui',
       sourcemap: true,
       globals: {
         react: 'React',
@@ -43,8 +44,14 @@ export default {
       }
     }
   ],
+  cssModules: true,
   external: externalPackages,
   plugins: [
+    postcss({
+      extract: false,
+      modules: true,
+      use: ['sass'],
+    }),
     RollupNodeResolve({
       customResolveOptions: {
         moduleDirectory: 'node_modules'
@@ -57,7 +64,6 @@ export default {
     RollupTypescript({
       tsconfig: resolveFile('tsconfig.rollup.json')
     }),
-    scss(),
     RollupCopy({
       targets: [
         {

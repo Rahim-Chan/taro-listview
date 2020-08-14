@@ -1,7 +1,7 @@
 import React from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import './index.scss';
+import '../../style/components/skeleton/index.scss'
 
 interface Props extends React.Props<any> {
   isLoaded: boolean;

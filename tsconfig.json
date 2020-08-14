@@ -1,32 +1,31 @@
+
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strictNullChecks": true,
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
     "sourceMap": true,
     "baseUrl": ".",
-    "rootDir": ".",
     "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "rootDirs": ["/src", "/test", "/mock", "./typings"],
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
     "allowJs": true,
-    "resolveJsonModule": true,
-    "typeRoots": ["node_modules/@types", "global.d.ts"],
+    "experimentalDecorators": true,
+    "strict": true,
     "paths": {
       "components": ["./src/components/index.ts"],
       "components/*": ["./src/components/*"],
       "models": ["./src/models/index.ts"],
       "utils/*": ["./src/utils/*"],
       "package": ["./package.json"]
-    }
+    },
+    "noImplicitAny": false
   },
-  "exclude": ["node_modules", "dist"],
-  "compileOnSave": false
+  "include": ["./src"],
+  "exclude": ["node_modules", "scripts", "webpack", "jest"]
 }

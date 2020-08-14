@@ -7,9 +7,9 @@ import tools from "./tool";
 import ResultPage from "../result-page";
 import { initialProps, initialState } from "./init";
 // eslint-disable-next-line no-unused-vars
-import { minGetMore } from "utils/utils";
+import { minGetMore } from "../../utils/utils";
 import { Indicator, Launch, State, Props } from "./type";
-import "./index.scss";
+import '../../style/components/list-view/index.scss'
 
 class ListView extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp

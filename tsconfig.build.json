@@ -1,32 +1,28 @@
-{
+  {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "strictNullChecks": true,
+    "preserveConstEnums": true,
+    "skipLibCheck": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "rootDir": ".",
-    "jsx": "react",
-    "allowJs": true,
+    "strictNullChecks": true,
     "resolveJsonModule": true,
-    "typeRoots": ["node_modules/@types", "global.d.ts"],
-    "paths": {
-      "components": ["./src/components/index.ts"],
-      "components/*": ["./src/components/*"],
-      "models": ["./src/models/index.ts"],
-      "utils/*": ["./src/utils/*"],
-      "package": ["./package.json"]
-    }
+    "target": "es2017",
+    "module": "es6",
+    "outDir": "./lib"
   },
-  "exclude": ["node_modules", "dist"],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules/*",
+  ],
+
+  "include": [
+    "src/**/*"
+  ]
 }
