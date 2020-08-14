@@ -1,0 +1,31 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "es6",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "./@types",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "resolveJsonModule": true
+  },
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules/*",
+    "packages/dist/*"
+  ],
+  "include": [
+    "src/components/*"
+  ]
+}
