@@ -1,4 +1,5 @@
-import Taro, {Component} from '@tarojs/taro';
+import React, {Component} from 'react';
+import Taro from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
 import ListView, { LazyBlock } from '../../index';
 
@@ -27,6 +28,7 @@ export default class Index extends Component {
   };
 
   componentDidMount() {
+    // console.log()
     this.refList.fetchInit()
   }
 
@@ -59,6 +61,7 @@ export default class Index extends Component {
   refList = {};
 
   insRef = (node) => {
+    console.log(node)
     this.refList = node;
   };
 
@@ -75,7 +78,6 @@ export default class Index extends Component {
               isLoaded={isLoaded}
               isError={error}
               hasMore={hasMore}
-              // style={{height: '100vh'}}
               isEmpty={isEmpty}
               onPullDownRefresh={this.pullDownRefresh}
               onScrollToLower={this.onScrollToLower}
@@ -83,7 +85,7 @@ export default class Index extends Component {
               customizeLoading
               lazyStorage='listView'
             >
-              {list.map((item, index) => {
+              {list.map((item: any, index) => {
                 return (
                   <View className='item skeleton-bg' key={`item_${index}`}>
                     <LazyBlock current={index} className='avatar' lazyStorage='listView'>
@@ -112,7 +114,6 @@ export default class Index extends Component {
               isLoaded={isLoaded}
               isError={error}
               hasMore={hasMore}
-              // style={{height: '100vh'}}
               isEmpty={isEmpty}
               onPullDownRefresh={this.pullDownRefresh}
               onScrollToLower={this.onScrollToLower}
@@ -120,7 +121,7 @@ export default class Index extends Component {
               customizeLoading
               lazyStorage='listView'
             >
-              {list.map((item, index) => {
+              {list.map((item: any, index) => {
                 return (
                   <View className='item skeleton-bg' key={`item_${index}`}>
                     <LazyBlock current={index} className='avatar' lazyStorage='listView'>

@@ -1,8 +1,9 @@
-import Taro, { Component } from '@tarojs/taro';
+import React from 'react';
+import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import './index.scss';
+import '../../style/components/skeleton/index.scss'
 
-interface Props {
+interface Props extends React.Props<any> {
   isLoaded: boolean;
   selector?: string;
 }
@@ -21,7 +22,7 @@ interface State {
   listRadius: Item[];
 }
 
-class Skeleton extends Component<Props, State> {
+export default class Skeleton extends React.Component<Props, State> {
   static defaultProps = {
     isLoaded: false,
     selector: '.skeleton',
@@ -79,30 +80,32 @@ class Skeleton extends Component<Props, State> {
   }
 
   weappSkl() {
-    const { selector } = this.props;
-    Taro.createSelectorQuery()
-      .selectAll(`${selector} >>> .skeleton-bg`)
+    // @ts-ignore
+    Taro.Current.page && Taro.createSelectorQuery()
+      .in(Taro.Current.page)
+      .selectAll(`.skeleton-bg`)
       .boundingClientRect()
       .exec(res => {
+        console.log(res, 'resresres')
         this.setState({ bg: res[0] });
       });
 
     Taro.createSelectorQuery()
-      .selectAll(`${selector} >>> .skeleton-rect`)
+      .selectAll(`.skeleton-rect`)
       .boundingClientRect()
       .exec(res => {
         this.setState({ list: res[0] });
       });
 
     Taro.createSelectorQuery()
-      .selectAll(`${selector} >>> .skeleton-radius`)
+      .selectAll(`.skeleton-radius`)
       .boundingClientRect()
       .exec(res => {
         this.setState({ listRadius: res[0] });
       });
   }
 
-  render() {
+  render(): JSX.Element {
     const { list, bg, listRadius, parentRect } = this.state;
     const { isLoaded } = this.props; // 是否加载完成
     return (
@@ -168,4 +171,3 @@ class Skeleton extends Component<Props, State> {
   }
 }
 
-export default Skeleton;

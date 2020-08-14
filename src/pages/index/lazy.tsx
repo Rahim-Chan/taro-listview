@@ -1,4 +1,5 @@
-import Taro, {Component} from '@tarojs/taro';
+import React, { Component} from 'react';
+import Taro from '@tarojs/taro';
 import {View, Image} from '@tarojs/components';
 import ListView from '../../components/list-view';
 import LazyBlock from '../../components/list-view/block';
@@ -48,7 +49,7 @@ export default class Index extends Component {
           onScrollToLower={this.onScrollToLower}
           lazyStorage='listViewLazy'
         >
-          {list.map((item, index) => {
+          {list.map((item: any, index) => {
             return (
               <View className='item' key={`item_${index}`}>
                 <LazyBlock current={index} className='avatar' lazyStorage='listViewLazy'>

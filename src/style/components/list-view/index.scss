@@ -1,0 +1,91 @@
+.animateEase {
+  transition: transform ease 300ms;
+}
+.downLoadingStyle {
+  overflow: hidden;
+}
+.scrollView {
+  position: relative;
+  width: 100%;
+}
+.autoHeight {
+  height: 100%;
+}
+.bodyView {
+  position: relative;
+  overflow: visible;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+.containView {
+  position: relative;
+}
+
+.unNeedBlock {
+  opacity: 0;
+  visibility: hidden;
+}
+.pullDownBlock {
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  font-size: 28px;
+  display: flex;
+  align-items: flex-end;
+  .tip {
+    display: flex;
+    justify-content: center;
+    color: #999999;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+
+  }
+}
+
+.loading, .loaded {
+  text-align: center;
+  font-size: 24px;
+  padding: 12px;
+  //animation: loading infinite 1000ms ease;
+}
+.loaded {
+  color: #e6e6e6;
+}
+.errorPage {
+  text-align: center;
+  padding: 40px;
+  .button {
+    border-radius: 10px;
+    margin-top: 10px;
+    display: inline-block;
+    border: 1px solid cornflowerblue;
+    color: cornflowerblue;
+    padding: 10px;
+  }
+}
+.noContentTips {
+  display: flex;
+  padding: 100px 20px 20px;
+  text-align: center;
+  flex-direction: column;
+  .emptyBanner {
+    width: 250px;
+    height: 170px;
+    display: inline-block;
+    margin: 0 auto 20px;
+  }
+}
+@keyframes loading {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+.hide {
+  visibility: hidden;
+}

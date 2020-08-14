@@ -1,4 +1,5 @@
-import Taro, { Component } from "@tarojs/taro";
+import React, { Component } from "react";
+import Taro from "@tarojs/taro";
 import { ScrollView, View } from "@tarojs/components";
 import Skeleton from "../skeleton";
 import Loading from "../loading";
@@ -8,7 +9,7 @@ import { initialProps, initialState } from "./init";
 // eslint-disable-next-line no-unused-vars
 import { minGetMore } from "../../utils/utils";
 import { Indicator, Launch, State, Props } from "./type";
-import "./index.scss";
+import '../../style/components/list-view/index.scss'
 
 class ListView extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp
@@ -23,6 +24,8 @@ class ListView extends Component<Props, State> {
       if (this.props.lazy) {
         const { lazyStorage } = this.props;
         return tools.lazyScrollInit(this.lazyClassName, lazyStorage)
+      } else {
+        return undefined
       }
   })();
 
@@ -48,19 +51,25 @@ class ListView extends Component<Props, State> {
 
   touchScrollTop = 0;
 
+  componentWillMount(): void {
+
+  }
+
   componentDidMount() {
     this.moveBox(0);
     if (this.props.lazy) {
-      Taro.createSelectorQuery()
-        .in(this.$scope)
-        .select(".scrollView")
-        .boundingClientRect()
-        .exec(res => {
-          const { lazyStorage } = this.props;
-          tools.updateScrollHeight(this.lazyKey, res[0].height, lazyStorage)
-
-          this.lazyViewHeight = res[0].height
-        })
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          Taro.createSelectorQuery()
+            .select(".scrollView")
+            .boundingClientRect()
+            .exec(res => {
+              const { lazyStorage } = this.props;
+              tools.updateScrollHeight(this.lazyKey, res[0].height, lazyStorage)
+              this.lazyViewHeight = res[0].height
+            })
+        }, 0)
+      })
     }
     if (this.props.needInit) this.fetchInit();
   }
@@ -177,7 +186,7 @@ class ListView extends Component<Props, State> {
     if (this.props.onScroll) this.props.onScroll(e);
     this.setState({ scrollTop });
     if (this.props.lazy) {
-      tools.lazyScroll(this.lazyKey, this.lazyClassName, this.lazyViewHeight);
+      tools.lazyScroll(this.lazyKey, this.lazyViewHeight);
     }
   };
 
@@ -199,28 +208,33 @@ class ListView extends Component<Props, State> {
     }
   };
 
-  updateDampText = act => {
+  updateDampText = (act: boolean) => {
     this.needPullDown = act;
     const { isInit, downLoading } = this.state;
     const showTip = !downLoading && !isInit; // 展示下拉区域文案
-    if (!showTip) return "";
-    const { indicator = {}, tipFreedText, tipText } = this.props;
-    const {
-      activate = "释放刷新",
-      deactivate = "下拉刷新"
-    } = indicator as Indicator;
-    let text = "";
-    if (act) {
-      text = activate || tipText;
+    if (!showTip) {
+      return ''
     } else {
-      text = deactivate || tipFreedText;
+      const { indicator = {}, tipFreedText, tipText } = this.props;
+      const {
+        activate = "释放刷新",
+        deactivate = "下拉刷新"
+      } = indicator as Indicator;
+      let text = "";
+      if (act) {
+        text = activate || tipText;
+      } else {
+        text = deactivate || tipFreedText;
+      }
+      if (Taro.getEnv() === "WEB") {
+        const target = document.getElementById(this.tipDampTextId) as HTMLElement;
+        target.innerText = text;
+      } else {
+        this.setState({ dampText: text });
+      }
+      return undefined
     }
-    if (Taro.getEnv() === "WEB") {
-      const target = document.getElementById(this.tipDampTextId) as HTMLElement;
-      target.innerText = text;
-    } else {
-      this.setState({ dampText: text });
-    }
+
   };
 
   render() {

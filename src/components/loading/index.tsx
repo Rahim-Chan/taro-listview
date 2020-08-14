@@ -1,6 +1,6 @@
-import Taro, { Component } from '@tarojs/taro';
+import React, { Component } from 'react';
 import { View } from '@tarojs/components';
-import './index.scss';
+import '../../style/components/loading/index.scss'
 
 interface PagePros {
     color?: any;

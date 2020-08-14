@@ -1,4 +1,4 @@
-import Taro, {useState} from '@tarojs/taro';
+import React, { useState } from 'react';
 import {View, Text, Button} from '@tarojs/components';
 import {Skeleton} from 'components';
 

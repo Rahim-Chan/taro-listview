@@ -1,9 +1,9 @@
-import Taro, {Component} from '@tarojs/taro';
+import React, {Component} from 'react';
+import Taro from '@tarojs/taro';
 import {View} from '@tarojs/components';
-import './block.scss'
+import '../../style/components/list-view/block.scss'
 import storage from "../../utils/storage";
 import tools from "./tool";
-
 
 interface LazyItem {
   key: string;
@@ -15,7 +15,7 @@ interface State {
 
 }
 
-interface Props {
+interface Props extends React.Props<any> {
   className?: string;
   current: number;
   lazyStorage?: string;
@@ -38,10 +38,17 @@ class LazyImage extends Component<Props, State> {
     lazyStorage: 'box'
   };
 
-  componentDidMount() {
+  componentWillMount(): void {
     const { lazyStorage } = this.props;
-    this.lazyItem = storage.get(`lazyBox_${lazyStorage}`)[storage.get(`lazyBox_${lazyStorage}`).length -1];
+    const lazyItem = storage.get(`lazyBox_${lazyStorage}`)[storage.get(`lazyBox_${lazyStorage}`).length -1]
+    this.lazyItem = lazyItem;
+  }
+
+  componentDidMount() {
+    // console.log({ lazyItem })
     this.bindTextListener();
+    // console.log('block componentDidMount')
+    // console.log(`lazy-image-${this.lazyItem.key}`)
   }
 
   componentWillUnmount(): void {
@@ -51,7 +58,7 @@ class LazyImage extends Component<Props, State> {
 
   // 绑定函数
   bindTextListener() {
-    const { key, className, viewHeight } = this.lazyItem;
+    const { key, viewHeight } = this.lazyItem;
     Taro.eventCenter.on(`lazyBlock${key}`, scrollCur => {
         this.setState({
           scrollCur
@@ -60,7 +67,7 @@ class LazyImage extends Component<Props, State> {
     // @ts-ignore
     Taro[key] = Taro.eventCenter.trigger.bind(Taro.eventCenter, `lazyBlock${key}`);
     setTimeout(() => {
-      tools.lazyScroll(key, className, viewHeight)
+      tools.lazyScroll(key, viewHeight)
     }, 0)
   }
 
@@ -71,7 +78,7 @@ class LazyImage extends Component<Props, State> {
   render() {
     const {current} = this.props;
     return (
-        <View className={`lazy-image-${this.lazyItem.key} ${this.props.className} `}>
+        <View className={`lazy-image-${this.lazyItem.key} ${this.props.className}`}>
           {
             this.isLoad(current) ? (
                 <View className='blockLoad'>

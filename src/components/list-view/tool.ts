@@ -10,7 +10,8 @@ interface LazyItem {
 export function debounce(method, time = 500) {
     let timer = null;
     return function() {
-        const context = this;
+        // @ts-ignore
+      const context = this;
         // 在函数执行的时候先清除timer定时器;
         // @ts-ignore
         clearTimeout(timer);
@@ -27,6 +28,7 @@ const throttle = function(func, delay) {
   return function() {
     const curTime = Date.now();
     const remaining = delay - (curTime - startTime);
+    // @ts-ignore
     const context = this;
     const args = arguments;
     // @ts-ignore
@@ -61,6 +63,7 @@ function lazyScrollInit(className,storagekey) {
   }
   lazyBox.push({ key: lazyKey, className, viewHeight: 0 });
   storage.set(`lazyBox_${storagekey}`, lazyBox)
+  console.log('lazyScrollInit``````',)
   return lazyKey
 }
 
@@ -78,10 +81,12 @@ function updateScrollHeight(key, viewHeight, storagekey) {
   storage.set(`lazyBox_${storagekey}`, lazyBox)
 }
 
-function lazyScroll(key, selector, height) {
-  const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `${selector} >>> .lazy-image-${key}`;
+function lazyScroll(key, height) {
+  // console.log({ selector, key })
+  const query = Taro.getEnv() === 'WEB' ? `.lazy-image-${key}` : `.lazy-image-${key}`;
   throttle(() => {
-    Taro.createSelectorQuery()
+    setTimeout(() => {
+      Taro.createSelectorQuery()
         .selectAll(query)
         .boundingClientRect()
         .exec(res => {
@@ -96,6 +101,7 @@ function lazyScroll(key, selector, height) {
           // @ts-ignore
           if (Taro[key] && typeof  Taro[key] === 'function') Taro[key](indexs)
         });
+    }, 0)
   }, 500)()
 }
 
