@@ -18,7 +18,7 @@
 	],
 	"browser": "dist/index.umd.js",
 	"source": "src/index.ts",
-	"types": "./@types/index.d.ts",
+	"types": "./@types/components/index.d.ts",
 	"main": "dist/index.js",
 	"module": "dist/index.esm.js",
 	"scripts": {

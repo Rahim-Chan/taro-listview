@@ -10,8 +10,8 @@ export default () => {
         <View className='skeleton'>
           <Skeleton isLoaded={isLoaded}>
             {
-              Array(4).fill(1).map(i => (
-                  <View className='item skeleton-bg' key={i}>
+              Array(4).fill(1).map((i, index) => (
+                  <View className='item skeleton-bg' key={i+index}>
                     <View className='avatar skeleton-radius' />
                     <View>
                       <View className='title skeleton-rect'>

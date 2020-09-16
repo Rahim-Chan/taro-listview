@@ -24,22 +24,22 @@ export default {
     {
       file: resolveFile(Package.main),
       format: 'cjs',
-      sourcemap: true
+      // sourcemap: true
     },
     {
       file: resolveFile(Package.module),
       format: 'es',
-      sourcemap: true
+      // sourcemap: true
     },
     {
       file: resolveFile(Package.browser),
       format: 'umd',
-      name: 'taro-ui',
-      sourcemap: true,
+      name: 'taro-listview',
+      // sourcemap: true,
       globals: {
         react: 'React',
-        '@tarojs/components': 'components',
-        '@tarojs/taro': 'Taro'
+        // '@tarojs/components': 'components',
+        // '@tarojs/taro': 'Taro'
       }
     }
   ],

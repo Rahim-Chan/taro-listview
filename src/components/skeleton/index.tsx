@@ -22,7 +22,7 @@ interface State {
   listRadius: Item[];
 }
 
-export default class Skeleton extends React.Component<Props, State> {
+export default class Skeleton extends React.PureComponent<Props, State> {
   static defaultProps = {
     isLoaded: false,
     selector: '.skeleton',
@@ -86,7 +86,6 @@ export default class Skeleton extends React.Component<Props, State> {
       .selectAll(`.skeleton-bg`)
       .boundingClientRect()
       .exec(res => {
-        console.log(res, 'resresres')
         this.setState({ bg: res[0] });
       });
 
@@ -115,11 +114,11 @@ export default class Skeleton extends React.Component<Props, State> {
           ''
         ) : (
           <View style={{ ...parentRect, backgroundColor: 'white', position: 'fixed', overflow: 'hidden' }}>
-            {bg.map(item => {
+            {bg.map((item: Item, index) => {
               const { width, height, top, left } = item as Item;
               return (
                 <View
-                  key={item}
+                  key={`${item.height}${index}`}
                   style={{
                     background: 'white',
                     width: `${width}px`,
@@ -131,11 +130,11 @@ export default class Skeleton extends React.Component<Props, State> {
                 />
               );
             })}
-            {list.map(item => {
+            {list.map((item: Item, index) => {
               const { width, height, top, left } = item as Item;
               return (
                 <View
-                  key={item}
+                  key={`${item.height}${index}`}
                   className='skeletonBg'
                   style={{
                     width: `${width}px`,
@@ -147,11 +146,11 @@ export default class Skeleton extends React.Component<Props, State> {
                 />
               );
             })}
-            {listRadius.map(item => {
+            {listRadius.map((item: Item, index) => {
               const { width, height, top, left } = item as Item;
               return (
                 <View
-                  key={item}
+                  key={`${item.height}${index}`}
                   className='skeletonBg'
                   style={{
                     borderRadius: '50%',
