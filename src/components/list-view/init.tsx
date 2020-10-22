@@ -33,7 +33,7 @@ export const initialProps ={
   },
   showIndicator: true,
   className: '',
-  onPullDownRefresh: () => {},
+  onPullDownRefresh: null,
   hasMore: false,
   needInit: false,
   isError: false,
