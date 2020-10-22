@@ -7,7 +7,7 @@ name: Actions Release
 on:
   push:
     branches:
-    - master
+    - v1.x
 
 # 任务列表
 jobs:
@@ -28,7 +28,7 @@ jobs:
     # 代码拉取
     - uses: actions/checkout@v1
       with:
-        ref: master
+        ref: v1.x
     # 依赖安装并打包
     - name: Install Dependencies and Build
       run: |
