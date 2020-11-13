@@ -42,7 +42,9 @@
 		"copy": "node ./scripts/build.js",
 		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types",
 		"publish:production": "npm run build & npm publish",
-		"semantic-release": "semantic-release"
+		"semantic-release": "semantic-release",
+		"doc-start": "dumi dev",
+		"doc-build": "dumi build"
 	},
 	"author": "rahim <chenrixi93@gmail.com>",
 	"publishConfig": {
@@ -84,6 +86,7 @@
 		"@types/webpack-env": "^1.13.6",
 		"@typescript-eslint/eslint-plugin": "^3.8.0",
 		"@typescript-eslint/parser": "^3.8.0",
+		"@umijs/plugin-sass": "^1.1.1",
 		"babel-eslint": "^8.2.3",
 		"babel-plugin-transform-class-properties": "^6.24.1",
 		"babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -91,6 +94,7 @@
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-taro": "3.0.14",
 		"cross-env": "^5.2.0",
+		"dumi": "^1.0.9",
 		"eslint": "^5.16.0",
 		"eslint-config-taro": "1.3.34",
 		"eslint-plugin-import": "^2.12.0",
@@ -110,7 +114,8 @@
 		"stylelint": "9.3.0",
 		"stylelint-config-taro-rn": "1.3.34",
 		"stylelint-taro-rn": "1.3.34",
-		"typescript": "^3.8.3"
+		"typescript": "^3.8.3",
+		"yorkie": "^2.0.0"
 	},
 	"peerDependencies": {
 		"@tarojs/components": ">=3",
