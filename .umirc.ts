@@ -8,8 +8,8 @@ export default defineConfig({
 
   title: 'taro-listview',
   // mode: 'doc',
-  theme: {
-    '@c-primary': '#ff652f',
-  },
+//   theme: {
+//     '@c-primary': '#ff652f',
+//   },
   // more config: https://d.umijs.org/config
 });
