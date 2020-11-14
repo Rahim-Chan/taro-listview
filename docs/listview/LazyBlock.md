@@ -1,24 +1,22 @@
----
-nav:
-  title: Getting Started
-  order: 1
----
 
-# Getting Started
+## LazyBlock
 
-## Installation
-> 安装：`npm i taro-listview`，`yarn add taro-listview`
+1.模块需固定同一高度。
 
-## Usage
-```jsx
+2.只能在 ListView 组件内使用，并开启 lazy 模式，且父元素的 className='lazy-view'!!!
+
+3.组件需传入模块遍历后的下标。
+
+## API 
+| 属性 | 说明                | 类型   |默认值   |必传   |
+| :------- | :---------------  | :--------- |:--------- |:--------- |
+| current   | 传入模块遍历后的下标    | number | null | true |
+| lazyStorage   | Storage Key值用于区分ListView(获取是哪一个ListView)    | string | box | - |
+
+```jsx                             a
 import Taro, { Component } from "@tarojs/taro";
 import { View, Image } from "@tarojs/components";
-import ListView, { LazyBlock } from "taro-listview";
-
-const blankList = [{
-    author: {},
-    title: "this is a example"
-  }];
+import ListView, { LazyBlock } from "taro-listView";
 
 let pageIndex = 1;
 
@@ -28,7 +26,7 @@ export default class Index extends Component {
     error: false,
     hasMore: true,
     isEmpty: false,
-    list: blankList
+    list: []
   };
 
   getData = async (pIndex = pageIndex) => {
@@ -42,19 +40,12 @@ export default class Index extends Component {
         page: pIndex
       }
     });
-    console.log({ data });
     return { list: data, hasMore: true, isLoaded: pIndex === 1 };
   };
 
   componentDidMount() {
-    this.refList.fetchInit();
+    this.getData();
   }
-
-  pullDownRefresh = async () => {
-    pageIndex = 1;
-    const res = await this.getData(1);
-    this.setState(res);
-  };
 
   onScrollToLower = async fn => {
     const { list } = this.state;
@@ -66,33 +57,24 @@ export default class Index extends Component {
     fn();
   };
 
-  refList = {};
-
-  insRef = node => {
-    this.refList = node;
-  };
-
   render() {
     const { isLoaded, error, hasMore, isEmpty, list } = this.state;
     return (
-      <View>
+      <View className="lazy-view">
         <ListView
-          ref={node => this.insRef(node)}
+          lazy
           isLoaded={isLoaded}
-          isError={error}
           hasMore={hasMore}
           style={{ height: "100vh" }}
-          isEmpty={isEmpty}
-          onPullDownRefresh={this.pullDownRefresh}
           onScrollToLower={this.onScrollToLower}
+          lazyStorage='lazyViewBlock'
         >
           {list.map((item, index) => {
             return (
-              <View className="item" key={index}>
-                <Image
-                    className="avatar skeleton-radius"
-                    src={item.author.avatar_url}
-                  />
+              <View className='item' key={index}>
+                <LazyBlock current={index} className='avatar' lazyStorage='lazyViewBlock'>
+                  <Image className='avatar' src={item.author.avatar_url} />
+                </LazyBlock>
                 <View className="title">{item.title}</View>
               </View>
             );
@@ -102,10 +84,4 @@ export default class Index extends Component {
     );
   }
 }
-``` 
-
-## Attention
-If you find that the `ListView`'s interaction like pull-down or pull-on doesn't work in `MiNA`, please give it a fixed height.
-Because it is a limitation from [scroll-view in MINA ](https://developers.weixin.qq.com/miniprogram/dev/component/scroll-view.html);
-
-
+```
