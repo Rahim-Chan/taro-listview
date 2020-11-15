@@ -43,8 +43,8 @@
 		"types": "tsc -d --emitDeclarationOnly --allowJs false --diagnostics --declarationDir ./@types",
 		"publish:production": "npm run build & npm publish",
 		"semantic-release": "semantic-release",
-		"docs-start": "dumi dev",
-		"docs-build": "dumi build"
+		"dev:docs": "dumi dev",
+		"build:docs": "dumi build"
 	},
 	"author": "rahim <chenrixi93@gmail.com>",
 	"publishConfig": {
