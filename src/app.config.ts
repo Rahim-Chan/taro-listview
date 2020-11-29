@@ -1,5 +1,6 @@
 export default {
   pages: [
+    'pages/index/style',
     'pages/index',
     'pages/index/index',
     'pages/index/lazy',

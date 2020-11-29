@@ -57,7 +57,8 @@ function lazyScrollInit(className,storagekey) {
   if (lazyBox.length) {
     const length = lazyBox.length;
     const lastKey = lazyBox[length - 1];
-    if (new Date().getTime() - Number(lastKey.key.replace('lazy', '')) > 86400000) {
+    console.log({lastKey})
+    if (new Date().getTime() - Number(lastKey.key?.replace('lazy', '')) > 86400000) {
       lazyBox.splice(0, length)
     }
   }

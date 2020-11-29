@@ -8,7 +8,9 @@
     display: flex;
     flex-direction: column;
     font-size: 20px;
-    box-shadow: 0 0 20px gold;
+    box-shadow: 0 0 2px #4400ff;
+    align-items: center;
+    justify-content: center;
     position: relative;
     .tab {
       position: absolute;
@@ -37,9 +39,8 @@
     flex-shrink: 0;
   }
   .title {
-    margin-right: auto;
     font-size: 20px;
-    margin-bottom: 10px;
+    margin: auto;
   }
 }
 
