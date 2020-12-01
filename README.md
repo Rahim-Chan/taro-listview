@@ -53,8 +53,8 @@
 | :------------------ | :--------------------------------------------------------------- | :-------- | :------------------------------------------------------------------------------------------------------ | :--- |
 | color               | 下拉加载时 loading 的颜色                                        | string    | #667baf                                                                                                 | -    |
 | emptyText           | 空白页提示语                                                     | string    | -                                                                                                       | -    |
-| footerLoaded        | 列表底部提示语                                                   | string    | -                                                                                                       |
-| footerLoading       | 列表底部提示语                                                   | string    | 加载中                                                                                                  | -    |
+| footerLoadedText        | 列表底部加载完毕提示语                                                   | string    | -                                                                                                       |
+| footerLoadingText       | 列表底部加载中提示语                                                   | string    | 加载中                                                                                                  | -    |
 | launch              | \*是否开启状态屏的渲染，状态屏节点对应以下 renderXX 属性（如下） | object    | `{ launchError = false, launchEmpty = false, launchFooterLoaded = false, launchFooterLoading = false }` | -    |
 | renderError         | 错误页                                                           | Taro.Node | -                                                                                                       | -    |
 | renderEmpty         | 空白页                                                           | Taro.Node | -                                                                                                       | -    |
