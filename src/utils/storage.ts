@@ -5,6 +5,7 @@ function get<T = any>(key: string, defaultValue?: T): T {
   if (!value || value === ' ' || value === 'undefined' || value === 'null') {
     value = '';
   }
+  // @ts-ignore
   return value ? JSON.parse(value) : defaultValue;
 }
 
