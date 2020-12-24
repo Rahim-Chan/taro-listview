@@ -31,17 +31,17 @@ export default {
       format: 'es',
       // sourcemap: true
     },
-    {
-      file: resolveFile(Package.browser),
-      format: 'umd',
-      name: 'taro-listview',
-      // sourcemap: true,
-      globals: {
-        react: 'React',
-        // '@tarojs/components': 'components',
-        // '@tarojs/taro': 'Taro'
-      }
-    }
+    // {
+    //   file: resolveFile(Package.browser),
+    //   format: 'umd',
+    //   name: 'taro-listview',
+    //   // sourcemap: true,
+    //   globals: {
+    //     react: 'React',
+    //     // '@tarojs/components': 'components',
+    //     // '@tarojs/taro': 'Taro'
+    //   }
+    // }
   ],
   cssModules: true,
   external: externalPackages,
