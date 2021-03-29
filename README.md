@@ -13,7 +13,12 @@
 - [ ] virtual-list(WIP)【虚拟列表】
 - [x] 支持TaroV3 、NPM版本2.x.x
 
+## 维护平台
+`微信小程序`、`h5`
+
+## 文档
 [Documents](https://taro-listview-docs-aqi1r3dhf.vercel.app/)
+
 ## 安装方式
 
 > 安装：`npm i taro-listview`，`yarn add taro-listview`
